@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>130AfterM // Labs Terminal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --terminal-amber: #ffb000;
+            --blood-orange: #ff4500;
+            --bg-dark: #050505;
+            --glass-bg: rgba(20, 20, 20, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --glass-hover: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #d1d5db;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            cursor: crosshair;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(255, 176, 0, 0.03), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.02), transparent 25%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        a, button { cursor: pointer; }
+
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* ── PARTICLES BACKGROUND ── */
+        .particles-container {
+            position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: var(--terminal-amber);
+            box-shadow: 0 0 10px var(--terminal-amber);
+            border-radius: 50%;
+            animation: float-up linear infinite;
+            opacity: 0;
+        }
+        @keyframes float-up {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        /* ── SCANLINES ── */
+        .scanlines {
+            position: fixed; inset: 0;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.05));
+            background-size: 100% 4px;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        /* ── SYS/NORM MODE STYLES ── */
+        .sys-mode .amber-text { color: var(--terminal-amber); }
+        .sys-mode .orange-text { color: var(--blood-orange); }
+        .sys-mode .glass-panel { border-color: rgba(255, 176, 0, 0.1); }
+        .sys-mode .glass-panel:hover { border-color: rgba(255, 176, 0, 0.3); box-shadow: 0 10px 40px rgba(255, 176, 0, 0.05); }
+        
+        .normal-mode .amber-text { color: #3b82f6; }
+        .normal-mode .orange-text { color: #8b5cf6; }
+        .normal-mode .glass-panel { border-color: rgba(59, 130, 246, 0.1); background-color: rgba(10, 15, 30, 0.4); }
+        .normal-mode .glass-panel:hover { border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 10px 40px rgba(59, 130, 246, 0.05); }
+
+        /* ── GLASSMORPHISM PANELS ── */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .glass-panel:hover {
+            transform: translateY(-2px);
+        }
+        .glass-panel:hover::before { opacity: 1; }
+
+        /* ── SHARED STICKY NAV ── */
+        .site-nav {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(5,5,5,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        /* ── GLITCH EFFECT ── */
+        .glitch-hover {
+            position: relative;
+            display: inline-block;
+            transition: all 0.1s;
+        }
+        .glitch-hover:hover {
+            text-shadow: 2px 0 #ff003c, -2px 0 #00f0ff;
+            animation: glitch-jiggle 0.2s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-jiggle {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-2deg); }
+            40% { transform: skew(2deg); }
+            60% { transform: skew(-1deg); }
+            80% { transform: skew(1deg); }
+            100% { transform: skew(0deg); }
+        }
+
+        .link-btn {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+            transition: all 0.2s;
+        }
+        .link-btn:hover { border-bottom-color: var(--terminal-amber); color: var(--terminal-amber); }
+        .normal-mode .link-btn:hover { border-bottom-color: #3b82f6; color: #3b82f6; }
+
+        #bootloader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--terminal-amber);
+            transition: opacity 0.4s ease;
+        }
+
+        #main-content {
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+        
+        .artifacts-sys, .artifacts-norm { display: none; }
+    </style>
+</head>
+<body class="sys-mode antialiased selection:bg-amber-500 selection:text-black">
+
+    <div class="scanlines"></div>
+    <div class="particles-container" id="particles"></div>
+
+<!-- ── SHARED STICKY NAV ── -->
+<nav class="site-nav">
+    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="./index.html">
+            <img src="./logo.png" alt="130AfterM" class="h-7 opacity-80" style="filter: brightness(0) invert(1);" onerror="this.style.display='none';">
+        </a>
+        <div class="flex items-center gap-1 font-mono text-[10px] tracking-widest">
+            <a href="./index.html" class="px-4 py-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">HOME</a>
+            <a href="./terminal.html" class="px-4 py-2 text-amber-400 font-bold rounded-lg bg-amber-500/10 border border-amber-500/20">LABS</a>
+            <a href="./archive.html" class="px-4 py-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">ARCHIVE</a>
+        </div>
+    </div>
+</nav>
+
+    <div id="bootloader">
+        <div id="boot-text" class="text-sm space-y-2 max-w-2xl mx-auto w-full"></div>
+    </div>
+
+    <main id="main-content" class="max-w-4xl mx-auto p-6 md:p-12 relative z-10">
+        
+        <a href="./index.html" class="inline-flex items-center gap-2 text-[10px] tracking-widest text-zinc-500 hover:text-amber-500 mb-8 transition-colors font-mono glitch-hover">
+            <i class="fas fa-arrow-left"></i> RETURN TO IDENTITY
+        </a>
+
+        <!-- ── HEADER ── -->
+        <header class="glass-panel p-8 mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+            <div>
+                <h1 id="main-title" class="text-5xl md:text-6xl font-black tracking-tighter cursor-pointer glitch-hover amber-text transition-colors duration-300 uppercase">130AfterM // LABS</h1>
+                <p class="font-mono text-xs tracking-widest mt-3 opacity-70">EXECUTION TERMINAL v0.8.4 • LIVE</p>
+                <p class="text-sm mt-3 opacity-90 amber-text transition-colors duration-300 font-medium"
+                    data-sys="Markets. Systems. Media. Built after hours."
+                    data-norm="Documenting charts, systems, and the process behind both.">
+                    Markets. Systems. Media. Built after hours.
+                </p>
+            </div>
+            <button id="mode-toggle" class="glass-panel px-6 py-3 flex items-center gap-3 text-[11px] tracking-widest font-mono hover:bg-white/5 transition-colors group cursor-pointer border border-white/10">
+                <span id="mode-sys" class="amber-text font-bold">SYS</span>
+                <span class="opacity-40">/</span>
+                <span id="mode-norm" class="opacity-50">NORM</span>
+            </button>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- ── LEFT COLUMN ── -->
+            <div class="space-y-6">
+                <section>
+                    <h2 class="text-xs font-mono uppercase amber-text mb-4 border-l-2 border-orange-600 pl-3 transition-colors duration-300 tracking-widest glitch-hover"
+                        data-sys="RBFX_LABS // TOOLS" data-norm="Trading Tools">RBFX_LABS // TOOLS</h2>
+                    <div class="glass-panel p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="font-bold text-lg text-white">RetailBeastFX SMC Indicator</h3>
+                            <span class="text-[10px] font-mono border border-orange-600/50 bg-orange-600/10 px-2 py-1 rounded-full text-orange-500 animate-pulse uppercase tracking-widest">LIVE</span>
+                        </div>
+                        <p class="text-sm opacity-80 leading-relaxed mt-3">
+                            Automated mapping of core ICT / SMC elements: Order Blocks, Fair Value Gaps, Liquidity Pools, and Killzones.<br><br>
+                            Not signals. Not automation.<br>
+                            Just another layer of precision in the process.
+                        </p>
+                        <div class="mt-6 pt-6 border-t border-white/5">
+                            <a href="https://whop.com/joined/retailbeastfx/products/retailbeastfx-smc-indicator/" target="_blank" class="link-btn inline-flex items-center gap-2 text-xs font-mono font-bold tracking-widest uppercase">
+                                <span>[ Deploy Indicator ]</span>
+                                <i class="fas fa-external-link-alt text-[10px] opacity-70"></i>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-xs font-mono uppercase amber-text mb-4 border-l-2 border-orange-600 pl-3 transition-colors duration-300 tracking-widest glitch-hover"
+                        data-sys="Time_Investment" data-norm="Where My Time Goes">Time_Investment</h2>
+                    <div class="glass-panel p-6">
+                        <p class="text-sm mb-4 opacity-80 font-medium">Thousands of hours logged across multiple disciplines:</p>
+                        <ul class="space-y-3 text-[11px] font-mono opacity-80 tracking-wide">
+                            <li class="flex gap-3 items-start"><span class="amber-text">>></span> Tape Reading, Chart Study &amp; Market Execution</li>
+                            <li class="flex gap-3 items-start"><span class="amber-text">>></span> Video Editing, Music Videos &amp; Visual Design</li>
+                            <li class="flex gap-3 items-start"><span class="amber-text">>></span> System Building &amp; Custom PC Architecture</li>
+                            <li class="flex gap-3 items-start"><span class="amber-text">>></span> Hardware Jailbreaking (Active since '08)</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ── RIGHT COLUMN ── -->
+            <div class="space-y-6">
+                <section>
+                    <h2 class="text-xs font-mono uppercase amber-text mb-4 border-l-2 border-orange-600 pl-3 transition-colors duration-300 tracking-widest glitch-hover"
+                        data-sys="External_Signals" data-norm="Outside the Screen">External_Signals</h2>
+                    <div class="glass-panel p-6">
+                        <span class="text-[10px] opacity-60 font-mono mb-4 block tracking-widest uppercase border border-white/10 w-max px-2 py-1 rounded"
+                            data-sys="NON-CORE INPUTS DETECTED"
+                            data-norm="What I'm into when I'm not building:">NON-CORE INPUTS DETECTED</span>
+                        <ul class="space-y-3 text-[11px] font-mono opacity-80 tracking-wide">
+                            <li class="flex gap-3 items-start"><span class="amber-text">>></span> Late night thinking &gt; early mornings</li>
+                            <li class="flex gap-3 items-start"><span class="amber-text">>></span> Music + visuals (anything with mood)</li>
+                            <li class="flex gap-3 items-start"><span class="amber-text">>></span> Breaking tech just to see how it works</li>
+                            <li class="flex gap-3 items-start"><span class="amber-text">>></span> Time with my kids &#8212; non-negotiable</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-xs font-mono uppercase amber-text mb-4 border-l-2 border-orange-600 pl-3 transition-colors duration-300 tracking-widest glitch-hover"
+                        data-sys="Recent_Artifacts" data-norm="Recent Work">Recent_Artifacts</h2>
+                    
+                    <div class="artifacts-sys space-y-4">
+                        <div class="glass-panel p-5 flex flex-col sm:flex-row items-center sm:items-start gap-5 group">
+                            <div class="w-full sm:w-32 h-20 bg-black rounded-lg border border-white/10 overflow-hidden flex items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity flex-shrink-0 relative">
+                                <span class="font-mono text-[10px] tracking-widest text-zinc-600">CHART_IMG</span>
+                                <div class="absolute inset-0 bg-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="font-mono text-[9px] border border-orange-600/30 bg-orange-600/10 px-2 py-1 rounded orange-text uppercase tracking-widest">TRADE</span>
+                                    <p class="text-sm font-bold amber-text">Execution Log &#8212; OB Rejection</p>
+                                </div>
+                                <p class="text-xs opacity-70 leading-relaxed mb-3">Clean entry off the OB, ran 1:3. Documented setup + entry criteria.</p>
+                                <a href="https://x.com/RetailBeastFX" target="_blank"
+                                    class="text-[10px] opacity-60 hover:opacity-100 hover:text-[var(--terminal-amber)] transition-all inline-block font-mono font-bold tracking-widest uppercase">&#8594; VIEW ON X</a>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-5 flex flex-col sm:flex-row items-center sm:items-start gap-5 group">
+                            <div class="w-full sm:w-32 h-20 bg-black rounded-lg border border-white/10 overflow-hidden flex items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity flex-shrink-0 relative">
+                                <span class="font-mono text-[10px] tracking-widest text-zinc-600">VIDEO_IMG</span>
+                                <div class="absolute inset-0 bg-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="font-mono text-[9px] border border-amber-500/30 bg-amber-500/10 px-2 py-1 rounded amber-text uppercase tracking-widest">EDIT</span>
+                                    <p class="text-sm font-bold amber-text">VHS Log &#8212; Process Capture</p>
+                                </div>
+                                <p class="text-xs opacity-70 leading-relaxed mb-3">Grading system used to document late-night builds and real-time thinking.</p>
+                                <a href="https://www.youtube.com/@130AfterM" target="_blank"
+                                    class="text-[10px] opacity-60 hover:opacity-100 hover:text-[var(--terminal-amber)] transition-all inline-block font-mono font-bold tracking-widest uppercase">&#8594; VIEW ON YT</a>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-5 flex flex-col sm:flex-row items-center sm:items-start gap-5 group">
+                            <div class="w-full sm:w-32 h-20 bg-black rounded-lg border border-white/10 overflow-hidden flex items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity flex-shrink-0 relative">
+                                <span class="font-mono text-[10px] tracking-widest text-zinc-600">CODE_IMG</span>
+                                <div class="absolute inset-0 bg-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="font-mono text-[9px] border border-white/20 bg-white/5 px-2 py-1 rounded text-zinc-400 uppercase tracking-widest">BUILD</span>
+                                    <p class="text-sm font-bold amber-text">Risk Calculator v1.4</p>
+                                </div>
+                                <p class="text-xs opacity-70 leading-relaxed mb-3">Updated for multi-pair tracking. Includes session exposure cap.</p>
+                                <a href="https://github.com/RetailBeastFX/" target="_blank"
+                                    class="text-[10px] opacity-60 hover:opacity-100 hover:text-[var(--terminal-amber)] transition-all inline-block font-mono font-bold tracking-widest uppercase">&#8594; VIEW ON GH</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="artifacts-norm space-y-4">
+                        <div class="glass-panel p-5 flex flex-col sm:flex-row items-center sm:items-start gap-5 group">
+                            <div class="w-full sm:w-32 h-20 bg-black rounded-lg border border-blue-500/20 overflow-hidden flex items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity flex-shrink-0 relative">
+                                <span class="font-mono text-[10px] tracking-widest text-blue-900">CHART_IMG</span>
+                                <div class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="font-mono text-[9px] border border-blue-500/30 bg-blue-500/10 px-2 py-1 rounded text-blue-400 uppercase tracking-widest">TRADE</span>
+                                    <p class="text-sm font-bold text-blue-400">Live Trade &#8212; Clean 1:3 Setup</p>
+                                </div>
+                                <p class="text-xs opacity-70 leading-relaxed mb-3">Caught a textbook rejection at a daily high. Documented the whole thing in real time.</p>
+                                <a href="https://x.com/RetailBeastFX" target="_blank"
+                                    class="text-[10px] opacity-60 hover:opacity-100 hover:text-blue-400 transition-all inline-block font-mono font-bold tracking-widest uppercase">&#8594; See it on X</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <footer class="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <p class="text-[11px] uppercase tracking-[0.2em] opacity-80 font-bold">Built After Hours</p>
+                <p class="text-[9px] mt-2 opacity-50 font-mono tracking-widest">01:30AM LOG</p>
+            </div>
+            <div class="text-[9px] opacity-50 font-mono tracking-widest text-center md:text-right leading-relaxed uppercase">
+                BUILD_VER: 3.3.0<br>
+                <span class="amber-text font-bold opacity-100">AFTER HOURS // GLASS</span>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // Background Particles
+        const particlesContainer = document.getElementById('particles');
+        for(let i=0; i<35; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = (Math.random() * 10 + 6) + 's';
+            p.style.animationDelay = (Math.random() * 5) + 's';
+            particlesContainer.appendChild(p);
+        }
+
+        const modeToggle = document.getElementById('mode-toggle');
+        const modeSysBtn = document.getElementById('mode-sys');
+        const modeNormBtn = document.getElementById('mode-norm');
+        const sysArtifacts = document.querySelector('.artifacts-sys');
+        const normArtifacts = document.querySelector('.artifacts-norm');
+        const title = document.getElementById('main-title');
+        
+        let isSysMode = localStorage.getItem('130am_mode') !== 'norm';
+
+        function applyMode(sys) {
+            isSysMode = sys;
+            document.body.classList.toggle('normal-mode', !sys);
+            document.body.classList.toggle('sys-mode', sys);
+            if (sys) {
+                modeSysBtn.classList.add('amber-text', 'font-bold');
+                modeSysBtn.classList.remove('opacity-50');
+                modeNormBtn.classList.remove('amber-text', 'font-bold');
+                modeNormBtn.classList.add('opacity-50');
+            } else {
+                modeNormBtn.classList.add('amber-text', 'font-bold');
+                modeNormBtn.classList.remove('opacity-50');
+                modeSysBtn.classList.remove('amber-text', 'font-bold');
+                modeSysBtn.classList.add('opacity-50');
+            }
+            document.querySelectorAll('[data-sys]').forEach(el => {
+                el.innerText = sys ? el.getAttribute('data-sys') : el.getAttribute('data-norm');
+            });
+            if (sysArtifacts && normArtifacts) {
+                sysArtifacts.style.display = sys ? 'block' : 'none';
+                normArtifacts.style.display = sys ? 'none' : 'block';
+            }
+            localStorage.setItem('130am_mode', sys ? 'sys' : 'norm');
+        }
+
+        modeToggle.addEventListener('click', () => {
+            document.body.style.transition = "filter 0.15s ease";
+            document.body.style.filter = "brightness(1.5)";
+            setTimeout(() => { document.body.style.filter = "brightness(1)"; }, 150);
+            applyMode(!isSysMode);
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            applyMode(isSysMode);
+            const bootScreen = document.getElementById('bootloader');
+            const bootText = document.getElementById('boot-text');
+            const mainContent = document.getElementById('main-content');
+            const hasBooted = sessionStorage.getItem('130am_booted'); // Use session storage so it boots once per session
+            
+            if (bootScreen && bootText) {
+                if (hasBooted) {
+                    bootScreen.style.display = 'none';
+                    if (mainContent) mainContent.style.opacity = '1';
+                } else {
+                    const lines = [
+                        "INITIALIZING 130AfterM GLASS OS...",
+                        "LOADING CORE MODULES...",
+                        { text: "EXECUTING HANDSHAKE...", stall: true },
+                        "SYNCING GLASSMORPHISM PROTOCOLS...",
+                        "ACCESS GRANTED"
+                    ];
+                    let delay = 0;
+                    lines.forEach((lineObj, index) => {
+                        setTimeout(() => {
+                            const p = document.createElement('div');
+                            if (typeof lineObj === 'object' && lineObj.stall) {
+                                p.innerHTML = lineObj.text + ' <span class="opacity-40">...</span>';
+                                bootText.appendChild(p);
+                                setTimeout(() => {
+                                    p.innerHTML = lineObj.text + ' <span class="text-green-500 font-bold ml-2">[OK]</span>';
+                                }, 400);
+                            } else {
+                                p.innerText = lineObj;
+                                bootText.appendChild(p);
+                            }
+                            if (index === lines.length - 1) {
+                                setTimeout(() => {
+                                    bootScreen.style.opacity = '0';
+                                    if (mainContent) mainContent.style.opacity = '1';
+                                    setTimeout(() => bootScreen.remove(), 500);
+                                    sessionStorage.setItem('130am_booted', 'true');
+                                }, 800);
+                            }
+                        }, delay);
+                        delay += (typeof lineObj === 'object' && lineObj.stall) ? 600 : (Math.random() * 150 + 100);
+                    });
+                }
+            }
+        });
+
+        // Glitch on Click
+        if (title) {
+            const originalText = title.innerText;
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$";
+            title.addEventListener('click', () => {
+                if (!isSysMode) return;
+                let iterations = 0;
+                const interval = setInterval(() => {
+                    title.innerText = originalText.split("").map((char, index) => {
+                        if (index < iterations) return originalText[index];
+                        return chars[Math.floor(Math.random() * chars.length)];
+                    }).join("");
+                    if (iterations >= originalText.length) {
+                        title.innerText = originalText;
+                        clearInterval(interval);
+                    }
+                    iterations += 1 / 3;
+                }, 30);
+            });
+            // Random occasional glitch
+            setInterval(() => {
+                if (isSysMode && Math.random() > 0.985) {
+                    title.style.textShadow = "2px 0 var(--blood-orange), -2px 0 var(--terminal-amber)";
+                    setTimeout(() => { title.style.textShadow = "none"; }, 100);
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
