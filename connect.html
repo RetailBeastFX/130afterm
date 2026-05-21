@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>130AfterM // CONNECT</title>
+    <meta name="description" content="Official Connection Protocol for 130AfterM. Trader. Builder. Systems Architect.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            --amber: #ffb000;
+            --amber-glow: rgba(255, 176, 0, 0.15);
+            --bg-dark: #050505;
+            --glass-bg: rgba(20, 20, 20, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.06);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #f0ede8;
+            font-family: 'Inter', sans-serif;
+            cursor: crosshair;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(255, 176, 0, 0.03), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.02), transparent 25%);
+        }
+
+        /* ── SHARED STICKY NAV ── */
+        .site-nav {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(5,5,5,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        /* ── SCANLINES ── */
+        .scanlines { position: fixed; inset: 0; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.05)); background-size: 100% 4px; z-index: 9999; pointer-events: none; opacity: 0.3; }
+
+        /* ── PARTICLES ── */
+        .particles-container { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+        .particle { position: absolute; width: 2px; height: 2px; background: var(--amber); box-shadow: 0 0 10px var(--amber); border-radius: 50%; animation: float-up linear infinite; opacity: 0; }
+        @keyframes float-up { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 0.5; } 90% { opacity: 0.5; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
+
+        /* ── GLASS PANELS ── */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-panel::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .glass-panel:hover { border-color: rgba(255,176,0,0.2); transform: translateY(-1px); }
+        .glass-panel:hover::before { opacity: 1; }
+
+        /* ── SOCIAL BUTTONS ── */
+        .link-btn {
+            display: flex; align-items: center; justify-content: space-between;
+            width: 100%; padding: 18px 24px; border-radius: 12px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            color: #f0ede8; font-size: 14px; font-weight: 600;
+            transition: all 0.3s ease; text-decoration: none;
+            position: relative; overflow: hidden;
+        }
+        .link-btn::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,176,0,0.1), transparent);
+            transform: translateX(-100%); transition: transform 0.5s ease; z-index: 0;
+        }
+        .link-btn:hover::before { transform: translateX(100%); }
+        .link-btn:hover {
+            background: rgba(255,176,0,0.05); color: #fff;
+            border-color: rgba(255,176,0,0.3); transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(255,176,0,0.1);
+        }
+        .link-btn > * { position: relative; z-index: 1; }
+        
+        .link-btn.primary { background: rgba(255,176,0,0.08); border-color: rgba(255,176,0,0.2); }
+
+        /* ── GLITCH EFFECT ── */
+        .glitch-hover { position: relative; }
+        .glitch-hover:hover { text-shadow: 1px 0 #ff003c, -1px 0 #00f0ff; animation: glitch-jiggle 0.2s infinite linear alternate-reverse; }
+        @keyframes glitch-jiggle { 0% { transform: skew(0deg); } 20% { transform: skew(-1.5deg); } 40% { transform: skew(1.5deg); } 100% { transform: skew(0deg); } }
+
+        /* ── UTILS ── */
+        .amber-text { color: var(--amber); }
+        .dot-blink { animation: blink 1.5s infinite ease-in-out; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-500 selection:text-black">
+
+<div class="scanlines"></div>
+<div class="particles-container" id="particles"></div>
+
+<!-- ── SHARED STICKY NAV ── -->
+<nav class="site-nav">
+    <div class="max-w-md mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="./index.html">
+            <img src="./logo.png" alt="130AfterM" class="h-7 opacity-80" onerror="this.style.display='none';">
+        </a>
+        <div class="flex items-center gap-1 font-mono text-[10px] tracking-widest">
+            <a href="./index.html" class="px-3 py-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">HOME</a>
+            <a href="./terminal.html" class="px-3 py-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">LABS</a>
+            <a href="./archive.html" class="px-3 py-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">ARCHIVE</a>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-md mx-auto px-6 py-12 md:py-16 relative z-10 flex flex-col items-center">
+
+    <!-- PROFILE HEADER -->
+    <div class="w-28 h-28 rounded-full overflow-hidden border-2 border-white/10 mb-6 relative">
+        <div class="absolute inset-0 bg-amber-500/10 z-10 mix-blend-overlay"></div>
+        <img src="./profile.png" alt="130AfterM" class="w-full h-full object-cover">
+    </div>
+
+    <h1 class="text-3xl font-black tracking-tighter text-white mb-2 glitch-hover">130 AFTER M</h1>
+    <p class="text-xs tracking-[0.2em] text-zinc-400 font-mono uppercase mb-8 text-center">
+        Trader • Builder • Architect
+    </p>
+
+    <!-- LINKS LIST -->
+    <div class="w-full flex flex-col gap-4">
+        
+        <!-- Primary Link -->
+        <a href="https://whop.com/joined/retailbeastfx/products/retailbeastfx-smc-indicator/" target="_blank" class="link-btn primary">
+            <div class="flex items-center gap-4">
+                <i class="fas fa-microchip text-xl amber-text"></i>
+                <div class="flex flex-col">
+                    <span class="tracking-wide">RetailBeastFX Indicator</span>
+                    <span class="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mt-0.5">Automated SMC Mapping</span>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right text-xs opacity-40"></i>
+        </a>
+
+        <div class="h-px w-full bg-white/5 my-2"></div>
+
+        <!-- Social Links -->
+        <a href="https://youtube.com/@130AfterM" target="_blank" class="link-btn">
+            <div class="flex items-center gap-4">
+                <i class="fab fa-youtube text-xl"></i>
+                <span>YouTube</span>
+            </div>
+            <i class="fas fa-external-link-alt text-[10px] opacity-40"></i>
+        </a>
+
+        <a href="https://x.com/130AfterM" target="_blank" class="link-btn">
+            <div class="flex items-center gap-4">
+                <i class="fab fa-x-twitter text-xl"></i>
+                <span>X (Twitter)</span>
+            </div>
+            <i class="fas fa-external-link-alt text-[10px] opacity-40"></i>
+        </a>
+
+        <a href="https://tiktok.com/@130AfterM" target="_blank" class="link-btn">
+            <div class="flex items-center gap-4">
+                <i class="fab fa-tiktok text-xl"></i>
+                <span>TikTok</span>
+            </div>
+            <i class="fas fa-external-link-alt text-[10px] opacity-40"></i>
+        </a>
+
+        <a href="https://threads.net/@130AfterM" target="_blank" class="link-btn">
+            <div class="flex items-center gap-4">
+                <i class="fa-brands fa-threads text-xl"></i>
+                <span>Threads</span>
+            </div>
+            <i class="fas fa-external-link-alt text-[10px] opacity-40"></i>
+        </a>
+
+        <a href="https://pinterest.com/130AfterM" target="_blank" class="link-btn">
+            <div class="flex items-center gap-4">
+                <i class="fab fa-pinterest text-xl"></i>
+                <span>Pinterest</span>
+            </div>
+            <i class="fas fa-external-link-alt text-[10px] opacity-40"></i>
+        </a>
+
+        <a href="https://www.facebook.com/130AfterM" target="_blank" class="link-btn">
+            <div class="flex items-center gap-4">
+                <i class="fab fa-facebook-f text-xl"></i>
+                <span>Facebook</span>
+            </div>
+            <i class="fas fa-external-link-alt text-[10px] opacity-40"></i>
+        </a>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="mt-12 text-center font-mono">
+        <p class="text-[10px] tracking-widest text-zinc-600 uppercase mb-2">1:30 After Midnight</p>
+        <div class="flex items-center justify-center gap-2 text-[9px] text-amber-500 opacity-80 uppercase tracking-widest">
+            <span class="dot-blink">●</span> System Online
+        </div>
+    </footer>
+
+</main>
+
+<script>
+    // Particle Generator
+    const container = document.getElementById('particles');
+    for(let i=0; i<20; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.animationDuration = (Math.random() * 8 + 4) + 's';
+        p.style.animationDelay = (Math.random() * 5) + 's';
+        container.appendChild(p);
+    }
+</script>
+
+</body>
+</html>
