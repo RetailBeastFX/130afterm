@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>130AM // Setup & Playbooks</title>
+    <meta name="description" content="130AM Broker and Platform Setup. Step-by-step connection protocols for Coinexx and Webull.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        * { box-sizing: border-box; }
+        :root {
+            --amber: #ffb000;
+            --amber-glow: rgba(255,176,0,0.15);
+            --bg-dark: #050505;
+            --glass-bg: rgba(18,18,18,0.5);
+            --glass-border: rgba(255,255,255,0.06);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #f0ede8;
+            font-family: 'Inter', sans-serif;
+            cursor: crosshair;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background-image:
+                radial-gradient(ellipse at 10% 60%, rgba(255,176,0,0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 20%, rgba(255,255,255,0.02) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+        a, button { cursor: pointer; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* ── SCANLINES ── */
+        .scanlines { position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.25; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px); }
+
+        /* ── PARTICLES ── */
+        .particles-container { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+        .particle { position: absolute; width: 1.5px; height: 1.5px; background: var(--amber); box-shadow: 0 0 8px var(--amber); border-radius: 50%; animation: float-up linear infinite; opacity: 0; }
+        @keyframes float-up { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 0.5; } 90% { opacity: 0.5; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
+
+        /* ── NAV ── */
+        .site-nav { position: sticky; top: 0; z-index: 100; background: rgba(5,5,5,0.92); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid var(--glass-border); }
+
+        /* ── HERO ── */
+        .hero-block { border: 1px solid rgba(255,176,0,0.2); border-left: 3px solid var(--amber); background: rgba(255,176,0,0.03); backdrop-filter: blur(20px); border-radius: 20px; padding: 32px; margin-bottom: 32px; }
+
+        /* ── CARDS ── */
+        .setup-card {
+            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 16px; padding: 24px; position: relative; overflow: hidden;
+            margin-bottom: 24px; transition: all 0.3s ease;
+        }
+        .setup-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: transparent; transition: background 0.3s ease; }
+        .setup-card:hover { border-color: rgba(255,176,0,0.25); box-shadow: 0 8px 30px rgba(255,176,0,0.06); }
+        .setup-card:hover::before { background: var(--amber); }
+
+        .step-number {
+            font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+            color: var(--amber); background: rgba(255,176,0,0.1);
+            padding: 4px 10px; border-radius: 6px; letter-spacing: 0.1em;
+            display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;
+        }
+
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--amber); color: #000;
+            font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+            padding: 10px 20px; border-radius: 8px; text-decoration: none; text-transform: uppercase;
+            transition: all 0.3s ease; border: 1px solid var(--amber);
+        }
+        .cta-btn:hover { background: transparent; color: var(--amber); box-shadow: 0 0 15px rgba(255,176,0,0.2); }
+
+        /* ── GLITCH ── */
+        .glitch-hover:hover { text-shadow: 2px 0 #ff003c, -2px 0 #00f0ff; animation: glitch-j 0.2s infinite linear alternate-reverse; }
+        @keyframes glitch-j { 0% { transform: skew(0deg); } 20% { transform: skew(-2deg); } 40% { transform: skew(2deg); } 60% { transform: skew(-1deg); } 80% { transform: skew(1deg); } 100% { transform: skew(0deg); } }
+
+        /* ── BLINK ── */
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .blink { animation: blink 2s ease infinite; }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-500 selection:text-black">
+
+<div class="scanlines"></div>
+<div class="particles-container" id="particles"></div>
+
+<!-- ── NAV ── -->
+<nav class="site-nav">
+    <div class="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <img src="./logo.png" alt="130AM" class="h-6 opacity-70" onerror="this.style.display='none';">
+            <span class="font-mono text-[9px] text-zinc-700 tracking-widest hidden sm:block">// after hours.</span>
+        </div>
+        <div class="flex items-center gap-1 font-mono text-[9px] tracking-widest">
+            <a href="./index.html"    class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">HOME</a>
+            <a href="./terminal.html" class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">LABS</a>
+            <a href="./archive.html"  class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">ARCHIVE</a>
+            <a href="./setup.html"    class="px-3 py-1.5 text-amber-400 font-bold rounded-lg bg-amber-500/10 border border-amber-500/20">SETUP</a>
+            <a href="./connect.html"  class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">CONNECT</a>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-3xl mx-auto px-6 py-10 md:py-16 relative z-10">
+
+    <!-- ── HERO ── -->
+    <div class="hero-block mb-12">
+        <div class="font-mono text-[11px] font-bold tracking-[0.15em] text-amber-400 mb-3 flex items-center gap-3">
+            130AM // SETUP
+            <span class="text-zinc-700 font-normal">|</span>
+            <span class="text-zinc-600 font-normal tracking-widest">System Playbooks</span>
+        </div>
+        <p class="text-[18px] font-bold text-zinc-200 leading-relaxed mb-2 glitch-hover">Connection Protocols.</p>
+        <p class="text-sm text-zinc-500 leading-relaxed">
+            Step-by-step guides to mirror the exact environments I use for Forex (Coinexx/MT5) and Options (Webull). No fluff, just the exact steps to get live.
+        </p>
+    </div>
+
+    <!-- ── FOREX SETUP: COINEXX + MT5 ── -->
+    <div class="mb-16">
+        <div class="flex items-center gap-4 mb-6">
+            <h2 class="text-xl font-black text-white tracking-tight uppercase">Forex Engine</h2>
+            <div class="h-px flex-1 bg-white/10"></div>
+            <span class="font-mono text-[10px] text-zinc-500 tracking-widest uppercase">Coinexx + MT5</span>
+        </div>
+
+        <div class="setup-card">
+            <div class="step-number">STEP 01</div>
+            <h3 class="text-lg font-bold text-white mb-2">Create Your Coinexx Account</h3>
+            <p class="text-sm text-zinc-400 mb-6 leading-relaxed">
+                Coinexx is an unregulated broker that I personally use and trust. It allows for high leverage and crypto funding, bypassing PDT rules and heavy restrictions.
+            </p>
+            <a href="https://my.coinexx.com/register?refLink=NTAxMDA2&refRm=11" target="_blank" rel="noopener" class="cta-btn">
+                <span>Sign Up (Affiliate Link)</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="setup-card">
+            <div class="step-number">STEP 02</div>
+            <h3 class="text-lg font-bold text-white mb-2">Fund via Crypto</h3>
+            <p class="text-sm text-zinc-400 leading-relaxed">
+                Once registered, navigate to the funding section. I recommend using Litecoin (LTC) or XRP for the lowest network fees and fastest transfer times from your crypto exchange (like Coinbase or Kraken) to Coinexx.
+            </p>
+        </div>
+
+        <div class="setup-card">
+            <div class="step-number">STEP 03</div>
+            <h3 class="text-lg font-bold text-white mb-2">Connect MetaTrader 5</h3>
+            <p class="text-sm text-zinc-400 mb-6 leading-relaxed">
+                Download MetaTrader 5. Coinexx will email you your server details (e.g., Coinexx-Live), account number, and master password. Enter these into MT5 to link your funded account to the trading terminal.
+            </p>
+            <div class="flex gap-4">
+                <a href="https://www.metatrader5.com/en/download" target="_blank" rel="noopener" class="text-xs font-mono text-amber-500 hover:text-amber-400 underline decoration-amber-500/30 underline-offset-4">
+                    Download MT5 Windows
+                </a>
+                <span class="text-zinc-600">|</span>
+                <a href="https://www.metatrader5.com/en/mobile-trading" target="_blank" rel="noopener" class="text-xs font-mono text-amber-500 hover:text-amber-400 underline decoration-amber-500/30 underline-offset-4">
+                    Download MT5 Mobile
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── OPTIONS SETUP: WEBULL ── -->
+    <div>
+        <div class="flex items-center gap-4 mb-6">
+            <h2 class="text-xl font-black text-white tracking-tight uppercase">Options Engine</h2>
+            <div class="h-px flex-1 bg-white/10"></div>
+            <span class="font-mono text-[10px] text-zinc-500 tracking-widest uppercase">Webull</span>
+        </div>
+
+        <div class="setup-card">
+            <div class="step-number">STEP 01</div>
+            <h3 class="text-lg font-bold text-white mb-2">Open a Webull Cash Account</h3>
+            <p class="text-sm text-zinc-400 mb-6 leading-relaxed">
+                For options, I prefer a Webull Cash Account over a Margin Account. A cash account completely avoids the Pattern Day Trader (PDT) rule, meaning you can day trade options with your settled cash every single day without needing $25k. Options cash settles overnight.
+            </p>
+            <a href="https://www.webull.com" target="_blank" rel="noopener" class="cta-btn">
+                <span>Create Webull Account</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="setup-card">
+            <div class="step-number">STEP 02</div>
+            <h3 class="text-lg font-bold text-white mb-2">Apply for Options Permissions</h3>
+            <p class="text-sm text-zinc-400 leading-relaxed">
+                Inside the app, navigate to your account settings and apply for Options Trading (Level 2). This allows you to buy calls and puts. You will need to fill out a brief experience questionnaire to get approved by Webull.
+            </p>
+        </div>
+
+        <div class="setup-card">
+            <div class="step-number">STEP 03</div>
+            <h3 class="text-lg font-bold text-white mb-2">Configure Active Trader</h3>
+            <p class="text-sm text-zinc-400 leading-relaxed">
+                Download the Webull Desktop app. Set up the 'Active Trader' tab for rapid entry/exit. Map your hotkeys for "Buy Custom" and "Sell Custom" to ensure you can get in and out of volatile options contracts quickly without dragging limit orders manually.
+            </p>
+        </div>
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <footer class="mt-20 text-center font-mono border-t border-white/[0.05] pt-8">
+        <p class="text-2xl font-black text-white mb-1 tracking-tight" style="font-family: Inter, sans-serif;">130AM</p>
+        <p class="text-[10px] tracking-[0.3em] text-zinc-700 uppercase mb-6">after hours.</p>
+        <div class="flex items-center justify-center gap-2 text-[8px] text-amber-500 opacity-80 uppercase tracking-widest">
+            <span class="blink">●</span> System Online
+        </div>
+    </footer>
+
+</main>
+
+<script>
+    const container = document.getElementById('particles');
+    for(let i=0;i<25;i++){
+        const p=document.createElement('div'); p.className='particle';
+        p.style.left=Math.random()*100+'vw';
+        p.style.animationDuration=(Math.random()*10+6)+'s';
+        p.style.animationDelay=(Math.random()*6)+'s';
+        container.appendChild(p);
+    }
+</script>
+</body>
+</html>
