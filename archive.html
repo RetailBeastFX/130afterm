@@ -1,558 +1,457 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>130AfterM // RBFX_ARCHIVE</title>
-    <meta name="description" content="EDGE_PROTOCOL // ACTIVE - Self-taught execution. Open systems over paid dependency.">
+    <title>130AM // Archive</title>
+    <meta name="description" content="130AM Trading Archive — Charts, systems, tools, and documented execution.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@400;600;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
         * { box-sizing: border-box; }
-
         :root {
             --amber: #ffb000;
-            --orange: #ff4500;
-            --bg: #050505;
-            --glass-bg: rgba(20, 20, 20, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.06);
-            --text: #c8c4bc;
-            --dim: #5a5750;
+            --amber-glow: rgba(255,176,0,0.15);
+            --bg-dark: #050505;
+            --glass-bg: rgba(18,18,18,0.5);
+            --glass-border: rgba(255,255,255,0.06);
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'JetBrains Mono', monospace;
-            min-height: 100vh;
-            overflow-x: hidden;
+            background-color: var(--bg-dark);
+            color: #f0ede8;
+            font-family: 'Inter', sans-serif;
             cursor: crosshair;
+            overflow-x: hidden;
+            min-height: 100vh;
             background-image:
-                radial-gradient(circle at 10% 60%, rgba(255, 176, 0, 0.03), transparent 30%),
-                radial-gradient(circle at 90% 20%, rgba(255, 255, 255, 0.015), transparent 30%);
+                radial-gradient(ellipse at 10% 60%, rgba(255,176,0,0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 20%, rgba(255,255,255,0.02) 0%, transparent 40%);
             background-attachment: fixed;
         }
-
-        /* ── PARTICLES ── */
-        .particles-container {
-            position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
-        }
-        .particle {
-            position: absolute; width: 2px; height: 2px;
-            background: var(--amber); box-shadow: 0 0 10px var(--amber);
-            border-radius: 50%; animation: float-up linear infinite; opacity: 0;
-        }
-        @keyframes float-up {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            10% { opacity: 0.5; } 90% { opacity: 0.5; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
-        }
+        a, button { cursor: pointer; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
 
         /* ── SCANLINES ── */
-        .scanlines {
-            position: fixed; inset: 0;
-            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.05) 50%);
-            background-size: 100% 4px; z-index: 9999; pointer-events: none; opacity: 0.25;
-        }
+        .scanlines { position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.25; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px); }
 
-        /* ── SHARED NAV ── */
-        .site-nav {
-            position: sticky; top: 0; z-index: 100;
-            background: rgba(5,5,5,0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
-        }
+        /* ── PARTICLES ── */
+        .particles-container { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+        .particle { position: absolute; width: 1.5px; height: 1.5px; background: var(--amber); box-shadow: 0 0 8px var(--amber); border-radius: 50%; animation: float-up linear infinite; opacity: 0; }
+        @keyframes float-up { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 0.5; } 90% { opacity: 0.5; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
 
-        /* ── GLASS PANELS ── */
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        .glass-panel::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-            opacity: 0; transition: opacity 0.3s;
-        }
-        .glass-panel:hover { border-color: rgba(255,176,0,0.2); transform: translateY(-1px); }
-        .glass-panel:hover::before { opacity: 1; }
+        /* ── NAV ── */
+        .site-nav { position: sticky; top: 0; z-index: 100; background: rgba(5,5,5,0.92); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid var(--glass-border); }
 
-        /* ── HERO BLOCK ── */
-        .hero-block {
-            border: 1px solid rgba(255, 176, 0, 0.2);
-            border-left: 3px solid var(--amber);
-            background: rgba(255, 176, 0, 0.03);
-            backdrop-filter: blur(20px);
-            border-radius: 16px;
-            padding: 28px;
-            margin-bottom: 24px;
-        }
-
-        /* ── TIER HEADERS ── */
-        .tier-header {
-            display: flex; align-items: center; gap: 12px;
-            margin-bottom: 16px; margin-top: 40px;
-        }
-        .tier-number {
-            font-size: 9px; letter-spacing: 0.15em;
-            padding: 4px 10px;
-            border: 1px solid var(--glass-border);
-            color: var(--amber);
-            background: rgba(255,176,0,0.05);
-            border-radius: 4px;
-        }
-        .tier-line { flex: 1; height: 1px; background: var(--glass-border); }
+        /* ── GLASS ── */
+        .glass-panel { background: var(--glass-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--glass-border); border-radius: 20px; transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.4,0,0.2,1); position: relative; overflow: hidden; }
+        .glass-panel::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); opacity: 0; transition: opacity 0.3s; }
+        .glass-panel:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+        .glass-panel:hover::after { opacity: 1; }
+        .glass-amber:hover { border-color: rgba(255,176,0,0.25); box-shadow: 0 12px 40px var(--amber-glow); }
 
         /* ── MODULE CARDS ── */
-        .module-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 18px;
-            transition: all 0.25s ease;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            height: 100%;
-        }
-        .module-card::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 2px;
-            background: transparent; transition: background 0.25s ease;
-        }
-        .module-card:hover:not(.status-building) {
-            border-color: rgba(255,176,0,0.25);
-            box-shadow: 0 8px 30px rgba(255,176,0,0.06);
-            transform: translateY(-2px);
-        }
+        .module-card { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; transition: all 0.25s ease; display: flex; flex-direction: column; position: relative; overflow: hidden; height: 100%; }
+        .module-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: transparent; transition: background 0.25s ease; }
+        .module-card:hover:not(.status-building) { border-color: rgba(255,176,0,0.25); box-shadow: 0 8px 30px rgba(255,176,0,0.06); transform: translateY(-2px); }
         .module-card:hover:not(.status-building)::before { background: var(--amber); }
-        .module-card.status-building { opacity: 0.6; }
+        .module-card.status-building { opacity: 0.55; }
+        a.module-card { text-decoration: none; }
 
-        .module-name {
-            font-size: 13px; font-weight: 700;
-            color: #f0ede8; letter-spacing: 0.04em; margin-bottom: 6px;
-        }
-        .module-meta {
-            display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
-        }
-        .badge {
-            font-size: 8px; letter-spacing: 0.14em;
-            padding: 2px 8px; border: 1px solid;
-            text-transform: uppercase; font-weight: 700; border-radius: 4px;
-        }
-        .badge-core { border-color: rgba(255,176,0,0.4); color: var(--amber); }
+        .module-name { font-size: 14px; font-weight: 700; color: #f0ede8; letter-spacing: 0.02em; margin-bottom: 6px; font-family: 'Inter', sans-serif; }
+        .module-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .badge { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.14em; padding: 2px 8px; border: 1px solid; text-transform: uppercase; font-weight: 700; border-radius: 4px; }
+        .badge-core   { border-color: rgba(255,176,0,0.4);   color: var(--amber); }
         .badge-system { border-color: rgba(100,160,255,0.4); color: #64a0ff; }
-        .badge-log { border-color: rgba(180,100,255,0.4); color: #b464ff; }
-
-        .status-dot {
-            width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-left: auto;
-        }
-        .dot-live { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,0.6); }
+        .badge-tool   { border-color: rgba(74,222,128,0.4);  color: #4ade80; }
+        .badge-mental { border-color: rgba(180,100,255,0.4); color: #b464ff; }
+        .status-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-left: auto; }
+        .dot-live     { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,0.6); }
         .dot-building { background: var(--amber); box-shadow: 0 0 6px rgba(255,176,0,0.5); }
 
         .module-topics { flex: 1; list-style: none; padding: 0; margin-bottom: 14px; }
-        .module-topics li {
-            font-size: 11px; opacity: 0.6; padding: 3px 0;
-            display: flex; align-items: flex-start; gap: 6px;
-        }
-        .module-topics li::before {
-            content: '—'; opacity: 0.3; flex-shrink: 0; font-size: 9px;
-        }
+        .module-topics li { font-size: 11px; color: #71717a; padding: 4px 0; display: flex; align-items: flex-start; gap: 8px; font-family: 'JetBrains Mono', monospace; }
+        .module-topics li::before { content: '—'; opacity: 0.3; flex-shrink: 0; font-size: 9px; }
+        .module-topics a { color: #71717a; text-decoration: none; transition: color 0.2s; }
+        .module-topics a:hover { color: var(--amber); }
+
+        /* ── TIER HEADERS ── */
+        .tier-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; margin-top: 48px; }
+        .tier-number { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; padding: 4px 10px; border: 1px solid var(--glass-border); color: var(--amber); background: rgba(255,176,0,0.05); border-radius: 4px; }
+        .tier-label  { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: #f4f4f5; font-family: 'JetBrains Mono', monospace; }
+        .tier-status { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; color: #3f3f46; }
+        .tier-line   { flex: 1; height: 1px; background: var(--glass-border); }
 
         /* ── CHANGELOG ── */
-        .changelog-item {
-            margin-bottom: 20px;
-            border-left: 1px solid rgba(255,176,0,0.2);
-            padding-left: 16px; position: relative;
-        }
-        .changelog-item::before {
-            content: ''; position: absolute; left: -3px; top: 5px;
-            width: 5px; height: 5px; background: var(--amber); border-radius: 50%;
-        }
-        .changelog-date { font-size: 9px; letter-spacing: 0.1em; color: var(--dim); margin-bottom: 4px; }
-        .changelog-text { font-size: 12px; color: #f0ede8; }
-
-        /* ── DEPTH SIGNAL ── */
-        .depth-signal {
-            display: flex; gap: 16px; flex-wrap: wrap;
-            font-size: 9px; letter-spacing: 0.15em;
-            color: var(--dim); margin-bottom: 40px;
-        }
-        .depth-signal span { color: var(--amber); font-weight: 700; }
-        .depth-signal .status-val { color: #22c55e; }
+        .changelog-item { margin-bottom: 20px; border-left: 1px solid rgba(255,176,0,0.2); padding-left: 16px; position: relative; }
+        .changelog-item::before { content: ''; position: absolute; left: -3px; top: 6px; width: 5px; height: 5px; background: var(--amber); border-radius: 50%; }
+        .changelog-date { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: #52525b; margin-bottom: 4px; }
+        .changelog-text { font-size: 13px; color: #e4e4e7; }
 
         /* ── GLITCH ── */
-        .glitch-hover:hover {
-            text-shadow: 1px 0 #ff003c, -1px 0 #00f0ff;
-            animation: glitch-jiggle 0.2s infinite linear alternate-reverse;
-        }
-        @keyframes glitch-jiggle {
-            0% { transform: skew(0deg); } 20% { transform: skew(-1.5deg); }
-            40% { transform: skew(1.5deg); } 100% { transform: skew(0deg); }
-        }
+        .glitch-hover:hover { text-shadow: 2px 0 #ff003c, -2px 0 #00f0ff; animation: glitch-j 0.2s infinite linear alternate-reverse; }
+        @keyframes glitch-j { 0% { transform: skew(0deg); } 20% { transform: skew(-2deg); } 40% { transform: skew(2deg); } 60% { transform: skew(-1deg); } 80% { transform: skew(1deg); } 100% { transform: skew(0deg); } }
 
         /* ── BLINK ── */
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
         .blink { animation: blink 2s ease infinite; }
+
+        /* ── SECTION LABEL ── */
+        .section-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: #3f3f46; }
+
+        /* ── HERO ── */
+        .hero-block { border: 1px solid rgba(255,176,0,0.2); border-left: 3px solid var(--amber); background: rgba(255,176,0,0.03); backdrop-filter: blur(20px); border-radius: 20px; padding: 32px; margin-bottom: 32px; }
+
+        /* ── STAT PILLS ── */
+        .depth-signal { display: flex; gap: 20px; flex-wrap: wrap; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; color: #52525b; margin-bottom: 48px; }
+        .depth-signal span { color: var(--amber); font-weight: 700; }
+        .depth-signal .status-val { color: #22c55e; }
     </style>
 </head>
 <body class="antialiased selection:bg-amber-500 selection:text-black">
 
-    <div class="scanlines"></div>
-    <div class="particles-container" id="particles"></div>
+<div class="scanlines"></div>
+<div class="particles-container" id="particles"></div>
 
-    <!-- ── SHARED STICKY NAV ── -->
-    <nav class="site-nav">
-        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-            <a href="./index.html">
-                <img src="./logo.png" alt="130AfterM" class="h-7 opacity-80" onerror="this.style.display='none';">
-            </a>
-            <div class="flex items-center gap-1 font-mono text-[10px] tracking-widest">
-                <a href="./index.html" class="px-3 py-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">HOME</a>
-                <a href="./terminal.html" class="px-3 py-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">LABS</a>
-                <a href="./archive.html" class="px-3 py-2 text-amber-400 font-bold rounded-lg bg-amber-500/10 border border-amber-500/20">ARCHIVE</a>
-                <a href="./connect.html" class="px-3 py-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">CONNECT</a>
-            </div>
+<!-- ── NAV ── -->
+<nav class="site-nav">
+    <div class="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <img src="./logo.png" alt="130AM" class="h-6 opacity-70" onerror="this.style.display='none';">
+            <span class="font-mono text-[9px] text-zinc-700 tracking-widest hidden sm:block">// after hours.</span>
         </div>
-    </nav>
-
-    <main class="max-w-4xl mx-auto px-6 py-10 md:py-14 relative z-10">
-
-        <!-- ── HERO BLOCK ── -->
-        <div class="hero-block mb-8">
-            <div class="text-[11px] font-bold tracking-[0.15em] text-amber-400 mb-3 flex items-center gap-3">
-                EDGE_PROTOCOL // ACTIVE
-                <span class="text-[9px] text-zinc-600 font-normal">|</span>
-                <span class="text-[9px] tracking-widest text-zinc-500 font-normal">RBFX_ARCHIVE</span>
-            </div>
-            <div class="text-[13px] leading-relaxed text-zinc-300 mb-4">
-                Self-taught execution.<br>
-                Open systems over paid dependency.<br><br>
-                Markets decoded through structure,<br>
-                repetition, and documentation.
-            </div>
-            <div class="text-[10px] tracking-[0.1em] text-zinc-600 uppercase flex items-center gap-2">
-                <span class="blink text-amber-500">●</span> STATUS: EVOLVING
-                <span class="ml-4 text-zinc-700">1:30 After Midnight</span>
-            </div>
+        <div class="flex items-center gap-1 font-mono text-[9px] tracking-widest">
+            <a href="./index.html"   class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">HOME</a>
+            <a href="./terminal.html" class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">LABS</a>
+            <a href="./archive.html" class="px-3 py-1.5 text-amber-400 font-bold rounded-lg bg-amber-500/10 border border-amber-500/20">ARCHIVE</a>
+            <a href="./connect.html" class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">CONNECT</a>
         </div>
+    </div>
+</nav>
 
-        <!-- ── DEPTH SIGNAL ── -->
-        <div class="depth-signal">
-            <div>MODULES: <span>17</span></div>
-            <div class="opacity-30">|</div>
-            <div>ACTIVE_LOGS: <span>08</span></div>
-            <div class="opacity-30">|</div>
-            <div>TOOLS: <span>04</span></div>
-            <div class="opacity-30">|</div>
-            <div>STATUS: <span class="status-val">GROWING</span></div>
+<main class="max-w-5xl mx-auto px-6 py-10 md:py-16 relative z-10">
+
+    <!-- ── HERO ── -->
+    <div class="hero-block mb-8">
+        <div class="font-mono text-[11px] font-bold tracking-[0.15em] text-amber-400 mb-3 flex items-center gap-3">
+            130AM // ARCHIVE
+            <span class="text-zinc-700 font-normal">|</span>
+            <span class="text-zinc-600 font-normal tracking-widest">Documented execution</span>
         </div>
-
-
-        <!-- ══════════ 01 — FOUNDATION_LAYER ══════════ -->
-        <div class="tier-header">
-            <span class="tier-number">01</span>
-            <span class="text-[11px] font-bold tracking-[0.1em] text-zinc-100">FOUNDATION_LAYER</span>
-            <span class="text-[9px] tracking-widest text-zinc-600">// STATUS: CORE</span>
-            <div class="tier-line"></div>
+        <p class="text-[15px] font-semibold text-zinc-200 leading-relaxed mb-2">Charts, notes, wins, losses, and lessons.</p>
+        <p class="text-sm text-zinc-500 leading-relaxed mb-4">Self-taught execution. Open systems over paid dependency.<br>Markets decoded through structure, repetition, and documentation.</p>
+        <div class="font-mono text-[10px] tracking-[0.1em] text-zinc-700 uppercase flex items-center gap-2">
+            <span class="blink text-amber-500">●</span> STATUS: EVOLVING
+            <span class="ml-4 text-zinc-800">1:30 After Midnight</span>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="module-card">
-                <div class="module-name">Market Basics</div>
-                <div class="module-meta">
-                    <span class="badge badge-core">Core</span>
-                    <div class="status-dot dot-live"></div>
-                </div>
+    </div>
+
+    <!-- ── DEPTH SIGNAL ── -->
+    <div class="depth-signal">
+        <div>MODULES: <span>16</span></div>
+        <div class="opacity-30">|</div>
+        <div>ACTIVE_LOGS: <span>08</span></div>
+        <div class="opacity-30">|</div>
+        <div>TOOLS: <span>04</span></div>
+        <div class="opacity-30">|</div>
+        <div>STATUS: <span class="status-val">GROWING</span></div>
+    </div>
+
+    <!-- ══ 01 — FOUNDATION_LAYER ══ -->
+    <div class="tier-header">
+        <span class="tier-number">01</span>
+        <span class="tier-label">FOUNDATION_LAYER</span>
+        <span class="tier-status">// Core</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <a href="https://www.babypips.com/learn/forex" target="_blank" rel="noopener" class="module-card">
+            <div class="module-name">Market Basics</div>
+            <div class="module-meta">
+                <span class="badge badge-core">Core</span>
+                <div class="status-dot dot-live"></div>
+            </div>
+            <ul class="module-topics">
+                <li><a href="https://www.babypips.com/learn/forex" target="_blank">BabyPips School of Pipsology</a></li>
+                <li>Session behavior &amp; overlap timing</li>
+                <li>Currency pair mechanics</li>
+                <li>Risk basics &amp; position sizing</li>
+            </ul>
+            <div class="mt-auto font-mono text-[9px] text-zinc-700 flex items-center gap-1 group-hover:text-amber-500">babypips.com <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
+        </a>
+        <a href="https://www.youtube.com/@RoseTrading" target="_blank" rel="noopener" class="module-card">
+            <div class="module-name">Options Mechanics</div>
+            <div class="module-meta">
+                <span class="badge badge-core">Core</span>
+                <div class="status-dot dot-live"></div>
+            </div>
+            <ul class="module-topics">
+                <li><a href="https://www.youtube.com/@RoseTrading" target="_blank">Rose Trading — YouTube</a></li>
+                <li>Greeks: Delta, Gamma, Theta, Vega</li>
+                <li>Theta decay &amp; Vega exposure</li>
+                <li>Contract behavior &amp; expiry mechanics</li>
+                <li>Base execution strategies</li>
+            </ul>
+            <div class="mt-auto font-mono text-[9px] text-zinc-700">youtube.com/@RoseTrading <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
+        </a>
+    </div>
+
+    <!-- ══ 02 — CORE_METHOD ══ -->
+    <div class="tier-header">
+        <span class="tier-number">02</span>
+        <span class="tier-label">CORE_METHOD</span>
+        <span class="tier-status">// Primary system</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <a href="https://www.youtube.com/@InnerCircleTrader" target="_blank" rel="noopener" class="module-card">
+            <div class="module-name">ICT 2022 Mentorship</div>
+            <div class="module-meta">
+                <span class="badge badge-system">System</span>
+                <div class="status-dot dot-live"></div>
+            </div>
+            <ul class="module-topics">
+                <li><a href="https://www.youtube.com/@InnerCircleTrader" target="_blank">ICT — Inner Circle Trader</a></li>
+                <li>Market structure (BOS / CHoCH)</li>
+                <li>Liquidity &amp; Displacement</li>
+                <li>PD Arrays — FVG, OB, BB, SIBI</li>
+                <li>Draw on Liquidity (DOL)</li>
+                <li>Timing, Killzones &amp; AMD cycle</li>
+            </ul>
+            <div class="mt-auto font-mono text-[9px] text-zinc-700">youtube.com/@InnerCircleTrader <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
+        </a>
+        <div class="module-card">
+            <div class="module-name">SMC — Smart Money Concepts</div>
+            <div class="module-meta">
+                <span class="badge badge-system">System</span>
+                <div class="status-dot dot-live"></div>
+            </div>
+            <ul class="module-topics">
+                <li><a href="https://www.youtube.com/@MentFX" target="_blank">MentFX — SMC breakdown</a></li>
+                <li>Order Block theory</li>
+                <li>Supply &amp; Demand zones</li>
+                <li>Fair Value Gaps (FVG)</li>
+                <li>Reversals &amp; Break of Structure</li>
+                <li>Internal vs external liquidity</li>
+                <li>Confluence building</li>
+            </ul>
+            <div class="mt-auto font-mono text-[9px] text-zinc-700">youtube.com/@MentFX <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
+        </div>
+    </div>
+
+    <!-- ══ 03 — VISUAL_DECODERS ══ -->
+    <div class="tier-header">
+        <span class="tier-number">03</span>
+        <span class="tier-label">VISUAL_DECODERS</span>
+        <span class="tier-status">// Active inputs</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <a href="https://www.youtube.com/@ETMFX" target="_blank" rel="noopener" class="module-card">
+            <div class="module-name">ETM FX</div>
+            <div class="font-mono text-[8px] text-zinc-700 uppercase tracking-widest mb-3">Visual Structure</div>
+            <ul class="module-topics">
+                <li><a href="https://www.youtube.com/@ETMFX" target="_blank">ETM FX — YouTube</a></li>
+                <li>Price action translation</li>
+                <li>Structural charting methods</li>
+            </ul>
+            <div class="mt-auto font-mono text-[9px] text-zinc-700">youtube.com/@ETMFX <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
+        </a>
+        <a href="https://www.youtube.com/@SmartRisk" target="_blank" rel="noopener" class="module-card">
+            <div class="module-name">Smart Risk</div>
+            <div class="font-mono text-[8px] text-zinc-700 uppercase tracking-widest mb-3">Execution Examples</div>
+            <ul class="module-topics">
+                <li><a href="https://www.youtube.com/@SmartRisk" target="_blank">Smart Risk — YouTube</a></li>
+                <li>Trade mechanics in action</li>
+                <li>Entry modeling &amp; SL placement</li>
+            </ul>
+            <div class="mt-auto font-mono text-[9px] text-zinc-700">youtube.com/@SmartRisk <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
+        </a>
+    </div>
+
+    <!-- ══ 04 — TOOLING_STACK ══ -->
+    <div class="tier-header">
+        <span class="tier-number">04</span>
+        <span class="tier-label">TOOLING_STACK</span>
+        <span class="tier-status">// Deployed</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <a href="https://www.tradingview.com" target="_blank" rel="noopener" class="module-card">
+            <div class="module-name">TradingView</div>
+            <div class="font-mono text-[8px] text-amber-500 uppercase tracking-widest mb-3">Primary Chart Engine</div>
+            <ul class="module-topics">
+                <li>Chart structure &amp; layouts</li>
+                <li>Custom Pine Script indicators</li>
+                <li>Multi-timeframe analysis</li>
+            </ul>
+            <div class="mt-auto font-mono text-[9px] text-zinc-700">tradingview.com <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
+        </a>
+        <a href="https://www.thinkorswim.com" target="_blank" rel="noopener" class="module-card">
+            <div class="module-name">Thinkorswim</div>
+            <div class="font-mono text-[8px] text-amber-500 uppercase tracking-widest mb-3">Options Execution</div>
+            <ul class="module-topics">
+                <li>Options chain &amp; Greeks</li>
+                <li>ThinkScript setups</li>
+                <li>Live execution</li>
+            </ul>
+            <div class="mt-auto font-mono text-[9px] text-zinc-700">thinkorswim.com <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
+        </a>
+        <a href="https://my.coinexx.com/register?refLink=NTAxMDA2&refRm=11" target="_blank" rel="noopener" class="module-card glass-amber">
+            <div class="module-name">Coinexx</div>
+            <div class="font-mono text-[8px] text-amber-500 uppercase tracking-widest mb-3">Forex Broker</div>
+            <ul class="module-topics">
+                <li>Forex execution — live account</li>
+                <li>MetaTrader 4/5 integration</li>
+                <li>Unregulated — trusted personally</li>
+            </ul>
+            <div class="mt-auto font-mono text-[9px] text-amber-600">coinexx.com (affiliate) <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
+        </a>
+        <a href="https://www.metatrader4.com" target="_blank" rel="noopener" class="module-card">
+            <div class="module-name">MetaTrader 4/5</div>
+            <div class="font-mono text-[8px] text-amber-500 uppercase tracking-widest mb-3">Forex / MQL5 Engine</div>
+            <ul class="module-topics">
+                <li>Forex order execution</li>
+                <li>MQL5 custom plugins</li>
+                <li>EA &amp; script development</li>
+            </ul>
+            <div class="mt-auto font-mono text-[9px] text-zinc-700">metatrader4.com <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
+        </a>
+    </div>
+
+    <!-- ══ 05 — MENTAL_FRAMEWORK ══ -->
+    <div class="tier-header">
+        <span class="tier-number">05</span>
+        <span class="tier-label">MENTAL_FRAMEWORK</span>
+        <span class="tier-status">// Stability protocol</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="module-card p-6" style="border-left: 2px solid rgba(255,176,0,0.3);">
+        <div class="flex flex-col md:flex-row gap-8">
+            <div class="flex-1">
+                <div class="module-name mb-4">Core Reads</div>
                 <ul class="module-topics">
-                    <li>BabyPips</li>
-                    <li>Session behavior</li>
-                    <li>Currency mechanics</li>
-                    <li>Risk basics</li>
+                    <li><a href="https://www.amazon.com/Trading-Zone-Confidence-Discipline-Attitude/dp/0735201447" target="_blank">Trading in the Zone — Mark Douglas</a></li>
+                    <li><a href="https://www.amazon.com/Best-Loser-Wins-Why-Normal/dp/B09VL9D3P5" target="_blank">The Best Loser Wins — Tom Hougaard</a></li>
+                    <li><a href="https://www.amazon.com/Mental-Game-Trading-Process-Performance/dp/1737872404" target="_blank">The Mental Game of Trading — Jared Tendler</a></li>
                 </ul>
             </div>
-            <div class="module-card">
-                <div class="module-name">Options Mechanics</div>
-                <div class="module-meta">
-                    <span class="badge badge-core">Core</span>
-                    <div class="status-dot dot-live"></div>
-                </div>
+            <div class="flex-1 flex items-center border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-8">
+                <p class="text-[12px] leading-relaxed text-zinc-500 italic">
+                    "Execution failure usually isn't strategy failure.<br>Risk, psychology, and process matter."
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 06 — AI_LAYER ══ -->
+    <div class="tier-header">
+        <span class="tier-number">06</span>
+        <span class="tier-label">AI_LAYER</span>
+        <span class="tier-status">// Augmented</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="module-card p-6">
+        <div class="flex flex-col md:flex-row gap-8">
+            <div class="flex-1">
+                <div class="font-mono text-[9px] text-zinc-600 uppercase tracking-widest mb-4">Input // Protocol</div>
                 <ul class="module-topics">
-                    <li>Rose Trading</li>
-                    <li>Greeks</li>
-                    <li>Theta &amp; Vega</li>
-                    <li>Contract behavior</li>
-                    <li>Base execution</li>
+                    <li><a href="https://chatgpt.com" target="_blank">ChatGPT — trade review &amp; pattern analysis</a></li>
+                    <li>Mechanical prompting frameworks</li>
+                    <li>Pattern &amp; setup breakdown</li>
+                </ul>
+            </div>
+            <div class="flex-1 border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-8">
+                <div class="font-mono text-[9px] text-zinc-600 uppercase tracking-widest mb-4">Output // Mechanics</div>
+                <ul class="module-topics">
+                    <li>Structural clarity on messy setups</li>
+                    <li>Accelerated review &amp; journaling</li>
+                    <li>Logic decoding for confluences</li>
                 </ul>
             </div>
         </div>
+    </div>
 
-
-        <!-- ══════════ 02 — CORE_METHOD ══════════ -->
-        <div class="tier-header">
-            <span class="tier-number">02</span>
-            <span class="text-[11px] font-bold tracking-[0.1em] text-zinc-100">CORE_METHOD</span>
-            <span class="text-[9px] tracking-widest text-zinc-600">// STATUS: PRIMARY</span>
-            <div class="tier-line"></div>
+    <!-- ══ 07 — EXECUTION_LOGS ══ -->
+    <div class="tier-header">
+        <span class="tier-number">07</span>
+        <span class="tier-label">EXECUTION_LOGS</span>
+        <span class="tier-status">// Live archive — building</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
+        <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
+            <span class="font-mono text-[10px] font-bold text-zinc-400 mb-2">WINS</span>
+            <div class="font-mono text-[8px] text-amber-500 uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="module-card">
-                <div class="module-name">ICT 2022</div>
-                <div class="module-meta">
-                    <span class="badge badge-system">System</span>
-                    <div class="status-dot dot-live"></div>
-                </div>
-                <ul class="module-topics">
-                    <li>Market structure (BOS / CHoCH)</li>
-                    <li>Liquidity &amp; Displacement</li>
-                    <li>PD Arrays (FVG, OB, BB, SIBI)</li>
-                    <li>Draw on Liquidity (DOL)</li>
-                    <li>Timing &amp; Killzones</li>
-                    <li>AMD (Accumulation, Manipulation, Distribution)</li>
-                </ul>
-            </div>
-            <div class="module-card">
-                <div class="module-name">SMC</div>
-                <div class="module-meta">
-                    <span class="badge badge-system">System</span>
-                    <div class="status-dot dot-live"></div>
-                </div>
-                <ul class="module-topics">
-                    <li>Order Block theory</li>
-                    <li>Supply &amp; Demand</li>
-                    <li>Fair Value Gaps (FVG)</li>
-                    <li>Reversals &amp; Break of Structure</li>
-                    <li>Internal vs external liquidity</li>
-                    <li>Confluence building</li>
-                </ul>
-            </div>
+        <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
+            <span class="font-mono text-[10px] font-bold text-zinc-400 mb-2">LOSSES</span>
+            <div class="font-mono text-[8px] text-amber-500 uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
         </div>
-
-
-        <!-- ══════════ 03 — VISUAL_DECODERS ══════════ -->
-        <div class="tier-header">
-            <span class="tier-number">03</span>
-            <span class="text-[11px] font-bold tracking-[0.1em] text-zinc-100">VISUAL_DECODERS</span>
-            <span class="text-[9px] tracking-widest text-zinc-600">// STATUS: ACTIVE_INPUTS</span>
-            <div class="tier-line"></div>
+        <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
+            <span class="font-mono text-[10px] font-bold text-zinc-400 mb-2">REVIEWS</span>
+            <div class="font-mono text-[8px] text-amber-500 uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="module-card">
-                <div class="module-name">ETM FX</div>
-                <div class="text-[8px] tracking-[0.15em] text-zinc-600 uppercase mb-3">Visual Structure</div>
-                <ul class="module-topics">
-                    <li>Price action translation</li>
-                    <li>Structural charting</li>
-                </ul>
-            </div>
-            <div class="module-card">
-                <div class="module-name">Smart Risk</div>
-                <div class="text-[8px] tracking-[0.15em] text-zinc-600 uppercase mb-3">Execution Examples</div>
-                <ul class="module-topics">
-                    <li>Trade mechanics</li>
-                    <li>Entry modeling</li>
-                </ul>
-            </div>
-            <div class="module-card">
-                <div class="module-name">TheForexHeist</div>
-                <div class="text-[8px] tracking-[0.15em] text-zinc-600 uppercase mb-3">Narrative Breakdown</div>
-                <ul class="module-topics">
-                    <li>Daily bias formulation</li>
-                    <li>Market context</li>
-                </ul>
-            </div>
+        <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
+            <span class="font-mono text-[10px] font-bold text-zinc-400 mb-2 leading-tight">OPTIONS<br>JOURNAL</span>
+            <div class="font-mono text-[8px] text-amber-500 uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
         </div>
-
-
-        <!-- ══════════ 04 — TOOLING_STACK ══════════ -->
-        <div class="tier-header">
-            <span class="tier-number">04</span>
-            <span class="text-[11px] font-bold tracking-[0.1em] text-zinc-100">TOOLING_STACK</span>
-            <span class="text-[9px] tracking-widest text-zinc-600">// STATUS: DEPLOYED</span>
-            <div class="tier-line"></div>
+        <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
+            <span class="font-mono text-[10px] font-bold text-zinc-400 mb-2">VHS LOGS</span>
+            <div class="font-mono text-[8px] text-amber-500 uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="module-card">
-                <div class="module-name">TradingView</div>
-                <div class="text-[8px] tracking-[0.15em] text-amber-500 uppercase mb-2">Primary_Chart_Engine</div>
-                <ul class="module-topics">
-                    <li>Chart structure</li>
-                    <li>Custom layouts</li>
-                </ul>
-            </div>
-            <div class="module-card">
-                <div class="module-name">Thinkorswim</div>
-                <div class="text-[8px] tracking-[0.15em] text-amber-500 uppercase mb-2">Options_Execution</div>
-                <ul class="module-topics">
-                    <li>Options</li>
-                    <li>Scripts</li>
-                    <li>Execution</li>
-                </ul>
-            </div>
-            <div class="module-card">
-                <div class="module-name">Bookmap</div>
-                <div class="text-[8px] tracking-[0.15em] text-amber-500 uppercase mb-2">Liquidity_Mapping</div>
-                <ul class="module-topics">
-                    <li>Liquidity</li>
-                    <li>Order flow</li>
-                </ul>
-            </div>
-            <div class="module-card">
-                <div class="module-name">MetaTrader</div>
-                <div class="text-[8px] tracking-[0.15em] text-amber-500 uppercase mb-2">Forex_MQL5_Engine</div>
-                <ul class="module-topics">
-                    <li>Forex</li>
-                    <li>MQL5 plugins</li>
-                </ul>
-            </div>
+        <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
+            <span class="font-mono text-[10px] font-bold text-zinc-400 mb-2 leading-tight">SYSTEM<br>CHANGES</span>
+            <div class="font-mono text-[8px] text-amber-500 uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
         </div>
+    </div>
 
-
-        <!-- ══════════ 05 — MENTAL_FRAMEWORK ══════════ -->
-        <div class="tier-header">
-            <span class="tier-number">05</span>
-            <span class="text-[11px] font-bold tracking-[0.1em] text-zinc-100">MENTAL_FRAMEWORK</span>
-            <span class="text-[9px] tracking-widest text-zinc-600">// STATUS: STABILITY_PROTOCOL</span>
-            <div class="tier-line"></div>
+    <!-- ══ 08 — SYSTEM_CHANGES.log ══ -->
+    <div class="tier-header">
+        <span class="tier-number">08</span>
+        <span class="tier-label">SYSTEM_CHANGES.log</span>
+        <span class="tier-status">// Documented evolution</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="module-card p-6 mb-12">
+        <div class="changelog-item">
+            <div class="changelog-date">2026.05</div>
+            <div class="changelog-text">Integrated options layer (Rose Trading). Shifting focus toward Theta and Vega exposure. Coinexx added as primary Forex broker.</div>
         </div>
-        <div class="module-card p-6" style="border-left: 2px solid rgba(255,176,0,0.3);">
-            <div class="flex flex-col md:flex-row gap-8">
-                <div class="flex-1">
-                    <div class="module-name mb-4">Core Resources</div>
-                    <ul class="module-topics">
-                        <li>Trading in the Zone (Douglas)</li>
-                        <li>The Best Loser Wins (Hougaard)</li>
-                        <li>The Mental Game of Trading (Tendler)</li>
-                    </ul>
-                </div>
-                <div class="flex-1 flex items-center border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-8">
-                    <p class="text-[11px] leading-relaxed opacity-60 italic">
-                        "Execution failure usually isn't strategy failure.<br>Risk, psychology, and process matter."
-                    </p>
-                </div>
-            </div>
+        <div class="changelog-item">
+            <div class="changelog-date">2026.03</div>
+            <div class="changelog-text">Removed Discord community dependency. Locked execution to open systems and public sources only.</div>
         </div>
-
-
-        <!-- ══════════ 06 — AI_LAYER ══════════ -->
-        <div class="tier-header">
-            <span class="tier-number">06</span>
-            <span class="text-[11px] font-bold tracking-[0.1em] text-zinc-100">AI_LAYER</span>
-            <span class="text-[9px] tracking-widest text-zinc-600">// STATUS: AUGMENTED</span>
-            <div class="tier-line"></div>
+        <div class="changelog-item">
+            <div class="changelog-date">2025.10</div>
+            <div class="changelog-text">ICT 2022 adoption. Rebuilt base mechanics around internal/external liquidity models. BOS, CHoCH, and FVG became primary confluences.</div>
         </div>
-        <div class="module-card p-6">
-            <div class="flex flex-col md:flex-row gap-8">
-                <div class="flex-1">
-                    <div class="text-[9px] tracking-widest opacity-50 mb-4 uppercase">INPUT // Protocol</div>
-                    <ul class="module-topics">
-                        <li>Mechanical Prompting</li>
-                        <li>Trade Review Analysis</li>
-                        <li>Pattern Breakdown</li>
-                    </ul>
-                </div>
-                <div class="flex-1 border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-8">
-                    <div class="text-[9px] tracking-widest opacity-50 mb-4 uppercase">OUTPUT // Mechanics</div>
-                    <ul class="module-topics">
-                        <li>Structural Clarity</li>
-                        <li>Study Acceleration</li>
-                        <li>Logic Decoding</li>
-                    </ul>
-                </div>
-            </div>
+        <div class="changelog-item" style="margin-bottom:0; border-bottom: none;">
+            <div class="changelog-date">2024.11</div>
+            <div class="changelog-text">Started BabyPips. First exposure to Forex market structure and session timing. 130AM profile initiated.</div>
         </div>
+    </div>
 
+    <!-- ── FOOTER ── -->
+    <footer class="text-center font-mono border-t border-white/[0.05] pt-8">
+        <p class="text-2xl font-black text-white mb-1 tracking-tight" style="font-family: Inter, sans-serif;">130AM</p>
+        <p class="text-[10px] tracking-[0.3em] text-zinc-700 uppercase mb-6">after hours.</p>
+        <p class="text-[9px] tracking-[0.15em] text-zinc-800">&copy; 2026 130AM. All Rights Reserved.</p>
+    </footer>
 
-        <!-- ══════════ 07 — EXECUTION_LOGS ══════════ -->
-        <div class="tier-header">
-            <span class="tier-number">07</span>
-            <span class="text-[11px] font-bold tracking-[0.1em] text-zinc-100">EXECUTION_LOGS</span>
-            <span class="text-[9px] tracking-widest text-zinc-600">// STATUS: LIVE_ARCHIVE</span>
-            <div class="tier-line"></div>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
-            <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
-                <span class="text-[10px] font-bold tracking-widest text-zinc-100 mb-2">WINS</span>
-                <div class="text-[8px] text-amber-500 tracking-widest uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
-            </div>
-            <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
-                <span class="text-[10px] font-bold tracking-widest text-zinc-100 mb-2">LOSSES</span>
-                <div class="text-[8px] text-amber-500 tracking-widest uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
-            </div>
-            <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
-                <span class="text-[10px] font-bold tracking-widest text-zinc-100 mb-2">REVIEWS</span>
-                <div class="text-[8px] text-amber-500 tracking-widest uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
-            </div>
-            <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
-                <span class="text-[10px] font-bold tracking-widest text-zinc-100 mb-2">OPTIONS<br>JOURNAL</span>
-                <div class="text-[8px] text-amber-500 tracking-widest uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
-            </div>
-            <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
-                <span class="text-[10px] font-bold tracking-widest text-zinc-100 mb-2">VHS LOGS</span>
-                <div class="text-[8px] text-amber-500 tracking-widest uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
-            </div>
-            <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
-                <span class="text-[10px] font-bold tracking-widest text-zinc-100 mb-2">SYSTEM<br>CHANGES</span>
-                <div class="text-[8px] text-amber-500 tracking-widest uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
-            </div>
-        </div>
+</main>
 
-
-        <!-- ══════════ 08 — SYSTEM_CHANGES.log ══════════ -->
-        <div class="tier-header">
-            <span class="tier-number">08</span>
-            <span class="text-[11px] font-bold tracking-[0.1em] text-zinc-100">SYSTEM_CHANGES.log</span>
-            <span class="text-[9px] tracking-widest text-zinc-600">// STATUS: DOCUMENTED_EVOLUTION</span>
-            <div class="tier-line"></div>
-        </div>
-        <div class="module-card p-6 mb-10">
-            <div class="changelog-item">
-                <div class="changelog-date">2026.05</div>
-                <div class="changelog-text">Integrated options layer (Rose Trading). Shifting focus toward Theta and Vega exposure.</div>
-            </div>
-            <div class="changelog-item">
-                <div class="changelog-date">2026.03</div>
-                <div class="changelog-text">Removed Discord community dependency (S9). Locked execution to open systems.</div>
-            </div>
-            <div class="changelog-item">
-                <div class="changelog-date">2025.10</div>
-                <div class="changelog-text">ICT 2022 adoption. Rebuilt base mechanics around internal/external liquidity models.</div>
-            </div>
-        </div>
-
-
-        <!-- ── FOOTER ── -->
-        <footer class="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 mt-8" style="border-top: 1px solid var(--glass-border);">
-            <div>
-                <p class="text-[10px] tracking-[0.2em] uppercase text-zinc-600">130AfterM // RBFX_ARCHIVE</p>
-                <p class="text-[9px] mt-1 opacity-40">Not a course. A collected operating archive.</p>
-            </div>
-            <div class="text-[9px] tracking-widest text-zinc-600">
-                BUILD_VER: 3.0.0 &nbsp;|&nbsp; <span class="text-amber-500">AFTER HOURS // GLASS</span>
-            </div>
-        </footer>
-
-    </main>
-
-    <script>
-        const container = document.getElementById('particles');
-        for(let i = 0; i < 30; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.animationDuration = (Math.random() * 10 + 8) + 's';
-            p.style.animationDelay = (Math.random() * 6) + 's';
-            container.appendChild(p);
-        }
-    </script>
+<script>
+    const container = document.getElementById('particles');
+    for(let i=0;i<35;i++){
+        const p=document.createElement('div'); p.className='particle';
+        p.style.left=Math.random()*100+'vw';
+        p.style.animationDuration=(Math.random()*10+6)+'s';
+        p.style.animationDelay=(Math.random()*6)+'s';
+        container.appendChild(p);
+    }
+</script>
 </body>
 </html>
