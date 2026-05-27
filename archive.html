@@ -35,52 +35,98 @@
         .font-mono { font-family: 'JetBrains Mono', monospace; }
 
         /* ── SCANLINES ── */
-        .scanlines { position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.25; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px); }
+        .scanlines {
+            position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.25;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+        }
 
         /* ── PARTICLES ── */
         .particles-container { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
         .particle { position: absolute; width: 1.5px; height: 1.5px; background: var(--amber); box-shadow: 0 0 8px var(--amber); border-radius: 50%; animation: float-up linear infinite; opacity: 0; }
-        @keyframes float-up { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 0.5; } 90% { opacity: 0.5; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
+        @keyframes float-up {
+            0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+            10%  { opacity: 0.5; }
+            90%  { opacity: 0.5; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
 
         /* ── NAV ── */
-        .site-nav { position: sticky; top: 0; z-index: 100; background: rgba(5,5,5,0.92); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid var(--glass-border); }
-
-        /* ── GLASS ── */
-        .glass-panel { background: var(--glass-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--glass-border); border-radius: 20px; transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.4,0,0.2,1); position: relative; overflow: hidden; }
-        .glass-panel::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); opacity: 0; transition: opacity 0.3s; }
-        .glass-panel:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
-        .glass-panel:hover::after { opacity: 1; }
-        .glass-amber:hover { border-color: rgba(255,176,0,0.25); box-shadow: 0 12px 40px var(--amber-glow); }
+        .site-nav {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(5,5,5,0.92);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--glass-border);
+        }
 
         /* ── MODULE CARDS ── */
-        .module-card { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; transition: all 0.25s ease; display: flex; flex-direction: column; position: relative; overflow: hidden; height: 100%; }
-        .module-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: transparent; transition: background 0.25s ease; }
-        .module-card:hover:not(.status-building) { border-color: rgba(255,176,0,0.25); box-shadow: 0 8px 30px rgba(255,176,0,0.06); transform: translateY(-2px); }
+        .module-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+        }
+        .module-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: transparent; transition: background 0.25s ease;
+        }
+        .module-card:hover:not(.status-building) {
+            border-color: rgba(255,176,0,0.25);
+            box-shadow: 0 8px 30px rgba(255,176,0,0.06);
+            transform: translateY(-2px);
+        }
         .module-card:hover:not(.status-building)::before { background: var(--amber); }
         .module-card.status-building { opacity: 0.55; }
-        a.module-card { text-decoration: none; }
 
-        .module-name { font-size: 14px; font-weight: 700; color: #f0ede8; letter-spacing: 0.02em; margin-bottom: 6px; font-family: 'Inter', sans-serif; }
-        .module-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .module-name { font-size: 14px; font-weight: 700; color: #f4f4f5; letter-spacing: 0.02em; margin-bottom: 6px; }
+
         .badge { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.14em; padding: 2px 8px; border: 1px solid; text-transform: uppercase; font-weight: 700; border-radius: 4px; }
         .badge-core   { border-color: rgba(255,176,0,0.4);   color: var(--amber); }
         .badge-system { border-color: rgba(100,160,255,0.4); color: #64a0ff; }
         .badge-tool   { border-color: rgba(74,222,128,0.4);  color: #4ade80; }
         .badge-mental { border-color: rgba(180,100,255,0.4); color: #b464ff; }
+
         .status-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-left: auto; }
         .dot-live     { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,0.6); }
         .dot-building { background: var(--amber); box-shadow: 0 0 6px rgba(255,176,0,0.5); }
 
-        .module-topics { flex: 1; list-style: none; padding: 0; margin-bottom: 14px; }
-        .module-topics li { font-size: 11px; color: #71717a; padding: 4px 0; display: flex; align-items: flex-start; gap: 8px; font-family: 'JetBrains Mono', monospace; }
-        .module-topics li::before { content: '—'; opacity: 0.3; flex-shrink: 0; font-size: 9px; }
-        .module-topics a { color: #71717a; text-decoration: none; transition: color 0.2s; }
-        .module-topics a:hover { color: var(--amber); }
+        .module-topics { list-style: none; padding: 0; margin: 0 0 16px 0; flex: 1; }
+        .module-topics li {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px; color: #52525b;
+            padding: 4px 0;
+            display: flex; align-items: flex-start; gap: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        .module-topics li:last-child { border-bottom: none; }
+        .module-topics li::before { content: '—'; opacity: 0.25; flex-shrink: 0; font-size: 9px; margin-top: 1px; }
+
+        .source-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-family: 'JetBrains Mono', monospace; font-size: 9px;
+            text-transform: uppercase; letter-spacing: 0.12em; color: #3f3f46;
+            text-decoration: none;
+            padding: 6px 10px;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            transition: all 0.2s;
+            margin-top: auto;
+        }
+        .source-link:hover { color: var(--amber); border-color: rgba(255,176,0,0.3); background: rgba(255,176,0,0.05); }
+        .source-link.affiliate { color: rgba(255,176,0,0.5); border-color: rgba(255,176,0,0.15); }
+        .source-link.affiliate:hover { color: var(--amber); border-color: rgba(255,176,0,0.4); background: rgba(255,176,0,0.08); }
 
         /* ── TIER HEADERS ── */
         .tier-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; margin-top: 48px; }
         .tier-number { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; padding: 4px 10px; border: 1px solid var(--glass-border); color: var(--amber); background: rgba(255,176,0,0.05); border-radius: 4px; }
-        .tier-label  { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: #f4f4f5; font-family: 'JetBrains Mono', monospace; }
+        .tier-label  { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: #f4f4f5; }
         .tier-status { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; color: #3f3f46; }
         .tier-line   { flex: 1; height: 1px; background: var(--glass-border); }
 
@@ -90,24 +136,20 @@
         .changelog-date { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: #52525b; margin-bottom: 4px; }
         .changelog-text { font-size: 13px; color: #e4e4e7; }
 
-        /* ── GLITCH ── */
-        .glitch-hover:hover { text-shadow: 2px 0 #ff003c, -2px 0 #00f0ff; animation: glitch-j 0.2s infinite linear alternate-reverse; }
-        @keyframes glitch-j { 0% { transform: skew(0deg); } 20% { transform: skew(-2deg); } 40% { transform: skew(2deg); } 60% { transform: skew(-1deg); } 80% { transform: skew(1deg); } 100% { transform: skew(0deg); } }
-
         /* ── BLINK ── */
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
         .blink { animation: blink 2s ease infinite; }
 
-        /* ── SECTION LABEL ── */
-        .section-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: #3f3f46; }
-
         /* ── HERO ── */
-        .hero-block { border: 1px solid rgba(255,176,0,0.2); border-left: 3px solid var(--amber); background: rgba(255,176,0,0.03); backdrop-filter: blur(20px); border-radius: 20px; padding: 32px; margin-bottom: 32px; }
+        .hero-block { border: 1px solid rgba(255,176,0,0.2); border-left: 3px solid var(--amber); background: rgba(255,176,0,0.03); backdrop-filter: blur(20px); border-radius: 20px; padding: 32px; }
 
-        /* ── STAT PILLS ── */
+        /* ── DEPTH SIGNAL ── */
         .depth-signal { display: flex; gap: 20px; flex-wrap: wrap; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; color: #52525b; margin-bottom: 48px; }
         .depth-signal span { color: var(--amber); font-weight: 700; }
         .depth-signal .status-val { color: #22c55e; }
+
+        /* ── MODULE META ROW ── */
+        .module-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
     </style>
 </head>
 <body class="antialiased selection:bg-amber-500 selection:text-black">
@@ -123,10 +165,10 @@
             <span class="font-mono text-[9px] text-zinc-700 tracking-widest hidden sm:block">// after hours.</span>
         </div>
         <div class="flex items-center gap-1 font-mono text-[9px] tracking-widest">
-            <a href="./index.html"   class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">HOME</a>
+            <a href="./index.html"    class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">HOME</a>
             <a href="./terminal.html" class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">LABS</a>
-            <a href="./archive.html" class="px-3 py-1.5 text-amber-400 font-bold rounded-lg bg-amber-500/10 border border-amber-500/20">ARCHIVE</a>
-            <a href="./connect.html" class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">CONNECT</a>
+            <a href="./archive.html"  class="px-3 py-1.5 text-amber-400 font-bold rounded-lg bg-amber-500/10 border border-amber-500/20">ARCHIVE</a>
+            <a href="./connect.html"  class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">CONNECT</a>
         </div>
     </div>
 </nav>
@@ -141,7 +183,7 @@
             <span class="text-zinc-600 font-normal tracking-widest">Documented execution</span>
         </div>
         <p class="text-[15px] font-semibold text-zinc-200 leading-relaxed mb-2">Charts, notes, wins, losses, and lessons.</p>
-        <p class="text-sm text-zinc-500 leading-relaxed mb-4">Self-taught execution. Open systems over paid dependency.<br>Markets decoded through structure, repetition, and documentation.</p>
+        <p class="text-sm text-zinc-500 leading-relaxed mb-4">Self-taught. Open systems over paid dependency.<br>Markets decoded through structure, repetition, and documentation.</p>
         <div class="font-mono text-[10px] tracking-[0.1em] text-zinc-700 uppercase flex items-center gap-2">
             <span class="blink text-amber-500">●</span> STATUS: EVOLVING
             <span class="ml-4 text-zinc-800">1:30 After Midnight</span>
@@ -167,35 +209,42 @@
         <div class="tier-line"></div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <a href="https://www.babypips.com/learn/forex" target="_blank" rel="noopener" class="module-card">
+
+        <div class="module-card">
             <div class="module-name">Market Basics</div>
             <div class="module-meta">
                 <span class="badge badge-core">Core</span>
                 <div class="status-dot dot-live"></div>
             </div>
             <ul class="module-topics">
-                <li><a href="https://www.babypips.com/learn/forex" target="_blank">BabyPips School of Pipsology</a></li>
+                <li>BabyPips School of Pipsology</li>
                 <li>Session behavior &amp; overlap timing</li>
                 <li>Currency pair mechanics</li>
                 <li>Risk basics &amp; position sizing</li>
             </ul>
-            <div class="mt-auto font-mono text-[9px] text-zinc-700 flex items-center gap-1 group-hover:text-amber-500">babypips.com <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
-        </a>
-        <a href="https://www.youtube.com/@RoseTrading" target="_blank" rel="noopener" class="module-card">
+            <a href="https://www.babypips.com/learn/forex" target="_blank" rel="noopener" class="source-link">
+                <i class="fas fa-arrow-up-right-from-square text-[9px]"></i> babypips.com/learn/forex
+            </a>
+        </div>
+
+        <div class="module-card">
             <div class="module-name">Options Mechanics</div>
             <div class="module-meta">
                 <span class="badge badge-core">Core</span>
                 <div class="status-dot dot-live"></div>
             </div>
             <ul class="module-topics">
-                <li><a href="https://www.youtube.com/@RoseTrading" target="_blank">Rose Trading — YouTube</a></li>
+                <li>Rose Trading — YouTube</li>
                 <li>Greeks: Delta, Gamma, Theta, Vega</li>
                 <li>Theta decay &amp; Vega exposure</li>
                 <li>Contract behavior &amp; expiry mechanics</li>
                 <li>Base execution strategies</li>
             </ul>
-            <div class="mt-auto font-mono text-[9px] text-zinc-700">youtube.com/@RoseTrading <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
-        </a>
+            <a href="https://www.youtube.com/@RoseTrading" target="_blank" rel="noopener" class="source-link">
+                <i class="fab fa-youtube text-[9px]"></i> youtube.com/@RoseTrading
+            </a>
+        </div>
+
     </div>
 
     <!-- ══ 02 — CORE_METHOD ══ -->
@@ -206,22 +255,26 @@
         <div class="tier-line"></div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <a href="https://www.youtube.com/@InnerCircleTrader" target="_blank" rel="noopener" class="module-card">
+
+        <div class="module-card">
             <div class="module-name">ICT 2022 Mentorship</div>
             <div class="module-meta">
                 <span class="badge badge-system">System</span>
                 <div class="status-dot dot-live"></div>
             </div>
             <ul class="module-topics">
-                <li><a href="https://www.youtube.com/@InnerCircleTrader" target="_blank">ICT — Inner Circle Trader</a></li>
+                <li>Inner Circle Trader — YouTube</li>
                 <li>Market structure (BOS / CHoCH)</li>
                 <li>Liquidity &amp; Displacement</li>
                 <li>PD Arrays — FVG, OB, BB, SIBI</li>
                 <li>Draw on Liquidity (DOL)</li>
                 <li>Timing, Killzones &amp; AMD cycle</li>
             </ul>
-            <div class="mt-auto font-mono text-[9px] text-zinc-700">youtube.com/@InnerCircleTrader <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
-        </a>
+            <a href="https://www.youtube.com/@InnerCircleTrader" target="_blank" rel="noopener" class="source-link">
+                <i class="fab fa-youtube text-[9px]"></i> youtube.com/@InnerCircleTrader
+            </a>
+        </div>
+
         <div class="module-card">
             <div class="module-name">SMC — Smart Money Concepts</div>
             <div class="module-meta">
@@ -229,16 +282,18 @@
                 <div class="status-dot dot-live"></div>
             </div>
             <ul class="module-topics">
-                <li><a href="https://www.youtube.com/@MentFX" target="_blank">MentFX — SMC breakdown</a></li>
+                <li>MentFX — YouTube</li>
                 <li>Order Block theory</li>
                 <li>Supply &amp; Demand zones</li>
                 <li>Fair Value Gaps (FVG)</li>
                 <li>Reversals &amp; Break of Structure</li>
                 <li>Internal vs external liquidity</li>
-                <li>Confluence building</li>
             </ul>
-            <div class="mt-auto font-mono text-[9px] text-zinc-700">youtube.com/@MentFX <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
+            <a href="https://www.youtube.com/@MentFX" target="_blank" rel="noopener" class="source-link">
+                <i class="fab fa-youtube text-[9px]"></i> youtube.com/@MentFX
+            </a>
         </div>
+
     </div>
 
     <!-- ══ 03 — VISUAL_DECODERS ══ -->
@@ -249,26 +304,33 @@
         <div class="tier-line"></div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <a href="https://www.youtube.com/@ETMFX" target="_blank" rel="noopener" class="module-card">
+
+        <div class="module-card">
             <div class="module-name">ETM FX</div>
             <div class="font-mono text-[8px] text-zinc-700 uppercase tracking-widest mb-3">Visual Structure</div>
             <ul class="module-topics">
-                <li><a href="https://www.youtube.com/@ETMFX" target="_blank">ETM FX — YouTube</a></li>
                 <li>Price action translation</li>
                 <li>Structural charting methods</li>
+                <li>Chart reading &amp; setup framing</li>
             </ul>
-            <div class="mt-auto font-mono text-[9px] text-zinc-700">youtube.com/@ETMFX <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
-        </a>
-        <a href="https://www.youtube.com/@SmartRisk" target="_blank" rel="noopener" class="module-card">
+            <a href="https://www.youtube.com/@ETMFX" target="_blank" rel="noopener" class="source-link">
+                <i class="fab fa-youtube text-[9px]"></i> youtube.com/@ETMFX
+            </a>
+        </div>
+
+        <div class="module-card">
             <div class="module-name">Smart Risk</div>
             <div class="font-mono text-[8px] text-zinc-700 uppercase tracking-widest mb-3">Execution Examples</div>
             <ul class="module-topics">
-                <li><a href="https://www.youtube.com/@SmartRisk" target="_blank">Smart Risk — YouTube</a></li>
-                <li>Trade mechanics in action</li>
+                <li>Live trade mechanics</li>
                 <li>Entry modeling &amp; SL placement</li>
+                <li>Risk-adjusted position management</li>
             </ul>
-            <div class="mt-auto font-mono text-[9px] text-zinc-700">youtube.com/@SmartRisk <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
-        </a>
+            <a href="https://www.youtube.com/@SmartRisk" target="_blank" rel="noopener" class="source-link">
+                <i class="fab fa-youtube text-[9px]"></i> youtube.com/@SmartRisk
+            </a>
+        </div>
+
     </div>
 
     <!-- ══ 04 — TOOLING_STACK ══ -->
@@ -279,7 +341,8 @@
         <div class="tier-line"></div>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <a href="https://www.tradingview.com" target="_blank" rel="noopener" class="module-card">
+
+        <div class="module-card">
             <div class="module-name">TradingView</div>
             <div class="font-mono text-[8px] text-amber-500 uppercase tracking-widest mb-3">Primary Chart Engine</div>
             <ul class="module-topics">
@@ -287,38 +350,50 @@
                 <li>Custom Pine Script indicators</li>
                 <li>Multi-timeframe analysis</li>
             </ul>
-            <div class="mt-auto font-mono text-[9px] text-zinc-700">tradingview.com <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
-        </a>
-        <a href="https://www.thinkorswim.com" target="_blank" rel="noopener" class="module-card">
+            <a href="https://www.tradingview.com" target="_blank" rel="noopener" class="source-link">
+                <i class="fas fa-arrow-up-right-from-square text-[9px]"></i> tradingview.com
+            </a>
+        </div>
+
+        <div class="module-card">
             <div class="module-name">Thinkorswim</div>
             <div class="font-mono text-[8px] text-amber-500 uppercase tracking-widest mb-3">Options Execution</div>
             <ul class="module-topics">
-                <li>Options chain &amp; Greeks</li>
+                <li>Options chain &amp; Greeks live</li>
                 <li>ThinkScript setups</li>
-                <li>Live execution</li>
+                <li>Order execution</li>
             </ul>
-            <div class="mt-auto font-mono text-[9px] text-zinc-700">thinkorswim.com <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
-        </a>
-        <a href="https://my.coinexx.com/register?refLink=NTAxMDA2&refRm=11" target="_blank" rel="noopener" class="module-card glass-amber">
+            <a href="https://www.schwab.com/trading/thinkorswim" target="_blank" rel="noopener" class="source-link">
+                <i class="fas fa-arrow-up-right-from-square text-[9px]"></i> thinkorswim
+            </a>
+        </div>
+
+        <div class="module-card" style="border-color: rgba(255,176,0,0.15);">
             <div class="module-name">Coinexx</div>
             <div class="font-mono text-[8px] text-amber-500 uppercase tracking-widest mb-3">Forex Broker</div>
             <ul class="module-topics">
-                <li>Forex execution — live account</li>
-                <li>MetaTrader 4/5 integration</li>
-                <li>Unregulated — trusted personally</li>
+                <li>Live Forex account</li>
+                <li>MT4/5 integration</li>
+                <li>Unregulated — personally trusted</li>
             </ul>
-            <div class="mt-auto font-mono text-[9px] text-amber-600">coinexx.com (affiliate) <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
-        </a>
-        <a href="https://www.metatrader4.com" target="_blank" rel="noopener" class="module-card">
+            <a href="https://my.coinexx.com/register?refLink=NTAxMDA2&refRm=11" target="_blank" rel="noopener" class="source-link affiliate">
+                <i class="fas fa-arrow-up-right-from-square text-[9px]"></i> coinexx.com (affiliate)
+            </a>
+        </div>
+
+        <div class="module-card">
             <div class="module-name">MetaTrader 4/5</div>
             <div class="font-mono text-[8px] text-amber-500 uppercase tracking-widest mb-3">Forex / MQL5 Engine</div>
             <ul class="module-topics">
                 <li>Forex order execution</li>
                 <li>MQL5 custom plugins</li>
-                <li>EA &amp; script development</li>
+                <li>EA development</li>
             </ul>
-            <div class="mt-auto font-mono text-[9px] text-zinc-700">metatrader4.com <i class="fas fa-arrow-up-right-from-square text-[8px] ml-1"></i></div>
-        </a>
+            <a href="https://www.metatrader4.com" target="_blank" rel="noopener" class="source-link">
+                <i class="fas fa-arrow-up-right-from-square text-[9px]"></i> metatrader4.com
+            </a>
+        </div>
+
     </div>
 
     <!-- ══ 05 — MENTAL_FRAMEWORK ══ -->
@@ -333,13 +408,24 @@
             <div class="flex-1">
                 <div class="module-name mb-4">Core Reads</div>
                 <ul class="module-topics">
-                    <li><a href="https://www.amazon.com/Trading-Zone-Confidence-Discipline-Attitude/dp/0735201447" target="_blank">Trading in the Zone — Mark Douglas</a></li>
-                    <li><a href="https://www.amazon.com/Best-Loser-Wins-Why-Normal/dp/B09VL9D3P5" target="_blank">The Best Loser Wins — Tom Hougaard</a></li>
-                    <li><a href="https://www.amazon.com/Mental-Game-Trading-Process-Performance/dp/1737872404" target="_blank">The Mental Game of Trading — Jared Tendler</a></li>
+                    <li>Trading in the Zone — Mark Douglas</li>
+                    <li>The Best Loser Wins — Tom Hougaard</li>
+                    <li>The Mental Game of Trading — Jared Tendler</li>
                 </ul>
+                <div class="flex flex-wrap gap-2 mt-4">
+                    <a href="https://www.amazon.com/Trading-Zone-Confidence-Discipline-Attitude/dp/0735201447" target="_blank" rel="noopener" class="source-link">
+                        <i class="fab fa-amazon text-[9px]"></i> Trading in the Zone
+                    </a>
+                    <a href="https://www.amazon.com/Best-Loser-Wins-Why-Normal/dp/B09VL9D3P5" target="_blank" rel="noopener" class="source-link">
+                        <i class="fab fa-amazon text-[9px]"></i> Best Loser Wins
+                    </a>
+                    <a href="https://www.amazon.com/Mental-Game-Trading-Process-Performance/dp/1737872404" target="_blank" rel="noopener" class="source-link">
+                        <i class="fab fa-amazon text-[9px]"></i> Mental Game of Trading
+                    </a>
+                </div>
             </div>
             <div class="flex-1 flex items-center border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-8">
-                <p class="text-[12px] leading-relaxed text-zinc-500 italic">
+                <p class="text-[13px] leading-relaxed text-zinc-500 italic">
                     "Execution failure usually isn't strategy failure.<br>Risk, psychology, and process matter."
                 </p>
             </div>
@@ -356,15 +442,18 @@
     <div class="module-card p-6">
         <div class="flex flex-col md:flex-row gap-8">
             <div class="flex-1">
-                <div class="font-mono text-[9px] text-zinc-600 uppercase tracking-widest mb-4">Input // Protocol</div>
+                <div class="font-mono text-[9px] text-zinc-600 uppercase tracking-widest mb-3">Input // Protocol</div>
                 <ul class="module-topics">
-                    <li><a href="https://chatgpt.com" target="_blank">ChatGPT — trade review &amp; pattern analysis</a></li>
+                    <li>Trade review &amp; pattern analysis</li>
                     <li>Mechanical prompting frameworks</li>
-                    <li>Pattern &amp; setup breakdown</li>
+                    <li>Setup breakdown &amp; journaling</li>
                 </ul>
+                <a href="https://chatgpt.com" target="_blank" rel="noopener" class="source-link mt-3 inline-flex">
+                    <i class="fas fa-robot text-[9px]"></i> chatgpt.com
+                </a>
             </div>
             <div class="flex-1 border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-8">
-                <div class="font-mono text-[9px] text-zinc-600 uppercase tracking-widest mb-4">Output // Mechanics</div>
+                <div class="font-mono text-[9px] text-zinc-600 uppercase tracking-widest mb-3">Output // Mechanics</div>
                 <ul class="module-topics">
                     <li>Structural clarity on messy setups</li>
                     <li>Accelerated review &amp; journaling</li>
@@ -418,7 +507,7 @@
     <div class="module-card p-6 mb-12">
         <div class="changelog-item">
             <div class="changelog-date">2026.05</div>
-            <div class="changelog-text">Integrated options layer (Rose Trading). Shifting focus toward Theta and Vega exposure. Coinexx added as primary Forex broker.</div>
+            <div class="changelog-text">Integrated options layer via Rose Trading. Shifting focus toward Theta and Vega exposure. Coinexx added as primary Forex broker.</div>
         </div>
         <div class="changelog-item">
             <div class="changelog-date">2026.03</div>
@@ -428,7 +517,7 @@
             <div class="changelog-date">2025.10</div>
             <div class="changelog-text">ICT 2022 adoption. Rebuilt base mechanics around internal/external liquidity models. BOS, CHoCH, and FVG became primary confluences.</div>
         </div>
-        <div class="changelog-item" style="margin-bottom:0; border-bottom: none;">
+        <div class="changelog-item" style="margin-bottom: 0;">
             <div class="changelog-date">2024.11</div>
             <div class="changelog-text">Started BabyPips. First exposure to Forex market structure and session timing. 130AM profile initiated.</div>
         </div>
@@ -445,11 +534,12 @@
 
 <script>
     const container = document.getElementById('particles');
-    for(let i=0;i<35;i++){
-        const p=document.createElement('div'); p.className='particle';
-        p.style.left=Math.random()*100+'vw';
-        p.style.animationDuration=(Math.random()*10+6)+'s';
-        p.style.animationDelay=(Math.random()*6)+'s';
+    for(let i = 0; i < 35; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.animationDuration = (Math.random() * 10 + 6) + 's';
+        p.style.animationDelay = (Math.random() * 6) + 's';
         container.appendChild(p);
     }
 </script>
