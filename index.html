@@ -4,20 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>130AM // after hours.</title>
-    <meta name="description" content="130AM — Trader. Builder. Forex. Options. Systems.">
+    <meta name="description" content="130AM — Trader. Builder. Forex. Options. Systems. After Hours.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap');
 
         :root {
             --amber: #ffb000;
+            --amber-dim: rgba(255, 176, 0, 0.6);
             --amber-glow: rgba(255, 176, 0, 0.15);
             --bg-dark: #050505;
-            --glass-bg: rgba(20, 20, 20, 0.4);
+            --glass-bg: rgba(18, 18, 18, 0.5);
             --glass-border: rgba(255, 255, 255, 0.06);
             --glass-hover: rgba(255, 255, 255, 0.1);
         }
+
+        * { box-sizing: border-box; }
 
         body {
             background-color: var(--bg-dark);
@@ -28,352 +31,516 @@
             min-height: 100vh;
         }
         a, button, input { cursor: pointer; }
-        h1, h2, h3, h4 { font-family: 'Inter', sans-serif; }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* ── SCANLINES ── */
+        .scanlines {
+            position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.25;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+        }
 
         /* ── PARTICLES ── */
         .particles-container {
             position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
-            background-image: radial-gradient(circle at 15% 50%, rgba(255, 176, 0, 0.03), transparent 25%);
+            background:
+                radial-gradient(ellipse at 10% 60%, rgba(255,176,0,0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 20%, rgba(255,255,255,0.02) 0%, transparent 40%);
         }
         .particle {
-            position: absolute; width: 2px; height: 2px;
-            background: var(--amber); box-shadow: 0 0 10px var(--amber);
+            position: absolute; width: 1.5px; height: 1.5px;
+            background: var(--amber); box-shadow: 0 0 8px var(--amber);
             border-radius: 50%; animation: float-up linear infinite; opacity: 0;
         }
         @keyframes float-up {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            10% { opacity: 0.6; } 90% { opacity: 0.6; }
+            0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+            10%  { opacity: 0.5; }
+            90%  { opacity: 0.5; }
             100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
         }
 
         /* ── GLASSMORPHISM ── */
         .glass-panel {
             background: var(--glass-bg);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); border-radius: 24px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.4,0,0.2,1);
             position: relative; overflow: hidden;
         }
-        .glass-panel::before {
+        .glass-panel::after {
             content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            opacity: 0; transition: opacity 0.3s ease;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            opacity: 0; transition: opacity 0.3s;
         }
-        .glass-panel:hover { border-color: var(--glass-hover); transform: translateY(-2px); box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
-        .glass-panel:hover::before { opacity: 1; }
-        .glass-amber:hover { border-color: rgba(255, 176, 0, 0.3); box-shadow: 0 10px 40px var(--amber-glow); }
+        .glass-panel:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+        .glass-panel:hover::after { opacity: 1; }
+        .glass-amber:hover { border-color: rgba(255,176,0,0.25); box-shadow: 0 12px 40px var(--amber-glow); }
+
+        /* ── BIG CLOCK ── */
+        .clock-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(4rem, 14vw, 9rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            color: var(--amber);
+            text-shadow:
+                0 0 20px rgba(255,176,0,0.5),
+                0 0 60px rgba(255,176,0,0.2),
+                0 0 120px rgba(255,176,0,0.1);
+            animation: clock-flicker 8s infinite;
+        }
+        @keyframes clock-flicker {
+            0%, 98%, 100% { opacity: 1; }
+            99% { opacity: 0.85; }
+            99.5% { opacity: 1; }
+        }
+        .clock-ampm {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(1rem, 3vw, 1.8rem);
+            color: rgba(255,176,0,0.5);
+            letter-spacing: 0.1em;
+        }
+        .clock-colon { animation: colon-blink 1s step-end infinite; }
+        @keyframes colon-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+        /* ── SESSION BADGE ── */
+        .session-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 16px; border-radius: 9999px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700;
+            transition: all 0.5s ease;
+        }
+        .session-after  { background: rgba(255,176,0,0.1);  color: var(--amber);  border: 1px solid rgba(255,176,0,0.25); }
+        .session-asian  { background: rgba(167,139,250,0.1); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
+        .session-london { background: rgba(56,189,248,0.1);  color: #38bdf8; border: 1px solid rgba(56,189,248,0.25); }
+        .session-ny     { background: rgba(74,222,128,0.1);  color: #4ade80; border: 1px solid rgba(74,222,128,0.25); }
 
         /* ── GLITCH ── */
         .glitch-hover { position: relative; display: inline-block; transition: all 0.1s; }
-        .glitch-hover:hover { text-shadow: 2px 0 #ff003c, -2px 0 #00f0ff; animation: glitch-jiggle 0.2s infinite linear alternate-reverse; }
-        @keyframes glitch-jiggle {
-            0% { transform: skew(0deg); } 20% { transform: skew(-2deg); }
-            40% { transform: skew(2deg); } 60% { transform: skew(-1deg); }
-            80% { transform: skew(1deg); } 100% { transform: skew(0deg); }
+        .glitch-hover:hover { text-shadow: 2px 0 #ff003c, -2px 0 #00f0ff; animation: glitch-j 0.2s infinite linear alternate-reverse; }
+        @keyframes glitch-j {
+            0%   { transform: skew(0deg); }
+            20%  { transform: skew(-2deg); }
+            40%  { transform: skew(2deg); }
+            60%  { transform: skew(-1deg); }
+            80%  { transform: skew(1deg); }
+            100% { transform: skew(0deg); }
         }
 
         /* ── SHIMMER ── */
         .shimmer-text {
-            background: linear-gradient(90deg, #fff 0%, #777 50%, #fff 100%);
+            background: linear-gradient(90deg, #ffffff 0%, #888 50%, #ffffff 100%);
             background-size: 200% auto; color: transparent;
             -webkit-background-clip: text; background-clip: text;
-            animation: shimmer 4s linear infinite;
+            animation: shimmer 5s linear infinite;
         }
         @keyframes shimmer { to { background-position: 200% center; } }
 
         /* ── PILLS ── */
-        .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; }
-        .pill-green { background: rgba(34, 197, 94, 0.1); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.2); }
-        .pill-amber { background: rgba(255, 176, 0, 0.1); color: var(--amber); border: 1px solid rgba(255, 176, 0, 0.2); }
-        .pill-gray  { background: rgba(255, 255, 255, 0.05); color: #a1a1aa; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; }
+        .pill-green  { background: rgba(34,197,94,0.1);   color: #4ade80;  border: 1px solid rgba(34,197,94,0.2); }
+        .pill-amber  { background: rgba(255,176,0,0.1);   color: var(--amber); border: 1px solid rgba(255,176,0,0.2); }
+        .pill-gray   { background: rgba(255,255,255,0.05); color: #a1a1aa; border: 1px solid rgba(255,255,255,0.1); }
 
-        /* ── ANIMATIONS ── */
-        @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        .dot-blink { animation: pulse-dot 2s ease infinite; }
+        /* ── PROFILE ── */
+        .profile-img-container { position: relative; border-radius: 20px; padding: 3px; background: linear-gradient(135deg, rgba(255,176,0,0.2), rgba(255,255,255,0.02)); }
+        .profile-img { border-radius: 16px; width: 100%; height: 100%; object-fit: cover; filter: grayscale(15%) contrast(1.1); }
 
-        /* ── PROFILE IMG ── */
-        .profile-img-container { position: relative; border-radius: 20px; padding: 4px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
-        .profile-img { border-radius: 16px; width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%) contrast(1.1); }
+        /* ── STATUS LINES ── */
+        .status-line { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #52525b; line-height: 1.8; }
+        .status-line strong { color: var(--amber); font-weight: 700; }
 
-        /* ── SOCIAL BUTTONS ── */
-        .social-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: #d4d4d8; font-size: 13px; font-weight: 500; transition: all 0.2s; text-decoration: none; }
-        .social-btn:hover { background: rgba(255,255,255,0.08); color: #fff; transform: scale(1.02); border-color: rgba(255,255,255,0.2); }
+        /* ── SOCIAL BTNS ── */
+        .social-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 13px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: #d4d4d8; font-size: 12px; font-weight: 500; transition: all 0.2s; text-decoration: none; }
+        .social-btn:hover { background: rgba(255,255,255,0.08); color: #fff; transform: scale(1.02); border-color: rgba(255,255,255,0.15); }
+
+        /* ── TOP 8 ── */
+        .top8-card { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 14px; padding: 14px 8px; text-align: center; transition: all 0.2s; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 7px; }
+        .top8-card:hover { border-color: rgba(255,176,0,0.3); background: rgba(255,176,0,0.04); transform: scale(1.04); }
+
+        /* ── PING WALL ── */
+        .pings-scroll { max-height: 210px; overflow-y: auto; scrollbar-width: none; }
+        .pings-scroll::-webkit-scrollbar { display: none; }
+        .ping-msg { font-size: 10px; font-family: 'JetBrains Mono', monospace; padding: 9px 0; border-bottom: 1px dashed rgba(255,255,255,0.06); line-height: 1.6; }
+        .ping-msg:last-child { border-bottom: none; }
 
         /* ── NAV ── */
         .site-nav {
             position: sticky; top: 0; z-index: 100;
-            background: rgba(5,5,5,0.85);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            background: rgba(5,5,5,0.92);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
             border-bottom: 1px solid var(--glass-border);
         }
 
-        /* ── SCANLINES ── */
-        .scanlines { position: fixed; inset: 0; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.05)); background-size: 100% 4px; z-index: 9999; pointer-events: none; opacity: 0.3; }
+        /* ── LABELS ── */
+        .section-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: #3f3f46; }
 
-        /* ── WINAMP SLIDER ── */
-        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; height: 2px; margin: 10px 0; }
-        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 2px; background: rgba(255,255,255,0.2); border-radius: 1px; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 10px; width: 4px; background: var(--amber); margin-top: -4px; border-radius: 2px; box-shadow: 0 0 5px var(--amber); cursor: crosshair; }
+        /* ── LIVE DOTS ── */
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .live-dot { animation: pulse-dot 2s ease infinite; border-radius: 50%; display: inline-block; width: 6px; height: 6px; }
 
-        /* ── SECTION DIVIDER ── */
-        .section-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: #52525b; }
+        /* ── MARKET BAR ── */
+        .market-bar { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; }
+
+        /* ── BLINKING BORDER ── */
+        @keyframes blink-border { 0%, 100% { border-color: rgba(255,176,0,0.2); } 50% { border-color: rgba(255,176,0,0.6); } }
+        .blink-border { animation: blink-border 3s ease-in-out infinite; }
     </style>
 </head>
 <body class="antialiased selection:bg-amber-500 selection:text-black">
+
 <div class="scanlines"></div>
 <div class="particles-container" id="particles"></div>
 
 <!-- ── NAV ── -->
 <nav class="site-nav">
-    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="./index.html">
-            <img src="./logo.png" alt="130AM" class="h-7 opacity-80" onerror="this.style.display='none';">
-        </a>
-        <div class="flex items-center gap-1 font-mono text-[10px] tracking-widest">
-            <a href="./index.html" class="px-3 py-2 text-amber-400 font-bold rounded-lg bg-amber-500/10 border border-amber-500/20">HOME</a>
-            <a href="./terminal.html" class="px-3 py-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">LABS</a>
-            <a href="./archive.html" class="px-3 py-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">ARCHIVE</a>
-            <a href="./connect.html" class="px-3 py-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">CONNECT</a>
+    <div class="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <img src="./logo.png" alt="130AM" class="h-6 opacity-70" onerror="this.style.display='none';">
+            <span class="font-mono text-[9px] text-zinc-700 tracking-widest hidden sm:block">// after hours.</span>
+        </div>
+        <div class="flex items-center gap-1 font-mono text-[9px] tracking-widest">
+            <a href="./index.html" class="px-3 py-1.5 text-amber-400 font-bold rounded-lg bg-amber-500/10 border border-amber-500/20">HOME</a>
+            <a href="./terminal.html" class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">LABS</a>
+            <a href="./archive.html" class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">ARCHIVE</a>
+            <a href="./connect.html" class="px-3 py-1.5 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-white/5">CONNECT</a>
         </div>
     </div>
 </nav>
 
-<main class="max-w-5xl mx-auto px-6 py-12 md:py-20 relative z-10">
+<main class="max-w-5xl mx-auto px-6 py-10 md:py-16 relative z-10">
 
-    <!-- ── CLOCK BAR ── -->
-    <div class="flex justify-between items-center mb-10 font-mono">
-        <div class="flex items-center gap-4">
-            <img src="./logo.png" alt="130AM" class="h-8 md:h-10 opacity-90" onerror="this.style.display='none';">
-            <div class="hidden sm:block w-[1px] h-6 bg-white/10"></div>
-            <div class="hidden sm:block text-[10px] tracking-widest text-zinc-500 uppercase glitch-hover">after hours.</div>
+    <!-- ══ HERO — BIG CLOCK ══ -->
+    <section class="mb-8">
+        <div class="glass-panel glass-amber blink-border p-8 md:p-14 flex flex-col items-center text-center relative overflow-hidden">
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div class="w-80 h-80 bg-amber-500/[0.04] rounded-full blur-3xl"></div>
+            </div>
+
+            <div id="session-badge" class="session-badge session-after mb-8 z-10">
+                <span class="live-dot bg-current"></span>
+                <span id="session-text">AFTER HOURS</span>
+            </div>
+
+            <div class="z-10 flex items-end gap-3 mb-5">
+                <div class="clock-display">
+                    <span id="clock-h">01</span><span class="clock-colon">:</span><span id="clock-m">30</span>
+                </div>
+                <div class="clock-ampm mb-4" id="clock-ampm">AM</div>
+            </div>
+
+            <p class="font-mono text-[10px] tracking-[0.4em] text-zinc-700 uppercase mb-5 z-10">after hours.</p>
+
+            <div id="market-bar" class="market-bar flex flex-wrap items-center justify-center gap-5 text-zinc-800 mb-8 z-10">
+                <span id="bar-asian"  class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-current inline-block"></span>Asian</span>
+                <span id="bar-london" class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-current inline-block"></span>London</span>
+                <span id="bar-ny"     class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-current inline-block"></span>New York</span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 z-10">
+                <a href="./archive.html" class="px-8 py-3 bg-amber-500 text-black font-bold text-xs uppercase tracking-widest rounded-full hover:bg-amber-400 transition-colors shadow-[0_0_24px_rgba(255,176,0,0.3)]">Explore</a>
+                <a href="./archive.html" class="px-8 py-3 bg-white/5 border border-white/10 text-white font-bold text-xs uppercase tracking-widest rounded-full hover:bg-white/10 transition-colors glitch-hover">Trading Archive</a>
+            </div>
         </div>
-        <div class="text-right">
-            <div class="text-2xl md:text-3xl font-bold tracking-tighter text-white" id="real-time">01:30<span class="text-xs text-zinc-500 ml-1">AM</span></div>
-            <div class="text-[9px] tracking-widest text-amber-500 mt-1 uppercase">SYNCED</div>
+    </section>
+
+    <!-- ══ PROFILE + ABOUT ══ -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-5 mb-5">
+
+        <!-- PROFILE -->
+        <div class="glass-panel glass-amber md:col-span-5 p-6 flex flex-col gap-5">
+            <div class="flex items-center gap-4">
+                <div class="profile-img-container w-20 h-20 flex-shrink-0">
+                    <img src="./profile.png" alt="130AM" class="profile-img">
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-tight text-white glitch-hover shimmer-text">130AM</h1>
+                    <p class="font-mono text-[9px] text-zinc-600 tracking-widest mt-1">Trader × Builder</p>
+                    <div class="flex gap-2 mt-2 flex-wrap">
+                        <span class="pill pill-green"><span class="live-dot bg-current" style="width:5px;height:5px"></span>ONLINE</span>
+                        <span class="pill pill-amber">AFTER HOURS</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-white/5 pt-4 space-y-1">
+                <div class="status-line"><strong>Currently:</strong> Watching NQ. Waiting on displacement.</div>
+                <div class="status-line"><strong>Mood:</strong> locked in 📊</div>
+                <div class="status-line"><strong>Session:</strong> <span id="status-session">After Hours</span></div>
+                <div class="status-line"><strong>Focus:</strong> ICT / SMC / Price Action</div>
+            </div>
+
+            <div class="flex gap-2 pt-3 border-t border-white/5 mt-auto">
+                <a href="./connect.html" class="flex-1 py-2.5 bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-[9px] font-mono uppercase tracking-widest rounded-xl hover:bg-amber-500/20 transition-colors text-center">+ Add</a>
+                <a href="./archive.html" class="flex-1 py-2.5 bg-white/5 border border-white/10 text-zinc-400 font-bold text-[9px] font-mono uppercase tracking-widest rounded-xl hover:bg-white/10 transition-colors text-center">View</a>
+            </div>
+        </div>
+
+        <!-- ABOUT ME -->
+        <div class="glass-panel md:col-span-7 p-7 flex flex-col gap-4">
+            <div class="section-label">About me</div>
+            <p class="text-sm font-semibold text-zinc-200 leading-relaxed">I trade and build things.</p>
+            <p class="text-sm text-zinc-500 leading-relaxed">Most of what I make starts from solving problems I run into myself. Forex, options, price structure — I study it, document it, and build tools around it.</p>
+            <p class="text-sm text-zinc-700 leading-relaxed">This space is part archive, part workspace. Not a highlight reel.</p>
+
+            <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/5 mt-auto">
+                <div>
+                    <div class="section-label mb-2">Who I'd like to meet</div>
+                    <p class="text-xs text-zinc-600">Other traders. Builders. Anyone serious about the craft. No noise.</p>
+                </div>
+                <div>
+                    <div class="section-label mb-2">The name</div>
+                    <p class="text-xs text-zinc-600">1:30 After Midnight. The hour when noise stops and real work starts.</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-min">
-
-        <!-- ── HERO ── -->
-        <div class="glass-panel glass-amber md:col-span-12 lg:col-span-8 p-8 flex flex-col sm:flex-row gap-8 items-center sm:items-start">
-            <div class="profile-img-container w-40 h-40 sm:w-48 sm:h-48 flex-shrink-0">
-                <img src="./profile.png" alt="130AM" class="profile-img">
-            </div>
-            <div class="flex flex-col flex-1 text-center sm:text-left w-full">
-                <div class="flex flex-wrap gap-2 justify-center sm:justify-start mb-4 font-mono">
-                    <span class="pill pill-green"><span class="dot-blink">●</span> ACTIVE</span>
-                    <span class="pill pill-amber glitch-hover">AFTER HOURS</span>
-                    <span class="pill pill-gray">THE CHARTS</span>
-                </div>
-                <h1 class="text-5xl md:text-6xl font-black tracking-tighter mb-2 text-white glitch-hover shimmer-text">130AM</h1>
-                <p class="text-sm tracking-[0.2em] text-zinc-400 font-mono uppercase mb-1">
-                    Trader × Builder
-                </p>
-                <p class="text-[10px] tracking-[0.25em] text-zinc-600 font-mono uppercase mb-6">
-                    Forex. Options. Systems.
-                </p>
-                <div class="mt-auto flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                    <a href="./archive.html" class="px-6 py-3 bg-white text-black font-bold text-xs uppercase tracking-widest rounded-full hover:scale-105 transition-transform text-center shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                        Explore
-                    </a>
-                    <a href="./archive.html" class="px-6 py-3 bg-white/5 border border-white/10 text-white font-bold text-xs uppercase tracking-widest rounded-full hover:bg-white/10 transition-colors text-center glitch-hover">
-                        Trading Archive
-                    </a>
-                </div>
-            </div>
+    <!-- ══ TOP 8 ══ -->
+    <div class="glass-panel p-6 mb-5">
+        <div class="flex items-center justify-between mb-5">
+            <div class="section-label">Top 8</div>
+            <span class="font-mono text-[9px] text-zinc-700">Core concepts</span>
         </div>
-
-        <!-- ── INTRO ── -->
-        <div class="glass-panel md:col-span-12 lg:col-span-4 p-8 flex flex-col justify-center">
-            <p class="text-lg font-bold text-white leading-snug mb-4">I trade and build things.</p>
-            <p class="text-sm text-zinc-400 leading-relaxed mb-6">
-                Most of what I make starts from solving problems I run into myself.
-            </p>
-            <p class="text-sm text-zinc-500 leading-relaxed mb-6">
-                This space is part archive, part workspace.
-            </p>
-            <div class="border-l-2 border-amber-500/40 pl-4 mt-auto">
-                <p class="text-[10px] font-mono tracking-widest text-zinc-500 uppercase mb-1">The Name</p>
-                <p class="text-xs text-zinc-300 leading-relaxed">1:30 After Midnight. The hour when the noise stops and the real work begins.</p>
-            </div>
+        <div class="grid grid-cols-4 sm:grid-cols-8 gap-3">
+            <a href="./terminal.html" class="top8-card"><span class="text-xl">🎯</span><span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider text-center leading-tight">Order Blocks</span></a>
+            <a href="./terminal.html" class="top8-card"><span class="text-xl">⚡</span><span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider text-center leading-tight">FVGs</span></a>
+            <a href="./terminal.html" class="top8-card"><span class="text-xl">💧</span><span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider text-center leading-tight">Liquidity</span></a>
+            <a href="./terminal.html" class="top8-card"><span class="text-xl">🕐</span><span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider text-center leading-tight">Killzones</span></a>
+            <a href="./archive.html" class="top8-card"><span class="text-xl">📈</span><span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider text-center leading-tight">Forex</span></a>
+            <a href="./archive.html" class="top8-card"><span class="text-xl">🔧</span><span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider text-center leading-tight">Options</span></a>
+            <a href="./terminal.html" class="top8-card"><span class="text-xl">🤖</span><span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider text-center leading-tight">SMC Indicator</span></a>
+            <a href="./archive.html" class="top8-card"><span class="text-xl">📓</span><span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider text-center leading-tight">Trade Journal</span></a>
         </div>
+    </div>
 
-        <!-- ── WHAT'S HERE ── -->
-        <div class="md:col-span-12">
-            <p class="section-label mb-4">What's here</p>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-
-                <a href="./archive.html" class="glass-panel p-7 flex flex-col group decoration-none">
-                    <i class="fas fa-chart-candlestick text-2xl text-zinc-600 group-hover:text-amber-500 transition-colors mb-4"></i>
-                    <h2 class="text-base font-bold text-white mb-2 glitch-hover">Trading</h2>
-                    <p class="text-xs text-zinc-500 leading-relaxed flex-1">Forex and options. Charts, lessons, setups, and documented experience.</p>
-                    <span class="mt-4 text-[10px] font-mono text-zinc-600 group-hover:text-amber-500 transition-colors uppercase tracking-widest">View Trading →</span>
-                </a>
-
-                <a href="./terminal.html" class="glass-panel p-7 flex flex-col group decoration-none">
-                    <i class="fas fa-microchip text-2xl text-zinc-600 group-hover:text-amber-500 transition-colors mb-4"></i>
-                    <h2 class="text-base font-bold text-white mb-2 glitch-hover">Systems</h2>
-                    <p class="text-xs text-zinc-500 leading-relaxed flex-1">Indicators, workflows, and tools. Built around function and personal use.</p>
-                    <span class="mt-4 text-[10px] font-mono text-zinc-600 group-hover:text-amber-500 transition-colors uppercase tracking-widest">View Systems →</span>
-                </a>
-
-                <a href="#" class="glass-panel p-7 flex flex-col group decoration-none">
-                    <i class="fas fa-box-archive text-2xl text-zinc-600 group-hover:text-amber-500 transition-colors mb-4"></i>
-                    <h2 class="text-base font-bold text-white mb-2 glitch-hover">Projects</h2>
-                    <p class="text-xs text-zinc-500 leading-relaxed flex-1">Things I've built, tested, or spent too much time on. Some active. Some archived.</p>
-                    <span class="mt-4 text-[10px] font-mono text-zinc-600 group-hover:text-amber-500 transition-colors uppercase tracking-widest">View Projects →</span>
-                </a>
-
-            </div>
+    <!-- ══ WHAT'S HERE ══ -->
+    <div class="mb-5">
+        <div class="section-label mb-4">What's here</div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <a href="./archive.html" class="glass-panel p-6 flex flex-col group decoration-none">
+                <i class="fas fa-chart-candlestick text-xl text-zinc-700 group-hover:text-amber-500 transition-colors mb-4"></i>
+                <h2 class="text-sm font-bold text-white mb-2 glitch-hover">Trading</h2>
+                <p class="text-xs text-zinc-600 leading-relaxed flex-1">Forex and options. Charts, lessons, setups, and documented experience.</p>
+                <span class="mt-5 text-[9px] font-mono text-zinc-700 group-hover:text-amber-500 transition-colors uppercase tracking-widest">View Trading →</span>
+            </a>
+            <a href="./terminal.html" class="glass-panel p-6 flex flex-col group decoration-none">
+                <i class="fas fa-microchip text-xl text-zinc-700 group-hover:text-amber-500 transition-colors mb-4"></i>
+                <h2 class="text-sm font-bold text-white mb-2 glitch-hover">Systems</h2>
+                <p class="text-xs text-zinc-600 leading-relaxed flex-1">Indicators, workflows, and tools. Built around function and personal use.</p>
+                <span class="mt-5 text-[9px] font-mono text-zinc-700 group-hover:text-amber-500 transition-colors uppercase tracking-widest">View Systems →</span>
+            </a>
+            <a href="#" class="glass-panel p-6 flex flex-col group decoration-none">
+                <i class="fas fa-box-archive text-xl text-zinc-700 group-hover:text-amber-500 transition-colors mb-4"></i>
+                <h2 class="text-sm font-bold text-white mb-2 glitch-hover">Projects</h2>
+                <p class="text-xs text-zinc-600 leading-relaxed flex-1">Things I've built, tested, or spent too much time on. Some active. Some archived.</p>
+                <span class="mt-5 text-[9px] font-mono text-zinc-700 group-hover:text-amber-500 transition-colors uppercase tracking-widest">View Projects →</span>
+            </a>
         </div>
+    </div>
 
-        <!-- ── FEATURED WORK ── -->
-        <div class="glass-panel md:col-span-12 lg:col-span-8 p-8">
-            <div class="font-mono text-[10px] tracking-[0.2em] text-zinc-500 uppercase mb-6 flex items-center gap-4">
-                <span class="glitch-hover">Featured Work</span>
-                <div class="h-px bg-white/10 flex-1"></div>
-                <span class="text-zinc-700">Selected builds</span>
-            </div>
-            <p class="text-sm text-zinc-400 mb-6">Selected projects and current builds.</p>
-            <div class="grid sm:grid-cols-2 gap-4">
-                <div class="bg-white/[0.02] border border-white/5 rounded-xl p-5 hover:border-amber-500/20 transition-colors">
-                    <div class="text-[9px] font-mono text-amber-500 uppercase tracking-widest mb-2">Trading Tools</div>
-                    <h3 class="text-sm font-bold text-white mb-1 glitch-hover">RetailBeastFX Indicator</h3>
-                    <p class="text-xs text-zinc-500">Automated SMC mapping. Order blocks, FVGs, and liquidity pools — rendered clean.</p>
-                </div>
-                <div class="bg-white/[0.02] border border-white/5 rounded-xl p-5 hover:border-amber-500/20 transition-colors">
-                    <div class="text-[9px] font-mono text-amber-500 uppercase tracking-widest mb-2">Indicators</div>
-                    <h3 class="text-sm font-bold text-white mb-1 glitch-hover">ICT Core Suite</h3>
-                    <p class="text-xs text-zinc-500">Killzones, FVGs, and session markers. ICT concepts made visual and precise.</p>
-                </div>
-                <div class="bg-white/[0.02] border border-white/5 rounded-xl p-5 hover:border-amber-500/20 transition-colors">
-                    <div class="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-2">Utilities</div>
-                    <h3 class="text-sm font-bold text-zinc-500 mb-1">Risk Calculator</h3>
-                    <p class="text-xs text-zinc-600">Position sizing and R:R management. In progress.</p>
-                </div>
-                <div class="bg-white/[0.02] border border-white/5 rounded-xl p-5 hover:border-amber-500/20 transition-colors">
-                    <div class="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-2">Experiments</div>
-                    <h3 class="text-sm font-bold text-zinc-500 mb-1">Strategy Backtester</h3>
-                    <p class="text-xs text-zinc-600">Systematic review framework. Early stage.</p>
-                </div>
-            </div>
-        </div>
+    <!-- ══ NOW PLAYING + GUESTBOOK ══ -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-5 mb-5">
 
-        <!-- ── WINAMP MEDIA PLAYER ── -->
-        <div class="glass-panel glass-amber md:col-span-12 lg:col-span-4 p-6 flex flex-col justify-between font-mono">
+        <!-- NOW PLAYING -->
+        <div class="glass-panel glass-amber md:col-span-5 p-6 flex flex-col font-mono">
             <div class="flex items-center justify-between mb-4">
-                <div class="text-[9px] tracking-widest text-zinc-500 uppercase glitch-hover">Focus Engine</div>
-                <div class="text-[9px] tracking-widest text-amber-500 uppercase">Live Stream</div>
+                <div class="section-label">Now playing</div>
+                <div class="flex items-center gap-2">
+                    <span class="live-dot bg-amber-500"></span>
+                    <span class="text-[9px] text-amber-500 uppercase tracking-widest">Streaming</span>
+                </div>
             </div>
-            <div class="bg-black/60 rounded-xl p-4 border border-white/10 shadow-inner flex-1 flex flex-col justify-center">
-                <div class="aspect-video bg-black rounded-lg overflow-hidden mb-4 border border-white/5 relative shadow-[0_0_20px_rgba(255,176,0,0.1)]">
-                    <iframe id="youtube-player"
-                            width="100%" height="100%" class="absolute inset-0"
+            <div class="bg-black/50 rounded-xl overflow-hidden border border-white/5 flex-1 mb-4">
+                <div class="aspect-video relative">
+                    <iframe id="youtube-player" width="100%" height="100%" class="absolute inset-0"
                             src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=0&controls=1&rel=0&modestbranding=1"
                             title="Focus Music" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                     </iframe>
                 </div>
-                <div class="text-center text-[9px] text-amber-500 font-bold tracking-widest mb-4 glitch-hover" id="track-title">
-                    LO-FI FOCUS • AFTER HOURS MIX
-                </div>
-                <div class="flex flex-wrap gap-2 justify-center mt-auto text-[9px] font-mono">
-                    <button onclick="changeTrack('jfKfPfyJRdk', 'LO-FI FOCUS')" class="px-3 py-2 bg-white/5 hover:bg-amber-500 hover:text-black rounded-full transition-colors border border-white/10">Lo-Fi</button>
-                    <button onclick="changeTrack('jGT1y4j1Q0U', 'DARK SYNTH')" class="px-3 py-2 bg-white/5 hover:bg-amber-500 hover:text-black rounded-full transition-colors border border-white/10">Dark Synth</button>
-                    <button onclick="changeTrack('5qap5aO7eqU', 'FOCUS FLOW')" class="px-3 py-2 bg-white/5 hover:bg-amber-500 hover:text-black rounded-full transition-colors border border-white/10">Focus Flow</button>
-                </div>
+            </div>
+            <div class="text-[9px] text-amber-500 tracking-widest text-center mb-3 glitch-hover" id="track-title">LO-FI FOCUS • AFTER HOURS MIX</div>
+            <div class="flex gap-2 justify-center text-[9px]">
+                <button onclick="changeTrack('jfKfPfyJRdk','LO-FI FOCUS')"  class="px-3 py-1.5 bg-white/5 hover:bg-amber-500 hover:text-black rounded-full border border-white/10 transition-colors">Lo-Fi</button>
+                <button onclick="changeTrack('jGT1y4j1Q0U','DARK SYNTH')"  class="px-3 py-1.5 bg-white/5 hover:bg-amber-500 hover:text-black rounded-full border border-white/10 transition-colors">Dark Synth</button>
+                <button onclick="changeTrack('5qap5aO7eqU','FOCUS FLOW')"   class="px-3 py-1.5 bg-white/5 hover:bg-amber-500 hover:text-black rounded-full border border-white/10 transition-colors">Focus Flow</button>
             </div>
         </div>
 
-        <!-- ── TRADING ARCHIVE ── -->
-        <div class="glass-panel md:col-span-12 lg:col-span-6 p-8 flex flex-col">
-            <div class="section-label mb-6">Trading Archive</div>
-            <h2 class="text-2xl font-black tracking-tight mb-3 text-white glitch-hover">Charts, notes, wins, losses, and lessons.</h2>
-            <p class="text-sm text-zinc-500 leading-relaxed mb-2">Documented over time.</p>
-            <p class="text-sm text-zinc-600 leading-relaxed mb-6">Not a highlight reel.</p>
-            <div class="mt-auto">
-                <a href="./archive.html" class="inline-flex items-center gap-2 text-xs font-mono text-amber-500 hover:text-amber-300 transition-colors uppercase tracking-widest glitch-hover">
-                    Open Archive <i class="fas fa-arrow-right text-[10px]"></i>
+        <!-- GUESTBOOK -->
+        <div class="glass-panel md:col-span-7 p-6 flex flex-col">
+            <div class="flex items-center justify-between mb-4">
+                <div class="section-label">Guestbook</div>
+                <span class="font-mono text-[9px] text-zinc-700">Wall posts</span>
+            </div>
+            <div class="pings-scroll flex-1 bg-black/20 rounded-xl p-4 border border-white/[0.04]">
+                <div class="ping-msg"><span class="text-amber-500">SYS_LOG</span><span class="text-zinc-700 mx-1.5">—</span><span class="text-zinc-400">400 pts secured on NQ. Logging off for the night.</span><span class="text-zinc-700 ml-2 text-[9px]">1h ago</span></div>
+                <div class="ping-msg"><span class="text-green-400">GUEST_093</span><span class="text-zinc-700 mx-1.5">—</span><span class="text-zinc-400">Setup is absolutely clean bro 🔥 where do I get that indicator?</span><span class="text-zinc-700 ml-2 text-[9px]">3h ago</span></div>
+                <div class="ping-msg"><span class="text-blue-400">ARCHIVE</span><span class="text-zinc-700 mx-1.5">—</span><span class="text-zinc-400">New execution logs deployed. 14 setups documented this week.</span><span class="text-zinc-700 ml-2 text-[9px]">Yesterday</span></div>
+                <div class="ping-msg"><span class="text-green-400">GUEST_412</span><span class="text-zinc-700 mx-1.5">—</span><span class="text-zinc-400">That options module update was exactly what I needed. W</span><span class="text-zinc-700 ml-2 text-[9px]">2d ago</span></div>
+                <div class="ping-msg"><span class="text-purple-400">GUEST_007</span><span class="text-zinc-700 mx-1.5">—</span><span class="text-zinc-400">Been following since day one. The ICT killzone docs are 🔑</span><span class="text-zinc-700 ml-2 text-[9px]">5d ago</span></div>
+                <div class="ping-msg opacity-40"><span class="text-zinc-600">SYSTEM</span><span class="text-zinc-700 mx-1.5">—</span><span class="text-zinc-600">Profile initiated. 130AM is online.</span><span class="text-zinc-700 ml-2 text-[9px]">11/2024</span></div>
+            </div>
+            <div class="mt-3 flex gap-2">
+                <input type="text" placeholder="Leave a message..." class="flex-1 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-2.5 text-[10px] font-mono text-white focus:outline-none focus:border-amber-500/40 transition-colors placeholder:text-zinc-700" disabled>
+                <button class="px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-[9px] font-mono text-zinc-600 uppercase tracking-widest" disabled>Post</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ FEATURED + ARCHIVE ══ -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-5 mb-5">
+        <div class="glass-panel md:col-span-8 p-7">
+            <div class="section-label mb-5">Featured work</div>
+            <div class="grid sm:grid-cols-2 gap-3">
+                <a href="./terminal.html" class="bg-white/[0.02] border border-white/5 rounded-xl p-5 hover:border-amber-500/25 transition-colors group">
+                    <div class="text-[8px] font-mono text-amber-500 uppercase tracking-widest mb-2">Trading Tools</div>
+                    <h3 class="text-sm font-bold text-white mb-1.5 group-hover:text-amber-400 transition-colors">RetailBeastFX Indicator</h3>
+                    <p class="text-[11px] text-zinc-600 leading-relaxed">Automated SMC mapping. Order blocks, FVGs, and liquidity pools.</p>
                 </a>
-            </div>
-        </div>
-
-        <!-- ── ARCHIVE ── -->
-        <div class="glass-panel md:col-span-12 lg:col-span-6 p-8 flex flex-col">
-            <div class="section-label mb-6">Archive</div>
-            <h2 class="text-2xl font-black tracking-tight mb-3 text-white glitch-hover">Older work and previous experiments.</h2>
-            <p class="text-sm text-zinc-500 leading-relaxed mb-6">Still part of the timeline.</p>
-            <div class="mt-auto">
-                <a href="./archive.html" class="inline-flex items-center gap-2 text-xs font-mono text-zinc-500 hover:text-white transition-colors uppercase tracking-widest">
-                    View Archive <i class="fas fa-arrow-right text-[10px]"></i>
+                <a href="./terminal.html" class="bg-white/[0.02] border border-white/5 rounded-xl p-5 hover:border-amber-500/25 transition-colors group">
+                    <div class="text-[8px] font-mono text-amber-500 uppercase tracking-widest mb-2">Indicators</div>
+                    <h3 class="text-sm font-bold text-white mb-1.5 group-hover:text-amber-400 transition-colors">ICT Core Suite</h3>
+                    <p class="text-[11px] text-zinc-600 leading-relaxed">Killzones, FVGs, session markers — ICT concepts made visual.</p>
                 </a>
-            </div>
-        </div>
-
-        <!-- ── CONNECT ── -->
-        <div id="connect" class="glass-panel md:col-span-12 p-8 relative overflow-hidden">
-            <div class="absolute -right-20 -top-20 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="flex flex-col lg:flex-row gap-10 items-center">
-                <div class="lg:w-1/3 text-center lg:text-left">
-                    <h2 class="text-3xl font-black tracking-tight mb-4 glitch-hover">Connect.</h2>
-                    <p class="text-sm text-zinc-400 leading-relaxed mb-2 font-medium">130AM</p>
-                    <p class="text-sm text-zinc-500 leading-relaxed mb-6">after hours.</p>
+                <div class="bg-white/[0.01] border border-white/[0.03] rounded-xl p-5">
+                    <div class="text-[8px] font-mono text-zinc-700 uppercase tracking-widest mb-2">Utilities — In Progress</div>
+                    <h3 class="text-sm font-bold text-zinc-600 mb-1.5">Risk Calculator</h3>
+                    <p class="text-[11px] text-zinc-700 leading-relaxed">Position sizing and R:R management.</p>
                 </div>
-                <div class="flex-1 w-full grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    <a href="https://x.com/130AfterM" target="_blank" class="social-btn"><i class="fab fa-x-twitter"></i> X (Twitter)</a>
-                    <a href="https://youtube.com/@130AfterM" target="_blank" class="social-btn"><i class="fab fa-youtube"></i> YouTube</a>
-                    <a href="./connect.html" class="social-btn"><i class="fas fa-link"></i> Contact</a>
-                    <a href="https://tiktok.com/@130AfterM" target="_blank" class="social-btn"><i class="fab fa-tiktok"></i> TikTok</a>
-                    <a href="https://threads.net/@130AfterM" target="_blank" class="social-btn"><i class="fa-brands fa-threads"></i> Threads</a>
-                    <a href="https://www.facebook.com/130AfterM" target="_blank" class="social-btn"><i class="fab fa-facebook-f"></i> Facebook</a>
+                <div class="bg-white/[0.01] border border-white/[0.03] rounded-xl p-5">
+                    <div class="text-[8px] font-mono text-zinc-700 uppercase tracking-widest mb-2">Experiments</div>
+                    <h3 class="text-sm font-bold text-zinc-600 mb-1.5">Strategy Backtester</h3>
+                    <p class="text-[11px] text-zinc-700 leading-relaxed">Systematic review framework. Early stage.</p>
                 </div>
             </div>
         </div>
+        <div class="md:col-span-4 flex flex-col gap-4">
+            <div class="glass-panel p-6 flex flex-col flex-1">
+                <div class="section-label mb-3">Trading Archive</div>
+                <p class="text-sm font-bold text-white mb-2 leading-snug">Charts, notes, wins, losses, and lessons.</p>
+                <p class="text-xs text-zinc-600 mb-4">Documented over time. Not a highlight reel.</p>
+                <a href="./archive.html" class="mt-auto text-[9px] font-mono text-amber-500 hover:text-amber-300 transition-colors uppercase tracking-widest">Open Archive →</a>
+            </div>
+            <div class="glass-panel p-6 flex flex-col flex-1">
+                <div class="section-label mb-3">Archive</div>
+                <p class="text-sm font-bold text-white mb-2 leading-snug">Older work and previous experiments.</p>
+                <p class="text-xs text-zinc-600 mb-4">Still part of the timeline.</p>
+                <a href="./archive.html" class="mt-auto text-[9px] font-mono text-zinc-600 hover:text-white transition-colors uppercase tracking-widest">View Archive →</a>
+            </div>
+        </div>
+    </div>
 
+    <!-- ══ CONNECT ══ -->
+    <div class="glass-panel p-8 mb-10 relative overflow-hidden">
+        <div class="absolute -right-16 -top-16 w-64 h-64 bg-amber-500/[0.04] rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex flex-col lg:flex-row gap-8 items-center">
+            <div class="lg:w-1/3 text-center lg:text-left">
+                <div class="section-label mb-3">Connect</div>
+                <h2 class="text-2xl font-black tracking-tight mb-1 text-white glitch-hover">130AM</h2>
+                <p class="text-zinc-600 text-sm">after hours.</p>
+            </div>
+            <div class="flex-1 w-full grid grid-cols-3 gap-2">
+                <a href="https://x.com/130AfterM"             target="_blank" class="social-btn"><i class="fab fa-x-twitter"></i> X</a>
+                <a href="https://youtube.com/@130AfterM"      target="_blank" class="social-btn"><i class="fab fa-youtube"></i> YouTube</a>
+                <a href="./connect.html"                                       class="social-btn"><i class="fas fa-link"></i> Contact</a>
+                <a href="https://tiktok.com/@130AfterM"       target="_blank" class="social-btn"><i class="fab fa-tiktok"></i> TikTok</a>
+                <a href="https://threads.net/@130AfterM"      target="_blank" class="social-btn"><i class="fa-brands fa-threads"></i> Threads</a>
+                <a href="https://www.facebook.com/130AfterM"  target="_blank" class="social-btn"><i class="fab fa-facebook-f"></i> Facebook</a>
+            </div>
+        </div>
     </div>
 
     <!-- ── FOOTER ── -->
-    <footer class="mt-16 text-center font-mono border-t border-white/5 pt-8">
-        <p class="text-xl font-black text-white mb-1 tracking-tight">130AM</p>
-        <p class="text-[10px] tracking-widest text-zinc-600 uppercase mb-6">after hours.</p>
-        <p class="text-[9px] tracking-[0.2em] opacity-30">&copy; 2026 130AM. All Rights Reserved.</p>
+    <footer class="text-center font-mono border-t border-white/[0.05] pt-8">
+        <p class="text-2xl font-black text-white mb-1 tracking-tight">130AM</p>
+        <p class="text-[10px] tracking-[0.3em] text-zinc-700 uppercase mb-6">after hours.</p>
+        <p class="text-[9px] tracking-[0.15em] text-zinc-800">&copy; 2026 130AM. All Rights Reserved.</p>
     </footer>
 
 </main>
 
 <script>
-    // Particles
-    const container = document.getElementById('particles');
-    for(let i=0; i<40; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.left = Math.random() * 100 + 'vw';
-        p.style.animationDuration = (Math.random() * 8 + 4) + 's';
-        p.style.animationDelay = (Math.random() * 5) + 's';
-        container.appendChild(p);
-    }
+// ── PARTICLES
+const container = document.getElementById('particles');
+for(let i=0;i<40;i++){
+    const p=document.createElement('div'); p.className='particle';
+    p.style.left=Math.random()*100+'vw';
+    p.style.animationDuration=(Math.random()*10+5)+'s';
+    p.style.animationDelay=(Math.random()*6)+'s';
+    container.appendChild(p);
+}
 
-    // Clock
-    function updateClock() {
-        const now = new Date();
-        let h = now.getHours();
-        const m = now.getMinutes().toString().padStart(2, '0');
-        const ampm = h >= 12 ? 'PM' : 'AM';
-        h = h % 12 || 12;
-        const ts = document.getElementById('real-time');
-        if (ts) ts.innerHTML = `${String(h).padStart(2,'0')}:${m}<span class="text-xs text-zinc-500 ml-1 font-bold">${ampm}</span>`;
-    }
-    updateClock();
-    setInterval(updateClock, 10000);
+// ── MARKET SESSIONS
+function getSession(){
+    const d=new Date();
+    const utcH=d.getUTCHours(), utcM=d.getUTCMinutes();
+    const t=utcH*60+utcM;
+    return {
+        asian:  t>=0   && t<540,
+        london: t>=480 && t<1020,
+        ny:     t>=780 && t<1320,
+        get afterHours(){ return !this.asian && !this.london && !this.ny; }
+    };
+}
 
-    // Media Player
-    function changeTrack(videoId, title) {
-        document.getElementById('youtube-player').src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-        document.getElementById('track-title').textContent = `${title} • AFTER HOURS MIX`;
+function updateSessionUI(){
+    const s=getSession();
+    const badge=document.getElementById('session-badge');
+    const text=document.getElementById('session-text');
+    const ss=document.getElementById('status-session');
+    const asian=document.getElementById('bar-asian');
+    const london=document.getElementById('bar-london');
+    const ny=document.getElementById('bar-ny');
+
+    [asian,london,ny].forEach(el=>el.style.color='#27272a');
+    badge.className='session-badge';
+
+    if(s.ny && s.london){
+        badge.classList.add('session-ny'); text.textContent='NY × LONDON OVERLAP';
+        if(ss) ss.textContent='NY × London Overlap';
+        london.style.color='#38bdf8'; ny.style.color='#4ade80';
+    } else if(s.ny){
+        badge.classList.add('session-ny'); text.textContent='NEW YORK SESSION';
+        if(ss) ss.textContent='New York'; ny.style.color='#4ade80';
+    } else if(s.london){
+        badge.classList.add('session-london'); text.textContent='LONDON SESSION';
+        if(ss) ss.textContent='London'; london.style.color='#38bdf8';
+    } else if(s.asian){
+        badge.classList.add('session-asian'); text.textContent='ASIAN SESSION';
+        if(ss) ss.textContent='Asian'; asian.style.color='#a78bfa';
+    } else {
+        badge.classList.add('session-after'); text.textContent='AFTER HOURS';
+        if(ss) ss.textContent='After Hours';
     }
+}
+
+// ── CLOCK
+function updateClock(){
+    const now=new Date();
+    let h=now.getHours();
+    const m=now.getMinutes().toString().padStart(2,'0');
+    const ampm=h>=12?'PM':'AM';
+    h=h%12||12;
+    const hStr=String(h).padStart(2,'0');
+    const bigH=document.getElementById('clock-h');
+    const bigM=document.getElementById('clock-m');
+    const bigAMPM=document.getElementById('clock-ampm');
+    if(bigH) bigH.textContent=hStr;
+    if(bigM) bigM.textContent=m;
+    if(bigAMPM) bigAMPM.textContent=ampm;
+    updateSessionUI();
+}
+updateClock();
+setInterval(updateClock, 10000);
+
+// ── MEDIA
+function changeTrack(id,title){
+    document.getElementById('youtube-player').src=`https://www.youtube.com/embed/${id}?autoplay=1`;
+    document.getElementById('track-title').textContent=`${title} • AFTER HOURS MIX`;
+}
 </script>
 
 </body>
