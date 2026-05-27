@@ -186,6 +186,10 @@
         /* ── BLINKING BORDER ── */
         @keyframes blink-border { 0%, 100% { border-color: rgba(255,176,0,0.2); } 50% { border-color: rgba(255,176,0,0.6); } }
         .blink-border { animation: blink-border 3s ease-in-out infinite; }
+    
+        /* ── SWUP FADE ── */
+        html.is-animating .transition-fade { opacity: 0; }
+        .transition-fade { transition: opacity 0.3s; opacity: 1; }
     </style>
 </head>
 <body class="antialiased selection:bg-amber-500 selection:text-black">
@@ -210,7 +214,7 @@
     </div>
 </nav>
 
-<main class="max-w-5xl mx-auto px-6 py-10 md:py-16 relative z-10">
+<main id="swup" class="transition-fade  class="max-w-5xl mx-auto px-6 py-10 md:py-16 relative z-10"">
 
     <!-- ══ HERO — BIG CLOCK ══ -->
     <section class="mb-8">
@@ -343,49 +347,6 @@
 
     <!-- ══ NOW PLAYING + GUESTBOOK ══ -->
     <div class="grid grid-cols-1 md:grid-cols-12 gap-5 mb-5">
-
-        <!-- 130AM FM RADIO -->
-        <div class="glass-panel glass-amber md:col-span-5 p-6 flex flex-col font-mono relative overflow-hidden">
-            <!-- Hidden YouTube Player -->
-            <div id="yt-player-container" class="hidden"></div>
-            
-            <div class="flex items-center justify-between mb-8 z-10">
-                <div class="section-label">130AM FM</div>
-                <div class="flex items-center gap-2">
-                    <span class="live-dot bg-amber-500" id="radio-dot" style="animation-play-state: paused;"></span>
-                    <span class="text-[9px] text-amber-500 uppercase tracking-widest" id="radio-status">Offline</span>
-                </div>
-            </div>
-
-            <div class="flex-1 flex flex-col items-center justify-center z-10 mb-8">
-                <!-- Audio Visualizer Animation (CSS) -->
-                <div class="flex items-end gap-1 h-8 mb-6 opacity-80" id="visualizer">
-                    <div class="w-1.5 bg-amber-500 h-2 transition-all duration-100 bar"></div>
-                    <div class="w-1.5 bg-amber-500 h-4 transition-all duration-100 bar"></div>
-                    <div class="w-1.5 bg-amber-500 h-3 transition-all duration-100 bar"></div>
-                    <div class="w-1.5 bg-amber-500 h-6 transition-all duration-100 bar"></div>
-                    <div class="w-1.5 bg-amber-500 h-2 transition-all duration-100 bar"></div>
-                </div>
-
-                <div class="text-[10px] text-zinc-400 tracking-[0.2em] uppercase mb-1">Now Playing</div>
-                <div class="text-[11px] font-bold text-amber-400 tracking-widest text-center glitch-hover px-4 leading-relaxed line-clamp-2" id="radio-title">Loading Signal...</div>
-            </div>
-
-            <div class="flex items-center justify-center gap-4 z-10">
-                <button id="radio-prev" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors text-zinc-400 hover:text-white">
-                    <i class="fas fa-backward-step text-[10px]"></i>
-                </button>
-                <button id="radio-play" class="w-12 h-12 rounded-full bg-amber-500 hover:bg-amber-400 border border-amber-400 flex items-center justify-center transition-all shadow-[0_0_15px_rgba(255,176,0,0.3)] text-black">
-                    <i class="fas fa-play text-xs ml-0.5" id="play-icon"></i>
-                </button>
-                <button id="radio-next" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors text-zinc-400 hover:text-white">
-                    <i class="fas fa-forward-step text-[10px]"></i>
-                </button>
-            </div>
-            
-            <!-- Ambient Glow -->
-            <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-amber-500/[0.05] rounded-full blur-3xl pointer-events-none"></div>
-        </div>
 
         <!-- GUESTBOOK -->
         <div class="glass-panel md:col-span-7 p-6 flex flex-col relative overflow-hidden">
@@ -655,7 +616,44 @@ function changeTrack(id,title){
     });
 </script>
 
-<!-- YOUTUBE IFRAME API & RADIO LOGIC -->
+
+<!-- FLOATING RADIO WIDGET -->
+<div id="radio-widget" class="fixed bottom-6 right-6 w-[340px] glass-panel glass-amber p-4 flex flex-col font-mono relative overflow-hidden z-50 shadow-2xl" style="backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);">
+    <div id="yt-player-container" class="hidden"></div>
+    <div class="flex items-center justify-between mb-4 z-10">
+        <div class="section-label">130AM FM</div>
+        <div class="flex items-center gap-2">
+            <span class="live-dot bg-amber-500" id="radio-dot" style="animation-play-state: paused;"></span>
+            <span class="text-[9px] text-amber-500 uppercase tracking-widest" id="radio-status">Offline</span>
+        </div>
+    </div>
+    <div class="flex items-center justify-between z-10">
+        <div class="flex flex-col">
+            <div class="text-[8px] text-zinc-400 tracking-[0.2em] uppercase mb-1">Now Playing</div>
+            <div class="text-[10px] font-bold text-amber-400 tracking-widest glitch-hover line-clamp-1 w-40" id="radio-title">Loading...</div>
+        </div>
+        <div class="flex items-center gap-2">
+            <div class="flex items-end gap-0.5 h-4 opacity-80 mr-2" id="visualizer">
+                <div class="w-1 bg-amber-500 h-1 transition-all duration-100 bar"></div>
+                <div class="w-1 bg-amber-500 h-2 transition-all duration-100 bar"></div>
+                <div class="w-1 bg-amber-500 h-1 transition-all duration-100 bar"></div>
+                <div class="w-1 bg-amber-500 h-3 transition-all duration-100 bar"></div>
+            </div>
+            <button id="radio-prev" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors text-zinc-400 hover:text-white"><i class="fas fa-backward-step text-[9px]"></i></button>
+            <button id="radio-play" class="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 flex items-center justify-center transition-all shadow-[0_0_10px_rgba(255,176,0,0.3)] text-black"><i class="fas fa-play text-[10px] ml-0.5" id="play-icon"></i></button>
+            <button id="radio-next" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors text-zinc-400 hover:text-white"><i class="fas fa-forward-step text-[9px]"></i></button>
+        </div>
+    </div>
+    <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-amber-500/[0.08] rounded-full blur-2xl pointer-events-none"></div>
+</div>
+
+<!-- SWUP & RADIO SCRIPTS -->
+<script src="https://unpkg.com/swup@4"></script>
+<script src="https://unpkg.com/@swup/scripts-plugin@3"></script>
+<script>
+    const swup = new Swup({ plugins: [new SwupScriptsPlugin()] });
+</script>
+
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
     let player;
@@ -672,39 +670,22 @@ function changeTrack(id,title){
     const bars = document.querySelectorAll('.bar');
 
     function animateVisualizer() {
-        if(!isPlaying) {
-            bars.forEach(bar => bar.style.height = '4px');
-            return;
-        }
-        bars.forEach(bar => {
-            const h = Math.floor(Math.random() * 20) + 4;
-            bar.style.height = h + 'px';
-        });
+        if(!isPlaying) { bars.forEach(bar => bar.style.height = '4px'); return; }
+        bars.forEach(bar => { bar.style.height = (Math.floor(Math.random() * 12) + 4) + 'px'; });
     }
 
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('yt-player-container', {
-            height: '0',
-            width: '0',
-            playerVars: {
-                listType: 'playlist',
-                list: 'PL5AZJ4fMfrhPkxjJMxa7OZZxRK-frkIX7',
-                loop: 1,
-                autoplay: 0,
-                controls: 0,
-                showinfo: 0,
-                rel: 0
-            },
-            events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
-            }
+            height: '0', width: '0',
+            playerVars: { listType: 'playlist', list: 'PL5AZJ4fMfrhPkxjJMxa7OZZxRK-frkIX7', loop: 1, autoplay: 0, controls: 0, showinfo: 0, rel: 0 },
+            events: { 'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange }
         });
     }
 
     function onPlayerReady(event) {
         titleEl.textContent = "PRESS PLAY TO STREAM";
         statusEl.textContent = "Ready";
+        player.setShuffle(true);
     }
 
     function onPlayerStateChange(event) {
@@ -713,19 +694,13 @@ function changeTrack(id,title){
             playIcon.className = "fas fa-pause text-xs";
             statusEl.textContent = "Streaming";
             dotEl.style.animationPlayState = "running";
-            
-            // Wait a tick to grab title
             setTimeout(() => {
                 try {
                     const data = player.getVideoData();
-                    if(data && data.title) {
-                        titleEl.textContent = data.title.toUpperCase();
-                    } else {
-                        titleEl.textContent = "STREAMING...";
-                    }
+                    if(data && data.title) titleEl.textContent = data.title.toUpperCase();
+                    else titleEl.textContent = "STREAMING...";
                 } catch(e) {}
             }, 500);
-            
             if(!visualizerInterval) visualizerInterval = setInterval(animateVisualizer, 150);
         } else {
             isPlaying = false;
@@ -740,21 +715,14 @@ function changeTrack(id,title){
 
     playBtn.addEventListener('click', () => {
         if(!player || !player.getPlayerState) return;
-        const state = player.getPlayerState();
-        if(state == YT.PlayerState.PLAYING) {
-            player.pauseVideo();
-        } else {
-            player.playVideo();
+        if(player.getPlayerState() == YT.PlayerState.PLAYING) player.pauseVideo();
+        else {
+            if (titleEl.textContent === "PRESS PLAY TO STREAM") player.playVideoAt(0);
+            else player.playVideo();
         }
     });
-
-    nextBtn.addEventListener('click', () => {
-        if(player && player.nextVideo) player.nextVideo();
-    });
-
-    prevBtn.addEventListener('click', () => {
-        if(player && player.previousVideo) player.previousVideo();
-    });
+    nextBtn.addEventListener('click', () => { if(player && player.nextVideo) player.nextVideo(); });
+    prevBtn.addEventListener('click', () => { if(player && player.previousVideo) player.previousVideo(); });
 </script>
 </body>
 </html>
