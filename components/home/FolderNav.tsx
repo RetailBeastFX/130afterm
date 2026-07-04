@@ -4,9 +4,9 @@ import Link from 'next/link';
 
 const DESTINATIONS = [
   {
-    path: '/log',
-    label: 'log',
-    description: 'real trades. documented wins and losses.',
+    path: '/links',
+    label: 'links',
+    description: 'socials and external resources.',
   },
   {
     path: '/archive',

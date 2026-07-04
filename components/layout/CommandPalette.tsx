@@ -5,20 +5,20 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const COMMANDS = [
-  { label: '/log', description: 'market log', path: '/log' },
   { label: '/archive', description: 'method + resources', path: '/archive' },
   { label: '/workspace', description: 'operating environment', path: '/workspace' },
   { label: '/gallery', description: 'photography', path: '/gallery' },
   { label: '/projects', description: "what's building", path: '/projects' },
+  { label: '/links', description: 'socials and external resources', path: '/links' },
   { label: '/about', description: 'the person', path: '/about' },
 ];
 
 const HELP_COMMANDS = [
-  { label: '/log', description: 'real trade entries — wins, losses, lessons' },
   { label: '/archive', description: 'method, resources, system changelog' },
   { label: '/workspace', description: 'tools, setup playbooks, operating stack' },
   { label: '/gallery', description: 'photography and visual world' },
   { label: '/projects', description: 'indicators and utilities being built' },
+  { label: '/links', description: 'socials and external resources' },
   { label: '/about', description: 'the story — how this all started' },
   { label: '', description: '' },
   { label: '// 130AfterM', description: '1:30 after midnight. when noise stops.' },

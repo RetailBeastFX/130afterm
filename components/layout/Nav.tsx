@@ -6,11 +6,12 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_ITEMS = [
-  { label: '/log', path: '/log' },
-  { label: '/archive', path: '/archive' },
+  { label: '/', path: '/' },
   { label: '/workspace', path: '/workspace' },
-  { label: '/gallery', path: '/gallery' },
   { label: '/projects', path: '/projects' },
+  { label: '/archive', path: '/archive' },
+  { label: '/gallery', path: '/gallery' },
+  { label: '/links', path: '/links' },
   { label: '/about', path: '/about' },
 ];
 

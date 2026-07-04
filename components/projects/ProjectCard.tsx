@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 interface ProjectCardProps {
   name: string;
   status: 'LIVE' | 'BUILDING' | 'CONCEPT';
@@ -133,25 +134,45 @@ export default function ProjectCard({
 
       {/* Link */}
       {link && (
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            fontFamily: 'var(--font-jetbrains), monospace',
-            fontSize: '11px',
-            color: '#D4973B',
-            textDecoration: 'none',
-            transition: 'color 100ms',
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = '#E8E8E8'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = '#D4973B'; }}
-        >
-          → access
-        </a>
+        link.startsWith('/') ? (
+          <Link
+            href={link}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontFamily: 'var(--font-jetbrains), monospace',
+              fontSize: '11px',
+              color: '#D4973B',
+              textDecoration: 'none',
+              transition: 'color 100ms',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = '#E8E8E8'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = '#D4973B'; }}
+          >
+            → explore
+          </Link>
+        ) : (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontFamily: 'var(--font-jetbrains), monospace',
+              fontSize: '11px',
+              color: '#D4973B',
+              textDecoration: 'none',
+              transition: 'color 100ms',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = '#E8E8E8'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = '#D4973B'; }}
+          >
+            → external
+          </a>
+        )
       )}
     </div>
   );
