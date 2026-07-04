@@ -2,9 +2,9 @@
   command = "npm run build"
   publish = "out"
 
-[[plugins]]
-  # Disable the Next.js SSR plugin — this site is a static export
-  # package = "@netlify/plugin-nextjs"
+[build.environment]
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+
 
 [[redirects]]
   from = "/*"
