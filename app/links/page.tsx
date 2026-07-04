@@ -22,6 +22,12 @@ const LINKS = [
     description: 'Life outside the charts and visual documentation.',
   },
   {
+    platform: 'Facebook',
+    handle: '@130AfterM',
+    url: 'https://www.facebook.com/130AfterM/',
+    description: 'Community, updates, and discussions.',
+  },
+  {
     platform: 'RetailBeastFX',
     handle: 'whop.com',
     url: 'https://whop.com/130afterm',
