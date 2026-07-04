@@ -1,65 +1,173 @@
-import Image from "next/image";
+import SessionClock from '@/components/home/SessionClock';
+import NowBlock from '@/components/home/NowBlock';
+import FolderNav from '@/components/home/FolderNav';
+import Guestbook from '@/components/home/Guestbook';
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div
+      style={{
+        maxWidth: '1100px',
+        margin: '0 auto',
+        padding: '64px 48px 0',
+      }}
+    >
+      {/* ── Identity header ──────────────────────────────────────── */}
+      <div style={{ marginBottom: '64px' }}>
+        <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span
+            className="pulse-amber"
+            style={{
+              width: '6px',
+              height: '6px',
+              borderRadius: '50%',
+              background: '#D4973B',
+              display: 'inline-block',
+              flexShrink: 0,
+            }}
+          />
+          <span
+            style={{
+              fontFamily: 'var(--font-jetbrains), monospace',
+              fontSize: '11px',
+              color: '#D4973B',
+              letterSpacing: '0.1em',
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            ONLINE · AFTER HOURS
+          </span>
         </div>
-      </main>
+
+        <h1
+          style={{
+            fontFamily: 'var(--font-sans)',
+            fontSize: '48px',
+            fontWeight: 200,
+            color: '#E8E8E8',
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em',
+            margin: '0 0 12px 0',
+          }}
+        >
+          130AfterM
+        </h1>
+
+        <p
+          style={{
+            fontFamily: 'var(--font-sans)',
+            fontSize: '15px',
+            fontWeight: 300,
+            color: '#8A8A95',
+            lineHeight: 1.6,
+            maxWidth: '480px',
+            margin: 0,
+          }}
+        >
+          Trader. Builder. Documenting the process.{' '}
+          <span style={{ color: '#454550' }}>
+            SPY 0DTE · XAUUSD · Technical Analysis.
+          </span>
+        </p>
+      </div>
+
+      {/* ── Main grid ────────────────────────────────────────────── */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 300px',
+          gap: '24px',
+          marginBottom: '32px',
+          alignItems: 'start',
+        }}
+      >
+        {/* Left column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <SessionClock />
+          <FolderNav />
+        </div>
+
+        {/* Right column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <NowBlock />
+
+          {/* About snippet */}
+          <div
+            style={{
+              background: '#111113',
+              border: '1px solid #1E1E22',
+              borderRadius: '2px',
+              padding: '20px',
+            }}
+          >
+            <div
+              style={{
+                fontFamily: 'var(--font-jetbrains), monospace',
+                fontSize: '11px',
+                color: '#8A8A95',
+                letterSpacing: '0.08em',
+                marginBottom: '12px',
+              }}
+            >
+              // ABOUT ME
+            </div>
+            <p
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '14px',
+                fontWeight: 400,
+                color: '#E8E8E8',
+                lineHeight: 1.6,
+                margin: '0 0 8px 0',
+              }}
+            >
+              I trade and build things.
+            </p>
+            <p
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '13px',
+                fontWeight: 300,
+                color: '#8A8A95',
+                lineHeight: 1.6,
+                margin: '0 0 12px 0',
+              }}
+            >
+              Most of what I make starts from solving problems I run into myself.
+              Forex, options, price structure — I study it, document it, and build tools around it.
+            </p>
+            <p
+              style={{
+                fontFamily: 'var(--font-jetbrains), monospace',
+                fontSize: '12px',
+                color: '#454550',
+                margin: 0,
+              }}
+            >
+              This space is part archive, part workspace. Not a highlight reel.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Responsive override for small screens ──────────────── */}
+      <style>{`
+        @media (max-width: 768px) {
+          .home-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+
+      {/* ── Divider ───────────────────────────────────────────── */}
+      <div
+        style={{
+          borderTop: '1px solid #1E1E22',
+          margin: '32px 0',
+        }}
+      />
+
+      {/* ── Guestbook ─────────────────────────────────────────── */}
+      <div style={{ marginBottom: '0', maxWidth: '720px' }}>
+        <Guestbook />
+      </div>
     </div>
   );
 }

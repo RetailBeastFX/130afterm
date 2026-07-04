@@ -1,0 +1,107 @@
+'use client';
+
+import Link from 'next/link';
+
+const DESTINATIONS = [
+  {
+    path: '/log',
+    label: 'log',
+    description: 'real trades. documented wins and losses.',
+  },
+  {
+    path: '/archive',
+    label: 'archive',
+    description: 'method, resources, system changelog.',
+  },
+  {
+    path: '/workspace',
+    label: 'workspace',
+    description: 'operating stack. tools. setup playbooks.',
+  },
+  {
+    path: '/gallery',
+    label: 'gallery',
+    description: 'photography. visual world.',
+  },
+  {
+    path: '/projects',
+    label: 'projects',
+    description: "indicators and utilities. what's building.",
+  },
+  {
+    path: '/about',
+    label: 'about',
+    description: 'the story. how this started.',
+  },
+];
+
+export default function FolderNav() {
+  return (
+    <div
+      style={{
+        background: '#111113',
+        border: '1px solid #1E1E22',
+        borderRadius: '2px',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Header */}
+      <div
+        style={{
+          padding: '16px 24px',
+          borderBottom: '1px solid #1E1E22',
+          fontFamily: 'var(--font-jetbrains), monospace',
+          fontSize: '11px',
+          color: '#454550',
+          letterSpacing: '0.08em',
+        }}
+      >
+        130AfterM /
+      </div>
+
+      {/* Items */}
+      {DESTINATIONS.map((dest, i) => (
+        <Link
+          key={dest.path}
+          href={dest.path}
+          style={{
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: '16px',
+            padding: '14px 24px',
+            borderBottom: i < DESTINATIONS.length - 1 ? '1px solid #1E1E22' : 'none',
+            textDecoration: 'none',
+            transition: 'background-color 100ms ease-out',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#141418';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent';
+          }}
+        >
+          <span
+            style={{
+              fontFamily: 'var(--font-jetbrains), monospace',
+              fontSize: '13px',
+              color: '#8A8A95',
+              minWidth: '90px',
+              flexShrink: 0,
+            }}
+          >
+            /{dest.label}
+          </span>
+          <span
+            style={{
+              fontFamily: 'var(--font-jetbrains), monospace',
+              fontSize: '12px',
+              color: '#454550',
+            }}
+          >
+            {dest.description}
+          </span>
+        </Link>
+      ))}
+    </div>
+  );
+}

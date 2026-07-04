@@ -1,26 +1,168 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ─── Design Tokens ─────────────────────────────────────────── */
+@theme {
+  /* Backgrounds */
+  --color-void:         #080808;
+  --color-surface:      #111113;
+  --color-border:       #1E1E22;
+  --color-subtle:       #2A2A30;
+
+  /* Text */
+  --color-primary:      #E8E8E8;
+  --color-secondary:    #8A8A95;
+  --color-muted:        #454550;
+  --color-ghost:        #2A2A35;
+
+  /* Accent */
+  --color-amber:        #D4973B;
+  --color-amber-dim:    #8B6428;
+
+  /* System signals */
+  --color-live:         #3B9B5E;
+  --color-inactive:     #3A3A40;
+  --color-caution:      #8B7355;
+
+  /* Fonts */
+  --font-mono: var(--font-jetbrains), 'JetBrains Mono', monospace;
+  --font-sans: var(--font-inter), 'Inter', sans-serif;
+
+  /* Spacing */
+  --spacing-micro:  4px;
+  --spacing-xs:     8px;
+  --spacing-sm:     16px;
+  --spacing-md:     24px;
+  --spacing-lg:     32px;
+  --spacing-xl:     48px;
+  --spacing-2xl:    72px;
+  --spacing-3xl:    96px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─── Base ───────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background-color: #080808;
+  color: #E8E8E8;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #080808;
+  color: #E8E8E8;
+  min-height: 100vh;
+}
+
+/* ─── Selection ─────────────────────────────────────────────── */
+::selection {
+  background-color: rgba(212, 151, 59, 0.2);
+  color: #E8E8E8;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #080808;
+}
+::-webkit-scrollbar-thumb {
+  background: #2A2A30;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #454550;
+}
+
+/* ─── Typography ─────────────────────────────────────────────── */
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8A8A95;
+}
+
+.label-amber {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #D4973B;
+}
+
+.meta {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: #8A8A95;
+}
+
+/* ─── Card base ─────────────────────────────────────────────── */
+.card {
+  background-color: #111113;
+  border: 1px solid #1E1E22;
+  border-radius: 2px;
+  padding: 24px;
+  transition: background-color 100ms ease-out, border-color 100ms ease-out;
+}
+
+.card:hover {
+  background-color: #141418;
+  border-color: #2A2A30;
+}
+
+.card-active {
+  border-left: 3px solid #8B6428;
+}
+
+/* ─── Amber pulse (live session dot) ────────────────────────── */
+@keyframes pulse-amber {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.pulse-amber {
+  animation: pulse-amber 2s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(59, 155, 94, 0.4); }
+  50%       { opacity: 0.8; box-shadow: 0 0 0 4px rgba(59, 155, 94, 0); }
+}
+
+.pulse-live {
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+/* ─── Page transitions ───────────────────────────────────────── */
+.page-enter {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+
+/* ─── Focus visible ──────────────────────────────────────────── */
+:focus-visible {
+  outline: 1px solid #D4973B;
+  outline-offset: 2px;
+}
+
+/* ─── Link reset ─────────────────────────────────────────────── */
+a {
+  color: inherit;
+  text-decoration: none;
 }
