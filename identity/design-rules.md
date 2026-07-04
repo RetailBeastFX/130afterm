@@ -71,3 +71,8 @@ Gradient: none
 - Hover color explosions
 - Loading spinners (skeleton states only)
 - Entrance animations that delay reading
+
+## Layout & Density
+
+**Curated over Minimal:**
+The site should not feel empty. It should feel like a rich, curated "desktop" or "dashboard" where every widget, fact, and stat tells a piece of a story. Density is encouraged as long as it's structurally organized (e.g., using a 12-column masonry or grid layout). Information doesn't need to be strictly necessary to be included—it just needs to be human.
