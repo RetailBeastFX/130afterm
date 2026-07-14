@@ -109,22 +109,17 @@ export function StatusBlock() {
 
 export function MusicBlock() {
   return (
-    <WidgetContainer title="Heavy Rotation" subtitle="HIP-HOP / RAP">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {[
-          { artist: 'Jay-Z', note: 'Blueprint era' },
-          { artist: 'Kendrick Lamar', note: 'DAMN. / GNX' },
-          { artist: 'J. Cole', note: 'KOD / Forest Hills' },
-          { artist: 'Drake', note: 'If You\'re Reading This' },
-        ].map((track) => (
-          <div
-            key={track.artist}
-            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-          >
-            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: '#E8E8E8' }}>{track.artist}</span>
-            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: '#454550' }}>{track.note}</span>
-          </div>
-        ))}
+    <WidgetContainer title="Heavy Rotation" subtitle="HUSTLE / RAP">
+      <div style={{ marginTop: '8px' }}>
+        <iframe
+          style={{ borderRadius: '0px', border: 'none' }}
+          src="https://open.spotify.com/embed/playlist/37i9dQZF1DZ06evO146D8J?utm_source=generator&theme=0"
+          width="100%"
+          height="152"
+          allowFullScreen={false}
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+        />
       </div>
     </WidgetContainer>
   );
