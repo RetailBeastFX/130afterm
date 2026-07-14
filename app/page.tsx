@@ -46,7 +46,7 @@ export default function Home() {
             margin: 0,
           }}
         >
-          Father. Trader. Builder.{' '}
+          Father. Trader.{' '}
           <span style={{ color: '#454550' }}>
             Documenting the process. Not the highlight reel.
           </span>
