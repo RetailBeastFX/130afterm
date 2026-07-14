@@ -115,7 +115,7 @@ export function MusicBlock() {
           style={{ borderRadius: '0px', border: 'none' }}
           width="100%"
           height="152"
-          src="https://www.youtube.com/embed?listType=search&list=Money+Man+24+Lil+Baby"
+          src="https://www.youtube.com/embed/x9BbsgCwsfI?list=PLd21VgI5I-t8"
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
