@@ -1,37 +1,35 @@
 'use client';
 
-import PageHeader from '@/components/ui/PageHeader';
-
 const LINKS = [
   {
-    platform: 'X (Twitter)',
-    handle: '@130afterm',
+    platform: 'X / TWITTER',
     url: 'https://x.com/130afterm',
-    description: 'Trading thoughts, system updates, and daily observations.',
+    description: '> rapid fire thoughts & chart setups',
+    isAccent: false,
   },
   {
-    platform: 'YouTube',
-    handle: '@130afterm',
+    platform: 'YOUTUBE',
     url: 'https://youtube.com/@130afterm',
-    description: 'Video breakdowns and behind-the-scenes system building.',
+    description: '> video breakdowns & system building',
+    isAccent: false,
   },
   {
-    platform: 'Instagram',
-    handle: '@130afterm',
+    platform: 'INSTAGRAM',
     url: 'https://instagram.com/130afterm',
-    description: 'Life outside the charts and visual documentation.',
+    description: '> outside the charts & visual docs',
+    isAccent: false,
   },
   {
-    platform: 'Facebook',
-    handle: '@130AfterM',
+    platform: 'FACEBOOK',
     url: 'https://www.facebook.com/130AfterM/',
-    description: 'Community, updates, and discussions.',
+    description: '> community & discussions',
+    isAccent: false,
   },
   {
-    platform: 'RetailBeastFX',
-    handle: 'whop.com',
+    platform: 'THE VAULT (WHOP)',
     url: 'https://whop.com/130afterm',
-    description: 'Access the V6 Execution Engine indicator suite.',
+    description: '> access the system & community',
+    isAccent: true,
   },
 ];
 
@@ -39,64 +37,70 @@ export default function LinksPage() {
   return (
     <div
       style={{
-        maxWidth: '1100px',
+        maxWidth: '600px',
         margin: '0 auto',
-        padding: '64px 48px 0',
+        padding: '64px 20px 100px',
+        color: '#e0e0e0',
       }}
     >
-      <PageHeader
-        path={['links']}
-        title="Socials"
-        subtitle="Where I document the journey outside of this workspace."
-        stats={[
-          { label: 'HANDLE', value: '@130afterm' }
-        ]}
-      />
+      <div style={{ textAlign: 'center', marginBottom: '48px', textTransform: 'uppercase', letterSpacing: '2px' }}>
+        <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: '32px', fontWeight: 800, margin: '0 0 8px 0', color: '#E8E8E8' }}>
+          /LINKS
+        </h1>
+        <p style={{ fontFamily: 'var(--font-jetbrains), monospace', fontSize: '12px', color: '#ff5500', margin: 0 }}>
+          OFFICIAL DIRECTORY // TAPPED IN
+        </p>
+      </div>
 
-      <div style={{ maxWidth: '640px', marginTop: '48px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {LINKS.map((link) => (
-            <a
-              key={link.platform}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'block',
-                background: '#111113',
-                border: '1px solid #1E1E22',
-                borderRadius: '4px',
-                padding: '24px',
-                textDecoration: 'none',
-                transition: 'all 0.2s ease',
-                position: 'relative',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#D4973B';
-                e.currentTarget.style.backgroundColor = '#161619';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = '#1E1E22';
-                e.currentTarget.style.backgroundColor = '#111113';
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '18px', fontWeight: 500, color: '#E8E8E8' }}>
-                  {link.platform}
-                </span>
-                <span style={{ fontFamily: 'var(--font-jetbrains), monospace', fontSize: '12px', color: '#D4973B' }}>
-                  ↗
-                </span>
-              </div>
-              <div style={{ fontFamily: 'var(--font-jetbrains), monospace', fontSize: '12px', color: '#454550', marginBottom: '12px' }}>
-                {link.handle}
-              </div>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 300, color: '#8A8A95', margin: 0 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        {LINKS.map((link) => (
+          <a
+            key={link.platform}
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              backgroundColor: '#111',
+              border: `2px solid ${link.isAccent ? '#ff5500' : '#333'}`,
+              borderRadius: '0px',
+              padding: '20px',
+              textDecoration: 'none',
+              color: 'inherit',
+              transition: 'all 0.2s ease-in-out',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = link.isAccent ? '#ff5500' : '#e0e0e0';
+              e.currentTarget.style.color = '#111';
+              e.currentTarget.style.borderColor = link.isAccent ? '#ff5500' : '#e0e0e0';
+              e.currentTarget.style.transform = 'translateX(5px)';
+              const sub = e.currentTarget.querySelector('.mono-sub') as HTMLElement;
+              if (sub) sub.style.color = '#555';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#111';
+              e.currentTarget.style.color = '#e0e0e0';
+              e.currentTarget.style.borderColor = link.isAccent ? '#ff5500' : '#333';
+              e.currentTarget.style.transform = 'translateX(0)';
+              const sub = e.currentTarget.querySelector('.mono-sub') as HTMLElement;
+              if (sub) sub.style.color = '#8A8A95';
+            }}
+          >
+            <div>
+              <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.2rem', fontWeight: 800, letterSpacing: '1px', margin: '0 0 5px 0' }}>
+                {link.platform}
+              </h2>
+              <span className="mono-sub" style={{ fontFamily: 'var(--font-jetbrains), monospace', fontSize: '0.75rem', color: '#8A8A95', textTransform: 'uppercase', transition: 'color 0.2s ease' }}>
                 {link.description}
-              </p>
-            </a>
-          ))}
-        </div>
+              </span>
+            </div>
+            <div style={{ fontFamily: 'var(--font-jetbrains), monospace', fontSize: '16px' }}>
+              ↗
+            </div>
+          </a>
+        ))}
       </div>
     </div>
   );

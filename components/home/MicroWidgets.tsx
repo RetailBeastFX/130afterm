@@ -6,9 +6,9 @@ export function WidgetContainer({ children, title, subtitle }: { children: React
   return (
     <div
       style={{
-        background: '#111113',
-        border: '1px solid #1E1E22',
-        borderRadius: '2px',
+        background: '#111',
+        border: '2px solid #333',
+        borderRadius: '0px',
         padding: '20px',
         height: '100%',
       }}
@@ -25,8 +25,9 @@ export function WidgetContainer({ children, title, subtitle }: { children: React
           style={{
             fontFamily: 'var(--font-jetbrains), monospace',
             fontSize: '11px',
-            color: '#D4973B',
+            color: '#ff5500',
             letterSpacing: '0.1em',
+            fontWeight: 700,
           }}
         >
           // {title.toUpperCase()}
@@ -57,7 +58,7 @@ export function CurrentlyBlock() {
   ];
 
   return (
-    <WidgetContainer title="Currently">
+    <WidgetContainer title="In The Trenches">
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {items.map((item) => (
           <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -72,14 +73,14 @@ export function CurrentlyBlock() {
 
 export function StatusBlock() {
   const items = [
-    { label: 'Status', value: 'Active', highlight: true },
+    { label: 'Network', value: 'Connected', highlight: true },
     { label: 'System', value: 'RBFX v6' },
     { label: 'Focus', value: 'Options' },
     { label: 'Operator Since', value: '2013' },
   ];
 
   return (
-    <WidgetContainer title="System Status">
+    <WidgetContainer title="Vitals">
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {items.map((item) => (
           <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -91,8 +92,8 @@ export function StatusBlock() {
                   style={{
                     width: '6px',
                     height: '6px',
-                    borderRadius: '50%',
-                    background: '#D4973B',
+                    borderRadius: '0px',
+                    background: '#ff5500',
                     display: 'inline-block',
                   }}
                 />
@@ -108,7 +109,7 @@ export function StatusBlock() {
 
 export function MusicBlock() {
   return (
-    <WidgetContainer title="On Rotation" subtitle="HIP-HOP / RAP">
+    <WidgetContainer title="Heavy Rotation" subtitle="HIP-HOP / RAP">
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {[
           { artist: 'Jay-Z', note: 'Blueprint era' },

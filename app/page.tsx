@@ -20,7 +20,11 @@ export default function Home() {
       }}
     >
       {/* ── Identity header ──────────────────────────────────────── */}
-      <div style={{ marginBottom: '48px' }}>
+      <div style={{ marginBottom: '48px', position: 'relative' }}>
+        <div style={{ position: 'absolute', top: '8px', right: '0', display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-jetbrains), monospace', fontSize: '11px', color: '#ff5500', letterSpacing: '0.1em' }}>
+          <span className="pulse-amber" style={{ width: '8px', height: '8px', background: '#ff5500', display: 'inline-block' }}></span>
+          [ STATUS: TAPPED IN ]
+        </div>
         <h1
           style={{
             fontFamily: 'var(--font-sans)',
@@ -113,8 +117,28 @@ export default function Home() {
       />
 
       {/* ── Guestbook ─────────────────────────────────────────── */}
-      <div style={{ marginBottom: '0', maxWidth: '720px' }}>
+      <div style={{ marginBottom: '64px', maxWidth: '720px' }}>
         <Guestbook />
+      </div>
+
+      {/* ── Marquee Ticker ────────────────────────────────────── */}
+      <div style={{
+        position: 'fixed',
+        bottom: '0',
+        left: '0',
+        width: '100%',
+        background: '#111',
+        borderTop: '2px solid #333',
+        padding: '8px 0',
+        fontFamily: 'var(--font-jetbrains), monospace',
+        fontSize: '12px',
+        color: '#ff5500',
+        letterSpacing: '0.2em',
+        zIndex: 100,
+      }} className="marquee-container">
+        <div className="marquee-content">
+          +++ TARGETING: XAUUSD LIQUIDITY +++ SPY 0DTE +++ SYSTEM: RBFX V6 +++ OPERATING STACK: ACTIVE +++
+        </div>
       </div>
     </div>
   );

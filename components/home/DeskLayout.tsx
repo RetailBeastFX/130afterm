@@ -9,8 +9,8 @@ export default function DeskLayout() {
     <div
       style={{
         background: '#0B0B0C',
-        border: '1px solid #1E1E22',
-        borderRadius: '4px',
+        border: '2px solid #333',
+        borderRadius: '0px',
         padding: '20px',
         display: 'flex',
         flexDirection: 'column',
@@ -28,7 +28,7 @@ export default function DeskLayout() {
           letterSpacing: '0.1em',
         }}
       >
-        // THE DESK
+        // HARDWARE & EXECUTION
       </div>
 
       {/* Monitor — real chart */}
@@ -38,15 +38,15 @@ export default function DeskLayout() {
           display: 'block',
           width: '100%',
           position: 'relative',
-          borderRadius: '6px',
+          borderRadius: '0px',
           overflow: 'hidden',
-          border: '1px solid #2A2A30',
+          border: '2px solid #333',
           textDecoration: 'none',
           transition: 'border-color 0.2s ease',
           flexShrink: 0,
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#D4973B')}
-        onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#2A2A30')}
+        onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#ff5500')}
+        onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#333')}
       >
         <Image
           src="/images/chart-monitor.png"
@@ -64,11 +64,11 @@ export default function DeskLayout() {
             left: '12px',
             fontFamily: 'var(--font-jetbrains), monospace',
             fontSize: '10px',
-            color: '#D4973B',
+            color: '#ff5500',
             letterSpacing: '0.08em',
             background: 'rgba(8,8,8,0.7)',
             padding: '3px 8px',
-            borderRadius: '2px',
+            borderRadius: '0px',
           }}
         >
           USDJPY · 4H · LIVE
@@ -84,7 +84,7 @@ export default function DeskLayout() {
             letterSpacing: '0.08em',
             background: 'rgba(8,8,8,0.7)',
             padding: '3px 8px',
-            borderRadius: '2px',
+            borderRadius: '0px',
           }}
         >
           → explore setup
@@ -99,17 +99,17 @@ export default function DeskLayout() {
           style={{
             flex: 2,
             padding: '14px 16px',
-            background: '#111113',
-            border: '1px solid #1E1E22',
-            borderRadius: '4px',
+            background: '#111',
+            border: '2px solid #333',
+            borderRadius: '0px',
             textDecoration: 'none',
             transition: 'border-color 0.2s ease',
             display: 'flex',
             flexDirection: 'column',
             gap: '4px',
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#D4973B')}
-          onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#1E1E22')}
+          onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#ff5500')}
+          onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#333')}
         >
           <span style={{ fontFamily: 'var(--font-jetbrains), monospace', fontSize: '10px', color: '#454550', letterSpacing: '0.08em' }}>
             SETUP
@@ -128,17 +128,17 @@ export default function DeskLayout() {
           style={{
             flex: 1,
             padding: '14px 16px',
-            background: '#111113',
-            border: '1px solid #1E1E22',
-            borderRadius: '4px',
+            background: '#111',
+            border: '2px solid #333',
+            borderRadius: '0px',
             textDecoration: 'none',
             transition: 'border-color 0.2s ease',
             display: 'flex',
             flexDirection: 'column',
             gap: '4px',
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#D4973B')}
-          onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#1E1E22')}
+          onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#ff5500')}
+          onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#333')}
         >
           <span style={{ fontFamily: 'var(--font-jetbrains), monospace', fontSize: '10px', color: '#454550', letterSpacing: '0.08em' }}>
             BROKER

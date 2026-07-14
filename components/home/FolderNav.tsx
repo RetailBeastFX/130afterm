@@ -11,7 +11,7 @@ const DESTINATIONS = [
   {
     path: '/archive',
     label: 'archive',
-    description: 'method, resources, system changelog.',
+    description: 'the vault. resources. system changelog.',
   },
   {
     path: '/workspace',
@@ -26,7 +26,7 @@ const DESTINATIONS = [
   {
     path: '/projects',
     label: 'projects',
-    description: "indicators and utilities. what's building.",
+    description: "in production. indicators and utilities.",
   },
   {
     path: '/about',
@@ -39,9 +39,9 @@ export default function FolderNav() {
   return (
     <div
       style={{
-        background: '#111113',
-        border: '1px solid #1E1E22',
-        borderRadius: '2px',
+        background: '#111',
+        border: '2px solid #333',
+        borderRadius: '0px',
         overflow: 'hidden',
       }}
     >
@@ -49,7 +49,7 @@ export default function FolderNav() {
       <div
         style={{
           padding: '16px 24px',
-          borderBottom: '1px solid #1E1E22',
+          borderBottom: '2px solid #333',
           fontFamily: 'var(--font-jetbrains), monospace',
           fontSize: '11px',
           color: '#454550',
@@ -69,7 +69,7 @@ export default function FolderNav() {
             alignItems: 'baseline',
             gap: '16px',
             padding: '14px 24px',
-            borderBottom: i < DESTINATIONS.length - 1 ? '1px solid #1E1E22' : 'none',
+            borderBottom: i < DESTINATIONS.length - 1 ? '2px solid #333' : 'none',
             textDecoration: 'none',
             transition: 'background-color 100ms ease-out',
           }}
