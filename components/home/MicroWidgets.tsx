@@ -50,9 +50,9 @@ export function WidgetContainer({ children, title, subtitle }: { children: React
 
 export function CurrentlyBlock() {
   const items = [
-    { label: '📈 Trading', value: 'SPY 0DTE, XAUUSD' },
-    { label: '📖 Reading', value: 'Market Wizards' },
-    { label: '🎯 Building', value: '130AfterM v1.0' },
+    { label: '📈 Trading', value: 'Stock Options' },
+    { label: '🎯 Building', value: 'RBFX v6' },
+    { label: '🌐 Running', value: '130AfterM' },
     { label: '☕ Fuel', value: 'Black Coffee' },
   ];
 
@@ -72,9 +72,9 @@ export function CurrentlyBlock() {
 
 export function StatusBlock() {
   const items = [
-    { label: 'Status', value: 'Online', highlight: true },
-    { label: 'Last Trade', value: 'Jul 02' },
-    { label: 'System', value: 'v6' },
+    { label: 'Status', value: 'Active', highlight: true },
+    { label: 'System', value: 'RBFX v6' },
+    { label: 'Focus', value: 'Options' },
     { label: 'Operator Since', value: '2013' },
   ];
 
@@ -108,31 +108,22 @@ export function StatusBlock() {
 
 export function MusicBlock() {
   return (
-    <WidgetContainer title="Rotation" subtitle="NO AUTOPLAY">
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div
-          style={{
-            width: '48px',
-            height: '48px',
-            background: '#1A1A1E',
-            border: '1px solid #2A2A30',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-          }}
-        >
-          <span style={{ fontSize: '20px' }}>🎵</span>
-        </div>
-        <div>
-          <div style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 500, color: '#E8E8E8', marginBottom: '4px' }}>
-            Nujabes / J Dilla
+    <WidgetContainer title="On Rotation" subtitle="HIP-HOP / RAP">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        {[
+          { artist: 'Jay-Z', note: 'Blueprint era' },
+          { artist: 'Kendrick Lamar', note: 'DAMN. / GNX' },
+          { artist: 'J. Cole', note: 'KOD / Forest Hills' },
+          { artist: 'Drake', note: 'If You\'re Reading This' },
+        ].map((track) => (
+          <div
+            key={track.artist}
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+          >
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: '#E8E8E8' }}>{track.artist}</span>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: '#454550' }}>{track.note}</span>
           </div>
-          <div style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: '#8A8A95' }}>
-            Lofi Instrumental
-          </div>
-        </div>
+        ))}
       </div>
     </WidgetContainer>
   );

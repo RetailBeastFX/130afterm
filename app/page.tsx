@@ -46,9 +46,9 @@ export default function Home() {
             margin: 0,
           }}
         >
-          Trader. Builder. Tinkerer.{' '}
+          Father. Trader. Builder.{' '}
           <span style={{ color: '#454550' }}>
-            This space is part archive, part workspace. Not a highlight reel.
+            Documenting the process. Not the highlight reel.
           </span>
         </p>
       </div>
@@ -85,8 +85,8 @@ export default function Home() {
         <div style={{ gridColumn: 'span 5', display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <MusicBlock />
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', height: '100%' }}>
-            <FactBlock title="First Bitcoin Exposure" value="2013" detail="Mt. Gox era." />
-            <FactBlock title="Coffee Count" value="2" detail="Chemex only." />
+            <FactBlock title="Bitcoin" value="2013" detail="Mt. Gox era." />
+            <FactBlock title="Markets" value="2020" detail="First real trade." />
           </div>
         </div>
       </div>
