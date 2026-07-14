@@ -113,13 +113,13 @@ export function MusicBlock() {
       <div style={{ marginTop: '8px' }}>
         <iframe
           style={{ borderRadius: '0px', border: 'none' }}
-          src="https://open.spotify.com/embed/playlist/37i9dQZF1DZ06evO146D8J?utm_source=generator&theme=0"
           width="100%"
           height="152"
-          allowFullScreen={false}
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          loading="lazy"
-        />
+          src="https://www.youtube.com/embed?listType=search&list=Money+Man+24+Lil+Baby"
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        ></iframe>
       </div>
     </WidgetContainer>
   );
