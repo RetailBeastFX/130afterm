@@ -1564,8 +1564,11 @@
         .linkDirectionalParticleSpeed(0.004)
         // ─── Custom node renderer ────────────────────────────────
         .nodeCanvasObject((node, ctx, globalScale) => {
+            // Guard: D3 simulation assigns x/y asynchronously; skip frame-0 nodes
+            if (!isFinite(node.x) || !isFinite(node.y)) return;
+
             const color  = GROUP_COLOR[node.group] || '#ffffff';
-            const r      = Math.max(node.val * 1.5, 3);
+            const r      = Math.max((node.val || 1) * 1.5, 3);
             const label  = node.label || node.id;
             const fSize  = Math.min(11 / globalScale, 12);
 
