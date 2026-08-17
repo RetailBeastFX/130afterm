@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>130 AM // NOW</title>
+  <meta name="description" content="What is Bo doing right now? Live status from 130AfterM — trading, building, gaming, living.">
+  <meta property="og:title" content="130 AM // NOW">
+  <meta property="og:description" content="What is Bo doing right now?">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --amber:#ffb000; --blue-cool:#38bdf8; --bg-base:#02040a; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #02040a; color: #e4e4e7; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    a { text-decoration: none; }
+
+    /* Orbs */
+    .orb-wrap { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.5; }
+    .orb-1 { width:600px;height:600px;background:radial-gradient(circle,rgba(56,189,248,0.2) 0%,transparent 70%);top:-10%;left:-5%;animation:orb-a 35s ease-in-out infinite alternate; }
+    .orb-2 { width:500px;height:500px;background:radial-gradient(circle,rgba(255,176,0,0.12) 0%,transparent 70%);bottom:-10%;right:-5%;animation:orb-b 40s ease-in-out infinite alternate; }
+    @keyframes orb-a { 0%{transform:translate(0,0)} 100%{transform:translate(60px,50px)} }
+    @keyframes orb-b { 0%{transform:translate(0,0)} 100%{transform:translate(-50px,-60px)} }
+
+    /* Nav */
+    .site-nav { position:sticky;top:0;z-index:200;background:rgba(2,6,14,0.92)!important;backdrop-filter:blur(28px);border-bottom:1px solid rgba(56,189,248,0.12); }
+
+    /* Glass */
+    .glass { border-radius:20px;border:1px solid rgba(56,189,248,0.15);background:rgba(2,8,20,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);transition:border-color .3s,background .3s; }
+    .glass:hover { border-color:rgba(56,189,248,0.3);background:rgba(2,8,20,0.88); }
+
+    /* NOW rows */
+    .now-row { display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:16px;border:1px solid rgba(255,255,255,0.05);background:rgba(2,8,20,0.6);backdrop-filter:blur(12px);transition:all .2s; }
+    .now-row:hover { border-color:rgba(56,189,248,0.15);background:rgba(2,8,20,0.85); }
+    .now-key { font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:#3f3f46;width:110px;flex-shrink:0; }
+    .now-val { font-size:14px;font-weight:600;color:#e4e4e7;flex:1; }
+    .now-icon { font-size:18px;width:36px;text-align:center;flex-shrink:0; }
+
+    /* Event rows */
+    .event-row { display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);background:rgba(2,8,20,0.5);text-decoration:none;transition:all .2s; }
+    .event-row:hover { border-color:rgba(255,255,255,0.1);background:rgba(2,8,20,0.8); }
+
+    /* Skeleton */
+    .skeleton { background:linear-gradient(90deg,rgba(255,255,255,0.03) 25%,rgba(255,255,255,0.07) 50%,rgba(255,255,255,0.03) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite; }
+    @keyframes shimmer { to{background-position:-200% 0} }
+
+    /* R3F */
+    #r3f-root { position:fixed;inset:0;z-index:-10;width:100vw;height:100vh;background:#02040a; }
+    #main-container { perspective:1500px;transform-style:preserve-3d;transition:transform .1s ease-out; }
+    @media(max-width:768px){ #main-container{perspective:none!important;transform:none!important} #r3f-root{opacity:.4} }
+
+    /* Reveal */
+    .reveal { opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease; }
+    .reveal.visible { opacity:1;transform:translateY(0); }
+  </style>
+
+  <!-- R3F importmap -->
+  <script type="importmap">{"imports":{"react":"https://esm.sh/react@18.2.0","react/jsx-runtime":"https://esm.sh/react@18.2.0/jsx-runtime","react-dom/client":"https://esm.sh/react-dom@18.2.0/client","three":"https://esm.sh/three@0.160.0","@react-three/fiber":"https://esm.sh/@react-three/fiber@8.15.12?external=react,react-dom,three","@react-three/postprocessing":"https://esm.sh/@react-three/postprocessing@2.16.0?external=react,react-dom,three,@react-three/fiber"}}</script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body style="background:#02040a;">
+<div id="r3f-root"></div>
+<div id="main-container">
+
+<div class="orb-wrap"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+
+<nav class="site-nav">
+  <div class="max-w-3xl mx-auto px-5 py-3 flex items-center justify-between">
+    <a href="./index.html" class="flex items-center gap-3 text-zinc-400 hover:text-white transition-colors font-mono text-xs">
+      <i class="fas fa-arrow-left text-xs"></i> 130 AM
+    </a>
+    <span class="font-mono text-[9px] tracking-[0.3em] text-zinc-700 uppercase">// NOW</span>
+    <div id="now-timestamp" class="font-mono text-[9px] text-zinc-700 tracking-widest"></div>
+  </div>
+</nav>
+
+<main class="relative z-10 max-w-3xl mx-auto px-4 md:px-6 py-12 pb-40">
+
+  <header class="mb-10 reveal">
+    <div class="font-mono text-[9px] tracking-[0.4em] text-zinc-700 uppercase mb-3">130 AM // BROADCAST TERMINAL</div>
+    <h1 class="text-5xl font-black text-white tracking-tight mb-3">NOW</h1>
+    <p class="text-zinc-600 text-sm font-mono" id="last-updated-label">Last updated: —</p>
+  </header>
+
+  <div id="now-grid" class="space-y-2 mb-12 reveal">
+    <div class="skeleton h-[62px] rounded-2xl"></div>
+    <div class="skeleton h-[62px] rounded-2xl"></div>
+    <div class="skeleton h-[62px] rounded-2xl"></div>
+    <div class="skeleton h-[62px] rounded-2xl"></div>
+    <div class="skeleton h-[62px] rounded-2xl"></div>
+    <div class="skeleton h-[62px] rounded-2xl"></div>
+  </div>
+
+  <div class="reveal">
+    <div class="font-mono text-[9px] tracking-[0.3em] text-zinc-700 uppercase mb-4">// RECENT EVENTS</div>
+    <div id="recent-events" class="space-y-2"></div>
+    <a href="./archive.html" class="inline-flex items-center gap-2 mt-5 font-mono text-[9px] tracking-widest text-zinc-600 hover:text-sky-400 transition-colors uppercase">
+      Full Archive <i class="fas fa-arrow-right text-xs"></i>
+    </a>
+  </div>
+
+</main>
+</div>
+
+<script>
+const TYPE_META={trade:{label:"TRADE",color:"#ffb000",icon:"📈"},build:{label:"BUILD",color:"#38bdf8",icon:"🛠"},stream:{label:"LIVE",color:"#ef4444",icon:"📡"},gaming:{label:"PLAY",color:"#a78bfa",icon:"🎮"},life:{label:"LIFE",color:"#a1a1aa",icon:"🌱"}};
+function updateTimestamp(){const el=document.getElementById("now-timestamp");if(!el)return;const n=new Date();el.textContent=n.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",timeZoneName:"short"});}
+updateTimestamp();setInterval(updateTimestamp,30000);
+async function loadNow(){let n={};try{const r=await fetch("./data/now.json");n=await r.json();}catch(e){}
+const rows=[{key:"TRADING",value:n.trading||"—",icon:"📈"},{key:"BUILDING",value:n.building||"—",icon:"🛠"},{key:"PLAYING",value:n.playing||"—",icon:"🎮"},{key:"LISTENING",value:n.listening||"—",icon:"🎧"},{key:"WORKING ON",value:n.working_on||"—",icon:"⚡"},{key:"MOOD",value:n.mood||"—",icon:"🔵"}];
+const g=document.getElementById("now-grid");
+g.innerHTML=rows.map(r=>"<div class='now-row'><div class='now-icon'>"+r.icon+"</div><div class='now-key'>"+r.key+"</div><div class='now-val'>"+r.value+"</div></div>").join("");
+if(n.updated){const d=new Date(n.updated);document.getElementById("last-updated-label").textContent="Last updated: "+d.toLocaleDateString("en-US",{month:"short",day:"numeric"})+" at "+d.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"});}}
+async function loadEvents(){let evs=[];try{const r=await fetch("./data/events.json");evs=await r.json();}catch(e){return;}
+const c=document.getElementById("recent-events");
+c.innerHTML=evs.slice(0,5).map(ev=>{const m=TYPE_META[ev.type]||{label:ev.type,color:"#52525b",icon:"●"};return"<a href='./archive.html' class='event-row'><span style='font-size:16px'>"+m.icon+"</span><div style='flex:1;min-width:0'><div style='font-size:13px;font-weight:600;color:#e4e4e7' class='truncate'>"+ev.title+"</div><div style='font-family:JetBrains Mono,monospace;font-size:9px;color:#3f3f46;margin-top:2px'>"+ev.date+"</div></div><span style='font-family:JetBrains Mono,monospace;font-size:9px;letter-spacing:.15em;color:"+m.color+"'>["+m.label+"]</span></a>";}).join("");}
+loadNow();loadEvents();
+// Scroll reveal
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}}),{threshold:.1});
+document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
+</script>
+
+<script type="text/babel" data-type="module">
+/** @jsxRuntime classic */
+/** @jsx React.createElement */
+import React,{useRef,useMemo} from "react";
+import{createRoot}from"react-dom/client";
+import{Canvas,useFrame,useThree}from"@react-three/fiber";
+import{EffectComposer,Bloom}from"@react-three/postprocessing";
+import*as THREE from"three";
+const EngineSphere=()=>{const r=useRef();const{mouse}=useThree();const u=useMemo(()=>({uTime:{value:0},uColor:{value:new THREE.Color("#38bdf8")},uAudioLow:{value:0}}),[]);useFrame(s=>{u.uTime.value=s.clock.elapsedTime;if(r.current){r.current.rotation.x+=(mouse.y*Math.PI-r.current.rotation.x)*.05;r.current.rotation.y+=(mouse.x*Math.PI-r.current.rotation.y)*.05;r.current.rotation.y+=.004;}});return React.createElement("mesh",{ref:r},React.createElement("sphereGeometry",{args:[2.5,64,64]}),React.createElement("shaderMaterial",{uniforms:u,vertexShader:"varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}",fragmentShader:"uniform float uTime;uniform vec3 uColor;varying vec2 vUv;void main(){vec2 g=fract(vUv*60.0);float l=step(0.92,g.x)+step(0.92,g.y);if(l<0.1)discard;float p=pow((sin(uTime*2.0)*.5+.5),3.0);gl_FragColor=vec4(uColor*(0.25+0.8*p),0.75);}",transparent:true,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,depthWrite:false}));};
+createRoot(document.getElementById("r3f-root")).render(React.createElement(Canvas,{camera:{position:[0,0,6]}},React.createElement("color",{attach:"background",args:["#02040a"]}),React.createElement(EngineSphere),React.createElement(EffectComposer,null,React.createElement(Bloom,{luminanceThreshold:.1,luminanceSmoothing:.9,intensity:2.5,mipmapBlur:true}))));
+const c=document.getElementById("main-container");
+const isMobile=()=>window.matchMedia("(max-width:768px)").matches||("ontouchstart" in window);
+if(!isMobile())document.addEventListener("mousemove",e=>{if(!c)return;const x=(e.clientX/window.innerWidth)-.5;const y=(e.clientY/window.innerHeight)-.5;c.style.transform=`rotateY(${x*4}deg) rotateX(${-y*4}deg)`;});
+</script>
+</body>
+</html>
