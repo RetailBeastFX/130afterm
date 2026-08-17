@@ -1,0 +1,110 @@
+---
+import type { ActivityEvent } from '../types/activity';
+
+interface Props {
+  events: ActivityEvent[];
+  limit?: number;
+}
+
+const { events, limit = 6 } = Astro.props;
+const visibleEvents = events.slice(0, limit);
+---
+
+<section class="activity-timeline" aria-label="Recent activity">
+  <div class="label">// ACTIVITY</div>
+
+  <div class="activity-timeline__list">
+    {visibleEvents.map((event) => (
+      <article class="activity-event" data-type={event.type}>
+        <div class="activity-event__meta">
+          <time datetime={event.date}>{event.date}</time>
+          <span class="activity-event__type">{event.type}</span>
+        </div>
+
+        <div class="activity-event__body">
+          <h3>
+            {event.href ? <a href={event.href}>{event.title}</a> : event.title}
+          </h3>
+          {event.summary && <p>{event.summary}</p>}
+
+          {event.tags?.length && (
+            <div class="activity-event__tags">
+              {event.tags.map((tag) => <span>{tag}</span>)}
+            </div>
+          )}
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .activity-timeline {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .activity-timeline__list {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .activity-event {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .activity-event__meta {
+    display: grid;
+    align-content: start;
+    gap: 0.25rem;
+    color: #52525b;
+    font: 9px/1.4 monospace;
+    text-transform: uppercase;
+  }
+
+  .activity-event__type {
+    color: #ffb000;
+  }
+
+  .activity-event__body h3 {
+    margin: 0;
+    color: #f4f4f5;
+    font-size: 0.9rem;
+  }
+
+  .activity-event__body h3 a:hover {
+    color: #ffb000;
+  }
+
+  .activity-event__body p {
+    margin: 0.35rem 0 0;
+    color: #71717a;
+    font-size: 0.75rem;
+  }
+
+  .activity-event__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.6rem;
+  }
+
+  .activity-event__tags span {
+    padding: 0.2rem 0.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0.3rem;
+    color: #52525b;
+    font: 8px monospace;
+  }
+
+  @media (max-width: 640px) {
+    .activity-event {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
+  }
+</style>
