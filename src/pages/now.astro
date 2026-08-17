@@ -3,6 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import AmbientBackground from '../components/AmbientBackground.astro';
 import Navbar from '../components/Navbar.astro';
 import EngineCanvas from '../components/EngineCanvas.tsx';
+
+const DISCORD_ID = '385513048237932564';
 ---
 
 <Layout title="130 AM // NOW" description="What is Bo doing right now? Live status from 130AfterM — trading, building, gaming, living.">
@@ -13,18 +15,54 @@ import EngineCanvas from '../components/EngineCanvas.tsx';
   <div id="main-container" style="perspective:1500px;transform-style:preserve-3d;transition:transform .1s ease-out;">
     <AmbientBackground />
     <Navbar />
-    
+
 <main class="relative z-10 max-w-3xl mx-auto px-4 md:px-6 py-12 pb-40">
 
   <header class="mb-10 reveal">
     <div class="font-mono text-[9px] tracking-[0.4em] text-zinc-700 uppercase mb-3">130 AM // BROADCAST TERMINAL</div>
     <h1 class="text-5xl font-black text-white tracking-tight mb-3">NOW</h1>
-    <p class="text-zinc-600 text-sm font-mono" id="last-updated-label">Last updated: —</p>
+    <div class="flex items-center gap-3 flex-wrap">
+      <!-- Discord presence badge -->
+      <div id="discord-badge" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/5 bg-white/[0.03]">
+        <span id="discord-dot" class="w-2 h-2 rounded-full bg-zinc-700 inline-block"></span>
+        <span id="discord-status-label" class="font-mono text-[9px] tracking-widest text-zinc-700 uppercase">Connecting...</span>
+      </div>
+      <span class="text-zinc-700 text-xs font-mono" id="now-timestamp"></span>
+    </div>
   </header>
 
+  <!-- Discord Live Presence card — shown when active -->
+  <div id="discord-presence-card" class="hidden mb-6 reveal">
+    <div class="glass p-4 flex items-center gap-4" style="border-color: rgba(88,101,242,0.2);">
+      <div style="width:40px;height:40px;border-radius:12px;background:rgba(88,101,242,0.12);border:1px solid rgba(88,101,242,0.25);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;" id="presence-icon">🎮</div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 mb-0.5">
+          <span class="font-mono text-[9px] tracking-[.2em] text-indigo-400" id="presence-type">PLAYING</span>
+        </div>
+        <div class="text-sm font-semibold text-white truncate" id="presence-name">—</div>
+        <div class="text-xs text-zinc-500 truncate mt-0.5" id="presence-detail">—</div>
+      </div>
+      <div class="text-[9px] font-mono text-zinc-700 flex-shrink-0" id="presence-elapsed"></div>
+    </div>
+  </div>
+
+  <!-- Spotify live card — shown when listening -->
+  <div id="spotify-card" class="hidden mb-6 reveal">
+    <div class="glass p-4 flex items-center gap-4" style="border-color: rgba(29,185,84,0.2);">
+      <img id="spotify-art" src="" alt="Album art" class="w-10 h-10 rounded-lg object-cover flex-shrink-0" style="display:none;" />
+      <div class="flex-1 min-w-0">
+        <div class="font-mono text-[9px] tracking-[.2em] text-green-400 mb-0.5">🎧 LISTENING NOW</div>
+        <div class="text-sm font-semibold text-white truncate" id="spotify-song">—</div>
+        <div class="text-xs text-zinc-500 truncate" id="spotify-artist">—</div>
+      </div>
+      <a id="spotify-link" href="#" target="_blank" class="flex-shrink-0 opacity-60 hover:opacity-100 transition-opacity">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- Manual now rows (from now.json) -->
   <div id="now-grid" class="space-y-2 mb-12 reveal">
-    <div class="skeleton h-[62px] rounded-2xl"></div>
-    <div class="skeleton h-[62px] rounded-2xl"></div>
     <div class="skeleton h-[62px] rounded-2xl"></div>
     <div class="skeleton h-[62px] rounded-2xl"></div>
     <div class="skeleton h-[62px] rounded-2xl"></div>
@@ -34,7 +72,7 @@ import EngineCanvas from '../components/EngineCanvas.tsx';
   <div class="reveal">
     <div class="font-mono text-[9px] tracking-[0.3em] text-zinc-700 uppercase mb-4">// RECENT EVENTS</div>
     <div id="recent-events" class="space-y-2"></div>
-    <a href="./archive.html" class="inline-flex items-center gap-2 mt-5 font-mono text-[9px] tracking-widest text-zinc-600 hover:text-sky-400 transition-colors uppercase">
+    <a href="/archive" class="inline-flex items-center gap-2 mt-5 font-mono text-[9px] tracking-widest text-zinc-600 hover:text-sky-400 transition-colors uppercase">
       Full Archive <i class="fas fa-arrow-right text-xs"></i>
     </a>
   </div>
@@ -42,56 +80,235 @@ import EngineCanvas from '../components/EngineCanvas.tsx';
 </main>
   </div>
 
-  <script>
+  <style>
+    .now-row { display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:16px;border:1px solid rgba(255,255,255,0.05);background:rgba(2,8,20,0.6);backdrop-filter:blur(12px);transition:all .2s; }
+    .now-row:hover { border-color:rgba(56,189,248,0.15);background:rgba(2,8,20,0.85); }
+    .now-key { font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:#3f3f46;width:110px;flex-shrink:0; }
+    .now-val { font-size:14px;font-weight:600;color:#e4e4e7;flex:1; }
+    .now-icon { font-size:18px;width:36px;text-align:center;flex-shrink:0; }
+    .event-row { display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);background:rgba(2,8,20,0.5);text-decoration:none;transition:all .2s; }
+    .event-row:hover { border-color:rgba(255,255,255,0.1);background:rgba(2,8,20,0.8); }
+    .skeleton { background:linear-gradient(90deg,rgba(255,255,255,0.03) 25%,rgba(255,255,255,0.07) 50%,rgba(255,255,255,0.03) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite; }
+    @keyframes shimmer { to{background-position:-200% 0} }
+  </style>
+
+  <script define:vars={{ DISCORD_ID }}>
+    const TYPE_META = {
+      trade:  { label: 'TRADE',  color: '#ffb000', icon: '📈' },
+      build:  { label: 'BUILD',  color: '#38bdf8', icon: '🛠' },
+      stream: { label: 'LIVE',   color: '#ef4444', icon: '📡' },
+      gaming: { label: 'PLAY',   color: '#a78bfa', icon: '🎮' },
+      life:   { label: 'LIFE',   color: '#a1a1aa', icon: '🌱' },
+    };
+
+    const STATUS_CONFIG = {
+      online:  { color: '#22c55e', label: 'ONLINE',      dot: '#22c55e' },
+      idle:    { color: '#eab308', label: 'IDLE',         dot: '#eab308' },
+      dnd:     { color: '#ef4444', label: 'DO NOT DISTURB', dot: '#ef4444' },
+      offline: { color: '#3f3f46', label: 'OFFLINE',     dot: '#3f3f46' },
+    };
+
+    // Live timestamp
+    function updateTimestamp() {
+      const el = document.getElementById('now-timestamp');
+      if (el) el.textContent = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
+    }
+    updateTimestamp();
+    setInterval(updateTimestamp, 30000);
+
+    // Format elapsed time from timestamp
+    function formatElapsed(ts) {
+      if (!ts) return '';
+      const ms = Date.now() - ts;
+      const m = Math.floor(ms / 60000);
+      const h = Math.floor(m / 60);
+      if (h > 0) return `${h}h ${m % 60}m`;
+      return `${m}m`;
+    }
+
+    // Load Lanyard (Discord presence)
+    async function loadLanyard() {
+      try {
+        const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
+        if (!res.ok) {
+          setDiscordStatus('offline');
+          return;
+        }
+        const { data } = await res.json();
+        
+        // --- Status badge ---
+        const status = data.discord_status || 'offline';
+        setDiscordStatus(status);
+
+        // --- Active game / activity ---
+        const gameActivity = data.activities?.find(a => a.type === 0); // Playing
+        const customStatus  = data.activities?.find(a => a.type === 4); // Custom status
+
+        if (gameActivity) {
+          showPresenceCard({
+            icon: '🎮',
+            type: 'PLAYING',
+            typeColor: '#a78bfa',
+            name: gameActivity.name,
+            detail: gameActivity.details || gameActivity.state || '',
+            elapsed: formatElapsed(gameActivity.timestamps?.start),
+          });
+        } else if (customStatus?.state) {
+          showPresenceCard({
+            icon: customStatus.emoji?.name || '💬',
+            type: 'STATUS',
+            typeColor: '#38bdf8',
+            name: customStatus.state,
+            detail: '',
+            elapsed: '',
+          });
+        }
+
+        // --- Spotify ---
+        if (data.listening_to_spotify && data.spotify) {
+          const sp = data.spotify;
+          const card = document.getElementById('spotify-card');
+          if (card) {
+            card.classList.remove('hidden');
+            const song = document.getElementById('spotify-song');
+            const artist = document.getElementById('spotify-artist');
+            const art = document.getElementById('spotify-art');
+            const link = document.getElementById('spotify-link');
+            if (song) song.textContent = sp.song;
+            if (artist) artist.textContent = sp.artist;
+            if (art && sp.album_art_url) { art.src = sp.album_art_url; art.style.display = 'block'; }
+            if (link && sp.track_id) link.href = `https://open.spotify.com/track/${sp.track_id}`;
+          }
+        }
+
+        // Update now.json fields that Lanyard can fill
+        return {
+          playing: gameActivity ? gameActivity.name : null,
+          listening: data.spotify ? `${data.spotify.song} — ${data.spotify.artist}` : null,
+          status,
+        };
+      } catch (e) {
+        setDiscordStatus('offline');
+        return null;
+      }
+    }
+
+    function setDiscordStatus(status) {
+      const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.offline;
+      const dot = document.getElementById('discord-dot');
+      const label = document.getElementById('discord-status-label');
+      if (dot) dot.style.background = cfg.dot;
+      if (label) { label.textContent = cfg.label; label.style.color = cfg.color; }
+
+      // Animate dot for online/dnd
+      if (status === 'online' || status === 'dnd') {
+        dot?.style.setProperty('animation', 'pulse-dot 2s ease infinite');
+      }
+    }
+
+    function showPresenceCard({ icon, type, typeColor, name, detail, elapsed }) {
+      const card = document.getElementById('discord-presence-card');
+      if (!card) return;
+      card.classList.remove('hidden');
+      const iconEl = document.getElementById('presence-icon');
+      const typeEl = document.getElementById('presence-type');
+      const nameEl = document.getElementById('presence-name');
+      const detailEl = document.getElementById('presence-detail');
+      const elapsedEl = document.getElementById('presence-elapsed');
+      if (iconEl) iconEl.textContent = icon;
+      if (typeEl) { typeEl.textContent = type; typeEl.style.color = typeColor; }
+      if (nameEl) nameEl.textContent = name;
+      if (detailEl) detailEl.textContent = detail;
+      if (elapsedEl) elapsedEl.textContent = elapsed ? `${elapsed} elapsed` : '';
+    }
+
+    // Load manual now.json fields
+    async function loadNow(lanyardData) {
+      let n = {};
+      try { const r = await fetch('/api/now'); n = await r.json(); } catch(e) {}
+
+      const rows = [
+        { key: 'TRADING',    value: n.trading    || '—', icon: '📈' },
+        { key: 'BUILDING',   value: n.building   || '—', icon: '🛠' },
+        // Auto-filled from Lanyard if active, fallback to now.json
+        { key: 'PLAYING',    value: (lanyardData?.playing) || n.playing    || '—', icon: '🎮' },
+        { key: 'LISTENING',  value: (lanyardData?.listening) || n.listening  || '—', icon: '🎧' },
+        { key: 'WORKING ON', value: n.working_on  || '—', icon: '⚡' },
+        { key: 'MOOD',       value: n.mood        || '—', icon: '🔵' },
+      ];
+
+      const g = document.getElementById('now-grid');
+      if (g) {
+        g.innerHTML = rows.map(r =>
+          `<div class="now-row">
+            <div class="now-icon">${r.icon}</div>
+            <div class="now-key">${r.key}</div>
+            <div class="now-val">${r.value}</div>
+          </div>`
+        ).join('');
+      }
+
+      if (n.updated) {
+        const d = new Date(n.updated);
+        const el = document.getElementById('last-updated-label');
+        // no longer shown — replaced by badge
+      }
+    }
+
+    // Load recent events
+    async function loadEvents() {
+      let evs = [];
+      try { const r = await fetch('/data/events.json'); evs = await r.json(); } catch(e) { return; }
+      const c = document.getElementById('recent-events');
+      if (c) {
+        c.innerHTML = evs.slice(0, 5).map(ev => {
+          const m = TYPE_META[ev.type] || { label: ev.type, color: '#52525b', icon: '●' };
+          return `<a href="/archive" class="event-row">
+            <span style="font-size:16px">${m.icon}</span>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:600;color:#e4e4e7" class="truncate">${ev.title}</div>
+              <div style="font-family:JetBrains Mono,monospace;font-size:9px;color:#3f3f46;margin-top:2px">${ev.date}</div>
+            </div>
+            <span style="font-family:JetBrains Mono,monospace;font-size:9px;letter-spacing:.15em;color:${m.color}">[${m.label}]</span>
+          </a>`;
+        }).join('');
+      }
+    }
+
+    // Parallax
     const isMobile = () => window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
     const container = document.getElementById('main-container');
-
-    if (!isMobile()) {
+    if (!isMobile() && container) {
       document.addEventListener('mousemove', (e) => {
-        if (!container) return;
         const x = (e.clientX / window.innerWidth) - 0.5;
         const y = (e.clientY / window.innerHeight) - 0.5;
         container.style.transform = `rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
       });
     }
 
-    // specific now page scripts
-    const TYPE_META={trade:{label:"TRADE",color:"#ffb000",icon:"📈"},build:{label:"BUILD",color:"#38bdf8",icon:"🛠"},stream:{label:"LIVE",color:"#ef4444",icon:"📡"},gaming:{label:"PLAY",color:"#a78bfa",icon:"🎮"},life:{label:"LIFE",color:"#a1a1aa",icon:"🌱"}};
-    function updateTimestamp(){const el=document.getElementById("now-timestamp");if(!el)return;const n=new Date();el.textContent=n.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",timeZoneName:"short"});}
-    updateTimestamp();setInterval(updateTimestamp,30000);
-    
-    async function loadNow(){
-      let n={};
-      try{const r=await fetch("/data/now.json");n=await r.json();}catch(e){}
-      const rows=[{key:"TRADING",value:n.trading||"—",icon:"📈"},{key:"BUILDING",value:n.building||"—",icon:"🛠"},{key:"PLAYING",value:n.playing||"—",icon:"🎮"},{key:"LISTENING",value:n.listening||"—",icon:"🎧"},{key:"WORKING ON",value:n.working_on||"—",icon:"⚡"},{key:"MOOD",value:n.mood||"—",icon:"🔵"}];
-      const g=document.getElementById("now-grid");
-      if(g) {
-        g.innerHTML=rows.map(r=>"<div class='now-row'><div class='now-icon'>"+r.icon+"</div><div class='now-key'>"+r.key+"</div><div class='now-val'>"+r.value+"</div></div>").join("");
-      }
-      if(n.updated){
-        const d=new Date(n.updated);
-        const el = document.getElementById("last-updated-label");
-        if(el) {
-          el.textContent="Last updated: "+d.toLocaleDateString("en-US",{month:"short",day:"numeric"})+" at "+d.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"});
-        }
-      }
-    }
+    // Scroll reveal
+    const obs = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    }), { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-    async function loadEvents(){
-      let evs=[];
-      try{const r=await fetch("/data/events.json");evs=await r.json();}catch(e){return;}
-      const c=document.getElementById("recent-events");
-      if(c) {
-        c.innerHTML=evs.slice(0,5).map(ev=>{const m=TYPE_META[ev.type]||{label:ev.type,color:"#52525b",icon:"●"};return"<a href='/archive.html' class='event-row'><span style='font-size:16px'>"+m.icon+"</span><div style='flex:1;min-width:0'><div style='font-size:13px;font-weight:600;color:#e4e4e7' class='truncate'>"+ev.title+"</div><div style='font-family:JetBrains Mono,monospace;font-size:9px;color:#3f3f46;margin-top:2px'>"+ev.date+"</div></div><span style='font-family:JetBrains Mono,monospace;font-size:9px;letter-spacing:.15em;color:"+m.color+"'>["+m.label+"]</span></a>";}).join("");
-      }
-    }
-    
-    // Load once DOM is ready
-    document.addEventListener('DOMContentLoaded', () => {
-      loadNow();
-      loadEvents();
-      const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}}),{threshold:.1});
-      document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
-    });
+    // Boot
+    (async () => {
+      const lanyardData = await loadLanyard();
+      await loadNow(lanyardData);
+      await loadEvents();
+      // Refresh Lanyard every 30s
+      setInterval(async () => {
+        const data = await loadLanyard();
+        await loadNow(data);
+      }, 30000);
+    })();
   </script>
+
+  <style>
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.85); }
+    }
+  </style>
 </Layout>
