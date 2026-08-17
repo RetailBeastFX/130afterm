@@ -13,3 +13,6 @@ desktop.ini
 # Build artifacts
 dist/
 .cache/
+
+# Local Netlify folder
+.netlify

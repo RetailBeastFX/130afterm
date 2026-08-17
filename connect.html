@@ -135,8 +135,78 @@
         html.is-animating .transition-fade { opacity: 0; }
         .transition-fade { transition: opacity 0.3s; opacity: 1; }
     </style>
+
+  <!-- R3F & Spatial HUD Injection -->
+  <style>
+    html, body { background-color: #02040a !important; }
+
+    #r3f-root { position: fixed; inset: 0; z-index: -10; width: 100vw; height: 100vh; background-color: #02040a; }
+
+    /* Strong glass panels with neon outline */
+    :root {
+      --bg-base: #02040a !important;
+      --glass-bg: rgba(2, 8, 20, 0.82) !important;
+      --glass-border: rgba(56, 189, 248, 0.2) !important;
+    }
+    section, article, nav, .site-nav,
+    [class*='bg-slate'], [class*='bg-zinc'], [class*='bg-white'],
+    [class*='border-white'], [class*='border-slate'], [class*='border-zinc'] {
+      background-color: rgba(2, 8, 20, 0.82) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border-color: rgba(56, 189, 248, 0.18) !important;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.12), 0 8px 40px rgba(0,0,0,0.7) !important;
+    }
+
+    /* Lift dim text */
+    .text-zinc-500, .text-zinc-400, .text-slate-500, .text-slate-400 { color: #8eb4cc !important; }
+    .text-zinc-600, .text-slate-600 { color: #7d9ab5 !important; }
+
+    /* Audio button */
+    .audio-btn {
+      position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+      padding: 10px 20px; background: rgba(2, 8, 20, 0.85);
+      border: 1px solid #38bdf8; color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+    }
+    .audio-btn:hover { background: rgba(56, 189, 248, 0.2); }
+
+    #main-container { transition: transform 0.1s ease-out; transform-style: preserve-3d; perspective: 1500px; }
+  </style>
+
+
+  <style>
+    /* ── Mobile Fixes ── */
+    @media (max-width: 768px) {
+      /* Disable perspective on small screens */
+      #main-container { perspective: none !important; transform: none !important; }
+
+      /* Sphere dimmer on mobile */
+      #r3f-root { opacity: 0.45; }
+
+      /* Bigger touch targets for audio button, move above radio widget */
+      .audio-btn {
+        bottom: 80px !important; right: 16px !important;
+        padding: 14px 18px !important;
+        font-size: 9px !important;
+      }
+
+      /* Radio widget: smaller on mobile */
+      #radio-widget { width: calc(100vw - 32px) !important; right: 16px !important; bottom: 16px !important; }
+
+      /* Nav: allow wrapping, prevent overflow */
+      .site-nav nav, .site-nav > div { flex-wrap: wrap; }
+      nav a, nav button { font-size: 12px !important; }
+
+      /* Ensure images don't break out of containers */
+      img { max-width: 100%; height: auto; }
+    }
+  </style>
 </head>
 <body class="antialiased selection:bg-amber-500 selection:text-black">
+  <div id="main-container">
 
 <div class="scanlines"></div>
 <div class="particles-container" id="particles"></div>
@@ -180,7 +250,7 @@
             <div class="link-icon-box"><i class="fas fa-microchip"></i></div>
             <div class="link-content">
                 <div class="link-title">RBFX Indicator</div>
-                <div class="link-desc">Automated SMC Mapping</div>
+                <div class="link-desc">MARKET ENGINE v7 &amp; ORB HUD</div>
             </div>
             <i class="fas fa-arrow-right link-arrow"></i>
         </a>
@@ -190,6 +260,15 @@
             <div class="link-content">
                 <div class="link-title">TradingView</div>
                 <div class="link-desc">Charting & Analytics</div>
+            </div>
+            <i class="fas fa-arrow-right link-arrow"></i>
+        </a>
+
+        <a href="#" target="_blank" rel="noopener" class="link-card">
+            <div class="link-icon-box"><i class="fas fa-bolt"></i></div>
+            <div class="link-content">
+                <div class="link-title">Webull Active Trader</div>
+                <div class="link-desc">0DTE OPTIONS EXECUTION</div>
             </div>
             <i class="fas fa-arrow-right link-arrow"></i>
         </a>
@@ -211,7 +290,7 @@
             <div class="link-icon-box"><i class="fab fa-youtube"></i></div>
             <div class="link-content">
                 <div class="link-title">YouTube</div>
-                <div class="link-desc">Process Capture &amp; VHS Logs</div>
+                <div class="link-desc">LIVE FORWARD TESTING &amp; VHS LOGS</div>
             </div>
             <i class="fas fa-arrow-right link-arrow"></i>
         </a>
@@ -220,7 +299,7 @@
             <div class="link-icon-box"><i class="fab fa-x-twitter"></i></div>
             <div class="link-content">
                 <div class="link-title">X (Twitter)</div>
-                <div class="link-desc">Daily Thoughts &amp; Setup Notes</div>
+                <div class="link-desc">ORB FORWARD TESTING &amp; SETUP NOTES</div>
             </div>
             <i class="fas fa-arrow-right link-arrow"></i>
         </a>
@@ -383,5 +462,138 @@
     nextBtn.addEventListener('click', () => { if(player && player.nextVideo) player.nextVideo(); });
     prevBtn.addEventListener('click', () => { if(player && player.previousVideo) player.previousVideo(); });
 </script>
+  </div> <!-- /main-container -->
+
+  <div id="r3f-root"></div>
+
+  <audio id="bg-music" loop crossorigin="anonymous" src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3"></audio>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+        "three": "https://esm.sh/three@0.160.0",
+        "@react-three/fiber": "https://esm.sh/@react-three/fiber@8.15.12?external=react,react-dom,three",
+        "@react-three/postprocessing": "https://esm.sh/@react-three/postprocessing@2.16.0?external=react,react-dom,three,@react-three/fiber"
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel" data-type="module">
+    /** @jsxRuntime classic */
+    /** @jsx React.createElement */
+    import React, { useRef, useMemo, useState } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import { Canvas, useFrame, useThree } from '@react-three/fiber';
+    import { EffectComposer, Bloom } from '@react-three/postprocessing';
+    import * as THREE from 'three';
+
+    let audioContext = null, analyser = null, dataArray = null;
+    const initAudio = () => {
+      if (audioContext) return;
+      const el = document.getElementById('bg-music');
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioContext.createAnalyser();
+      const src = audioContext.createMediaElementSource(el);
+      src.connect(analyser); analyser.connect(audioContext.destination);
+      analyser.fftSize = 256;
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
+      el.play();
+      const btn = document.getElementById('audio-init-btn');
+      if (btn) btn.style.display = 'none';
+    };
+    window.initAudio = initAudio;
+
+    const EngineSphere = () => {
+      const meshRef = useRef();
+      const { mouse } = useThree();
+      const uniforms = useMemo(() => ({
+        uTime: { value: 0 },
+        uColor: { value: new THREE.Color('#38bdf8') },
+        uAudioLow: { value: 0 },
+        uAudioHigh: { value: 0 }
+      }), []);
+
+      useFrame((state) => {
+        uniforms.uTime.value = state.clock.elapsedTime;
+        if (analyser && dataArray) {
+          analyser.getByteFrequencyData(dataArray);
+          let lo = 0; for (let i = 0; i < 10; i++) lo += dataArray[i];
+          let hi = 0; for (let i = 80; i < 100; i++) hi += dataArray[i];
+          uniforms.uAudioLow.value += (lo / 10 / 255 - uniforms.uAudioLow.value) * 0.1;
+          uniforms.uAudioHigh.value += (hi / 20 / 255 - uniforms.uAudioHigh.value) * 0.1;
+        }
+        if (meshRef.current) {
+          meshRef.current.rotation.x += (mouse.y * Math.PI - meshRef.current.rotation.x) * 0.05;
+          meshRef.current.rotation.y += (mouse.x * Math.PI - meshRef.current.rotation.y) * 0.05;
+          meshRef.current.rotation.y += 0.005 + uniforms.uAudioHigh.value * 0.05;
+          meshRef.current.rotation.z += 0.002 + uniforms.uAudioHigh.value * 0.02;
+        }
+      });
+
+      return React.createElement('mesh', { ref: meshRef },
+        React.createElement('sphereGeometry', { args: [2.5, 64, 64] }),
+        React.createElement('shaderMaterial', {
+          uniforms,
+          vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+          fragmentShader: `
+            uniform float uTime; uniform vec3 uColor; uniform float uAudioLow; varying vec2 vUv;
+            void main(){
+              vec2 g=fract(vUv*60.0);
+              float line=step(0.92,g.x)+step(0.92,g.y);
+              if(line<0.1) discard;
+              float p=pow((sin(uTime*2.0)*.5+.5),3.0);
+              gl_FragColor=vec4(uColor*(0.25+0.8*p+uAudioLow*2.0),0.75);
+            }`,
+          transparent: true, side: THREE.DoubleSide,
+          blending: THREE.AdditiveBlending, depthWrite: false
+        })
+      );
+    };
+
+    createRoot(document.getElementById('r3f-root')).render(
+      React.createElement(Canvas, { camera: { position: [0, 0, 6] } },
+        React.createElement('color', { attach: 'background', args: ['#02040a'] }),
+        React.createElement(EngineSphere),
+        React.createElement(EffectComposer, null,
+          React.createElement(Bloom, { luminanceThreshold: 0.1, luminanceSmoothing: 0.9, intensity: 2.5, mipmapBlur: true })
+        )
+      )
+    );
+
+    // ── Smart Interaction: Mouse on desktop, Gyro on mobile ──
+    const isMobile = () => window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
+    const container = document.getElementById('main-container');
+
+    if (!isMobile()) {
+      // Desktop: CSS 3D Parallax via mouse
+      document.addEventListener('mousemove', (e) => {
+        if (!container) return;
+        const x = (e.clientX / window.innerWidth) - 0.5;
+        const y = (e.clientY / window.innerHeight) - 0.5;
+        container.style.transform = `rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
+      });
+    } else {
+      // Mobile: gyroscope tilt via DeviceOrientation
+      if (container) container.style.transform = 'none';
+      window.addEventListener('deviceorientation', (e) => {
+        if (!container) return;
+        const tiltX = Math.max(-15, Math.min(15, (e.beta || 0) - 45)) / 15; // -1 to 1
+        const tiltY = Math.max(-15, Math.min(15, e.gamma || 0)) / 15;        // -1 to 1
+        container.style.transform = `rotateY(${tiltY * 4}deg) rotateX(${-tiltX * 4}deg)`;
+      }, true);
+      // Request permission on iOS 13+
+      if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        document.getElementById('audio-init-btn')?.addEventListener('click', () => {
+          DeviceOrientationEvent.requestPermission().catch(() => {});
+        }, { once: true });
+      }
+    }
+  </script>
+  <button id="audio-init-btn" class="audio-btn" onclick="window.initAudio()">[ AUDIO SYNC ]</button>
+
 </body>
 </html>

@@ -20,11 +20,12 @@
             --amber-glow: rgba(255, 176, 0, 0.2);
             --indigo: #6366f1;
             --blue-cool: #38bdf8;
-            --bg-base: #07081a;
-            --glass-bg: rgba(255, 255, 255, 0.04);
-            --glass-bg-hover: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.09);
-            --glass-border-hover: rgba(255, 255, 255, 0.18);
+            --bg-base: #02040a;
+            /* Stronger glass so content pops over sphere */
+            --glass-bg: rgba(2, 8, 20, 0.75);
+            --glass-bg-hover: rgba(2, 8, 20, 0.88);
+            --glass-border: rgba(56, 189, 248, 0.2);
+            --glass-border-hover: rgba(56, 189, 248, 0.4);
             --radius: 22px;
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,6 +38,17 @@
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             min-height: 100vh;
+        }
+
+        /* ── Lift dim text so it reads over dark glass ── */
+        .text-zinc-500, .text-zinc-400 { color: #94a3b8 !important; }
+        .text-zinc-600 { color: #7d91a8 !important; }
+        .text-slate-500, .text-slate-400 { color: #94a3b8 !important; }
+        .text-slate-600 { color: #7d91a8 !important; }
+
+        /* ── Neon border glow on cards to tie into sphere ── */
+        .glass-card, [class*="glass-bg"], .site-nav {
+            box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.15), 0 4px 32px rgba(0,0,0,0.6) !important;
         }
         a { text-decoration: none; }
         button { cursor: pointer; border: none; background: none; }
@@ -601,8 +613,99 @@
         .glitch-hover { position: relative; display: inline-block; transition: all 0.1s; }
         .glitch-hover:hover { text-shadow: 1px 0 #ff003c, -1px 0 #00f0ff; }
     </style>
+
+  <!-- R3F & Spatial HUD Injection -->
+  <style>
+    /* Hard background baseline */
+    html, body { height: 100%; min-height: 100vh; background-color: #02040a !important; color: white; }
+    
+    #r3f-root { position: fixed; inset: 0; z-index: -10; width: 100vw; height: 100vh; background-color: #02040a; }
+
+    /* Neon-theme the glass cards specifically — don't touch layout containers */
+    .glass, .glass-static, .glass-amber {
+      background: rgba(2, 8, 20, 0.78) !important;
+      border-color: rgba(56, 189, 248, 0.2) !important;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.1), 0 8px 40px rgba(0,0,0,0.6) !important;
+    }
+    .glass:hover {
+      border-color: rgba(56, 189, 248, 0.4) !important;
+    }
+    .site-nav {
+      background: rgba(2, 6, 14, 0.92) !important;
+      border-bottom-color: rgba(56, 189, 248, 0.15) !important;
+    }
+
+    /* Lift dim text — scoped tightly to avoid conflicts */
+    .text-zinc-500, .text-zinc-400, .text-slate-500, .text-slate-400 {
+      color: #8eb4cc !important;
+    }
+    .text-zinc-600, .text-slate-600 { color: #7d9ab5 !important; }
+    
+    .audio-btn {
+      position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+      padding: 10px 20px; background: rgba(2, 8, 20, 0.85);
+      border: 1px solid #38bdf8; color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 2px;
+      transition: all 0.3s;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+    }
+    .audio-btn:hover { background: rgba(56, 189, 248, 0.2); box-shadow: 0 0 20px rgba(56, 189, 248, 0.5); }
+
+    /* Parallax container */
+    #main-container {
+      transition: transform 0.1s ease-out;
+      transform-style: preserve-3d;
+      perspective: 1500px;
+    }
+  </style>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+        "three": "https://esm.sh/three@0.160.0",
+        "@react-three/fiber": "https://esm.sh/@react-three/fiber@8.15.12?external=react,react-dom,three",
+        "@react-three/postprocessing": "https://esm.sh/@react-three/postprocessing@2.16.0?external=react,react-dom,three,@react-three/fiber"
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+
+  <style>
+    /* ── Mobile Fixes ── */
+    @media (max-width: 768px) {
+      /* Disable perspective on small screens */
+      #main-container { perspective: none !important; transform: none !important; }
+
+      /* Sphere dimmer on mobile */
+      #r3f-root { opacity: 0.45; }
+
+      /* Bigger touch targets for audio button, move above radio widget */
+      .audio-btn {
+        bottom: 80px !important; right: 16px !important;
+        padding: 14px 18px !important;
+        font-size: 9px !important;
+      }
+
+      /* Radio widget: smaller on mobile */
+      #radio-widget { width: calc(100vw - 32px) !important; right: 16px !important; bottom: 16px !important; }
+
+      /* Nav: allow wrapping, prevent overflow */
+      .site-nav nav, .site-nav > div { flex-wrap: wrap; }
+      nav a, nav button { font-size: 12px !important; }
+
+      /* Ensure images don't break out of containers */
+      img { max-width: 100%; height: auto; }
+    }
+  </style>
 </head>
-<body class="antialiased selection:bg-amber-500/30 selection:text-white">
+<body class="antialiased selection:bg-amber-500/30 selection:text-white" style="background-color: transparent !important;">
+  <div id="r3f-root"></div>
+  <div id="main-container">
 
 <!-- ── AMBIENT ORBS ── -->
 <div class="orb-wrap">
@@ -729,7 +832,7 @@
                         <span class="pill pill-amber" id="profile-session-badge">AFTER HOURS</span>
                     </div>
                     <div class="status-line mt-2.5"><strong>Focus:</strong> XAUUSD + SPY 0DTE</div>
-                    <div class="status-line"><strong>System:</strong> RBFX v6 — SMC Execution</div>
+                    <div class="status-line"><strong>System:</strong> RBFX v7 — Momentum Engine</div>
                 </div>
             </div>
         </div>
@@ -772,12 +875,12 @@
                     </div>
                     <div class="text-right">
                         <div class="text-[9px] text-zinc-600 font-mono mb-0.5">Framework</div>
-                        <span class="text-sm font-bold text-violet-400 tracking-wide">ICT / SMC</span>
+                        <span class="text-sm font-bold text-violet-400 tracking-wide">ORB Momentum</span>
                     </div>
                 </div>
                 <div class="pt-2 border-t border-white/[0.04]">
                     <div class="text-[9px] text-zinc-700 font-mono">System</div>
-                    <div class="text-sm font-bold text-white mt-0.5">RetailBeastFX v6</div>
+                    <div class="text-sm font-bold text-white mt-0.5">Operator HUD v7.3</div>
                 </div>
             </div>
         </div>
@@ -839,6 +942,17 @@
             </div>
         </div>
 
+        <!-- ══ CARD 5.5: MARKET REGIME ══ -->
+        <div class="glass p-6 flex flex-col col-span-1 reveal" style="min-height: 200px;">
+            <div class="label mb-4">// MARKET_REGIME</div>
+            <div class="flex-1 flex flex-col justify-center">
+                <!-- Will link to a TradingView webhook -->
+                <div class="font-mono text-[11px] text-zinc-300">
+                    Current Status: <span class="text-[#38bdf8]">EXPANDING</span>
+                </div>
+            </div>
+        </div>
+
         <!-- ══ CARD 6: NOTEBOOK INDEX ══ -->
         <div class="glass p-6 flex flex-col col-span-1 reveal" style="min-height: 200px;">
             <div class="label mb-4">// Digital_Garden // Index</div>
@@ -881,7 +995,7 @@
                 <a href="./terminal.html" class="bg-white/[0.02] border border-white/[0.05] rounded-xl p-4 hover:border-amber-500/25 transition-colors group">
                     <div class="text-[8px] font-mono text-amber-500/80 uppercase tracking-widest mb-2">Trading Tools</div>
                     <div class="text-sm font-bold text-white mb-1 group-hover:text-amber-400 transition-colors">RetailBeastFX</div>
-                    <p class="text-[11px] text-zinc-600 leading-relaxed">Automated SMC mapping. Order blocks, FVGs, liquidity.</p>
+                    <p class="text-[11px] text-zinc-600 leading-relaxed">Hybrid SMC + Momentum engine. ORB logic, Auction Theory, and Dynamic FSM Management.</p>
                 </a>
                 <a href="./terminal.html" class="bg-white/[0.02] border border-white/[0.05] rounded-xl p-4 hover:border-amber-500/25 transition-colors group">
                     <div class="text-[8px] font-mono text-amber-500/80 uppercase tracking-widest mb-2">Indicators</div>
@@ -1404,7 +1518,7 @@
             document.getElementById('lanyard-content').innerHTML = `
                 <div class="text-center py-4">
                     <div class="text-2xl mb-3">⌨️</div>
-                    <div class="text-sm font-semibold text-white mb-1">Building RBFX v6</div>
+                    <div class="text-sm font-semibold text-white mb-1">Deploying Market Engine v7</div>
                     <div class="text-xs text-zinc-500">Visual Studio Code</div>
                     <div class="font-mono text-[9px] text-zinc-700 mt-2 uppercase tracking-widest">Add Discord ID to enable live presence</div>
                 </div>
@@ -1809,5 +1923,156 @@
 })();
 </script>
 
+  </div> <!-- /main-container -->
+
+  <!-- Audio -->
+  <audio id="bg-music" loop crossorigin="anonymous" src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3"></audio>
+
+  <!-- React Application -->
+  <script type="text/babel" data-type="module">
+    /** @jsxRuntime classic */
+    /** @jsx React.createElement */
+    /** @jsxFrag React.Fragment */
+    import React, { useRef, useMemo, useState, useEffect } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import { Canvas, useFrame, useThree } from '@react-three/fiber';
+    import { EffectComposer, Bloom } from '@react-three/postprocessing';
+    import * as THREE from 'three';
+
+    // Global audio refs
+    let audioContext = null;
+    let analyser = null;
+    let dataArray = null;
+
+    const initAudio = () => {
+      if (audioContext) return;
+      const audioEl = document.getElementById('bg-music');
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioContext.createAnalyser();
+      const source = audioContext.createMediaElementSource(audioEl);
+      source.connect(analyser);
+      analyser.connect(audioContext.destination);
+      analyser.fftSize = 256;
+      const bufferLength = analyser.frequencyBinCount;
+      dataArray = new Uint8Array(bufferLength);
+      audioEl.play();
+      
+      // Update UI button
+      const btn = document.getElementById('audio-init-btn');
+      if (btn) btn.style.display = 'none';
+    };
+
+    window.initAudio = initAudio;
+
+    const EngineSphere = () => {
+      const meshRef = useRef();
+      const materialRef = useRef();
+      const { mouse } = useThree();
+      const uniforms = useMemo(() => ({
+        uTime: { value: 0 },
+        uColor: { value: new THREE.Color("#38bdf8") }, // using the blue-cool color from the portfolio
+        uAudioLow: { value: 0 },
+        uAudioHigh: { value: 0 }
+      }), []);
+
+      useFrame((state) => {
+        uniforms.uTime.value = state.clock.elapsedTime;
+        if (analyser && dataArray) {
+          analyser.getByteFrequencyData(dataArray);
+          let lowSum = 0; for(let i = 0; i < 10; i++) lowSum += dataArray[i];
+          let highSum = 0; for(let i = 80; i < 100; i++) highSum += dataArray[i];
+          uniforms.uAudioLow.value += ((lowSum / 10 / 255) - uniforms.uAudioLow.value) * 0.1;
+          uniforms.uAudioHigh.value += ((highSum / 20 / 255) - uniforms.uAudioHigh.value) * 0.1;
+        }
+        if (meshRef.current) {
+          const targetRotX = mouse.y * Math.PI;
+          const targetRotY = mouse.x * Math.PI;
+          meshRef.current.rotation.x += (targetRotX - meshRef.current.rotation.x) * 0.05;
+          meshRef.current.rotation.y += (targetRotY - meshRef.current.rotation.y) * 0.05;
+          meshRef.current.rotation.y += 0.005 + (uniforms.uAudioHigh.value * 0.05);
+          meshRef.current.rotation.z += 0.002 + (uniforms.uAudioHigh.value * 0.02);
+        }
+      });
+
+      const vertexShader = `
+        varying vec2 vUv;
+        void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }
+      `;
+      const fragmentShader = `
+        uniform float uTime;
+        uniform vec3 uColor;
+        uniform float uAudioLow;
+        varying vec2 vUv;
+        void main() {
+          vec2 uv = vUv * 60.0;
+          vec2 grid = fract(uv);
+          float line = step(0.9, grid.x) + step(0.9, grid.y);
+          float pulse = (sin(uTime * 3.0) * 0.5 + 0.5);
+          float intensePulse = pow(pulse, 2.0);
+          float audioReactivity = uAudioLow * 3.0; 
+          vec3 glowColor = uColor * (0.5 + 1.5 * intensePulse + audioReactivity);
+          if (line < 0.1) discard;
+          gl_FragColor = vec4(glowColor, 1.0);
+        }
+      `;
+
+      return (
+        <mesh ref={meshRef}>
+          <sphereGeometry args={[2.5, 64, 64]} />
+          <shaderMaterial 
+            ref={materialRef} vertexShader={vertexShader} fragmentShader={fragmentShader}
+            uniforms={uniforms} transparent={true} side={THREE.DoubleSide}
+            blending={THREE.AdditiveBlending} depthWrite={false}
+          />
+        </mesh>
+      );
+    };
+
+    const WebGLEngine = () => (
+      <Canvas camera={{ position: [0, 0, 6] }}>
+        <color attach="background" args={['#02040a']} />
+        <EngineSphere />
+        <EffectComposer>
+          <Bloom luminanceThreshold={0.1} luminanceSmoothing={0.9} intensity={2.5} mipmapBlur={true} />
+        </EffectComposer>
+      </Canvas>
+    );
+
+    const r3fRoot = createRoot(document.getElementById('r3f-root'));
+    r3fRoot.render(<WebGLEngine />);
+
+    // ── Smart Interaction: Mouse on desktop, Gyro on mobile ──
+    const isMobile = () => window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
+    const container = document.getElementById('main-container');
+
+    if (!isMobile()) {
+      // Desktop: CSS 3D Parallax via mouse
+      document.addEventListener('mousemove', (e) => {
+        if (!container) return;
+        const x = (e.clientX / window.innerWidth) - 0.5;
+        const y = (e.clientY / window.innerHeight) - 0.5;
+        container.style.transform = `rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
+      });
+    } else {
+      // Mobile: gyroscope tilt via DeviceOrientation
+      if (container) container.style.transform = 'none';
+      window.addEventListener('deviceorientation', (e) => {
+        if (!container) return;
+        const tiltX = Math.max(-15, Math.min(15, (e.beta || 0) - 45)) / 15; // -1 to 1
+        const tiltY = Math.max(-15, Math.min(15, e.gamma || 0)) / 15;        // -1 to 1
+        container.style.transform = `rotateY(${tiltY * 4}deg) rotateX(${-tiltX * 4}deg)`;
+      }, true);
+      // Request permission on iOS 13+
+      if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        document.getElementById('audio-init-btn')?.addEventListener('click', () => {
+          DeviceOrientationEvent.requestPermission().catch(() => {});
+        }, { once: true });
+      }
+    }
+  </script>
+
+  <button id="audio-init-btn" class="audio-btn" onclick="window.initAudio()">
+    [ INITIALIZE AUDIO SYNC ]
+  </button>
 </body>
 </html>
