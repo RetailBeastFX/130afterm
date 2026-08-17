@@ -1,0 +1,60 @@
+[
+  {
+    "id": "2026-08-17-life-001",
+    "type": "life",
+    "date": "2026-08-17",
+    "time": "00:00",
+    "title": "Birthday \u2014 30",
+    "body": "Turning 30. Building in the dark. This is the start.",
+    "tags": ["milestone", "birthday"],
+    "status": "active",
+    "mood": "locked-in"
+  },
+  {
+    "id": "2026-08-17-build-001",
+    "type": "build",
+    "date": "2026-08-17",
+    "time": "14:30",
+    "title": "130AfterM Spatial HUD deployed",
+    "body": "Migrated the site to WebGL + R3F. Neon glass panels, audio-reactive sphere, CSS 3D parallax.",
+    "tags": ["WebGL", "R3F", "130AfterM"],
+    "status": "shipped",
+    "mood": "locked-in"
+  },
+  {
+    "id": "2026-08-17-trade-001",
+    "type": "trade",
+    "date": "2026-08-17",
+    "time": "09:45",
+    "title": "SPY 0DTE \u2014 Opening ORB",
+    "body": "Watched the opening range. ORB formed clean. Waited for 2 EMA cross.",
+    "tags": ["SPY", "0DTE", "ORB", "2EMA"],
+    "ticker": "SPY",
+    "strategy": "ORB Momentum + 2 EMA",
+    "status": "closed",
+    "mood": "patient"
+  },
+  {
+    "id": "2026-08-16-stream-001",
+    "type": "stream",
+    "date": "2026-08-16",
+    "time": "20:00",
+    "title": "RetailBeastFX LIVE \u2014 ORB System Breakdown",
+    "body": "Walked through the ORB Momentum system live.",
+    "tags": ["RetailBeastFX", "ORB"],
+    "platform": "Twitch",
+    "status": "archived",
+    "mood": "on"
+  },
+  {
+    "id": "2026-08-15-build-001",
+    "type": "build",
+    "date": "2026-08-15",
+    "time": "22:00",
+    "title": "Market Engine v7 \u2014 ORB + EMA indicator",
+    "body": "Finalized the Pine Script indicator for TradingView.",
+    "tags": ["PineScript", "TradingView", "ORB"],
+    "status": "shipped",
+    "mood": "focused"
+  }
+]

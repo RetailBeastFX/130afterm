@@ -1,0 +1,77 @@
+---
+// Activity Ticker component
+---
+<div id="activity-ticker" style="
+  position: relative; z-index: 100;
+  background: rgba(2,4,10,0.9);
+  border-bottom: 1px solid rgba(56,189,248,0.12);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+  height: 32px;
+  display: flex;
+  align-items: center;
+">
+  <div style="
+    flex-shrink: 0;
+    padding: 0 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: #38bdf8;
+    border-right: 1px solid rgba(56,189,248,0.2);
+    height: 100%;
+    display: flex; align-items: center;
+    white-space: nowrap;
+  ">● BROADCAST</div>
+  <div id="ticker-track" style="
+    display: flex;
+    align-items: center;
+    animation: ticker-scroll 40s linear infinite;
+    white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #52525b;
+    letter-spacing: 0.1em;
+    padding-left: 20px;
+  ">
+    <span id="ticker-content">Loading feed...</span>
+  </div>
+  <style>
+    @keyframes ticker-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+  </style>
+</div>
+
+<script>
+  const TYPE_META: Record<string, {label: string, color: string, icon: string}> = {
+    trade:  { label: 'TRADE',  color: '#ffb000', icon: '📈' },
+    build:  { label: 'BUILD',  color: '#38bdf8', icon: '🛠' },
+    stream: { label: 'LIVE',   color: '#ef4444', icon: '📡' },
+    gaming: { label: 'PLAY',   color: '#a78bfa', icon: '🎮' },
+    life:   { label: 'LIFE',   color: '#a1a1aa', icon: '🌱' },
+  };
+
+  async function loadTicker() {
+    try {
+      const res = await fetch('/data/events.json');
+      const events = await res.json();
+      if (!events.length) return;
+
+      const tickerEl = document.getElementById('ticker-content');
+      if (tickerEl) {
+        const items = events.map((ev: any) => {
+          const meta = TYPE_META[ev.type] || { label: ev.type.toUpperCase(), color: '#52525b' };
+          return `<span style="color:${meta.color};margin-right:6px;">[${meta.label}]</span><span style="color:#71717a;margin-right:32px;">${ev.date.slice(5)} — ${ev.title}</span>`;
+        }).join(' │ ');
+        tickerEl.innerHTML = items + ' │ ' + items;
+      }
+    } catch (e) {
+      console.error('Failed to load ticker', e);
+    }
+  }
+
+  // Load once the DOM is ready
+  document.addEventListener('DOMContentLoaded', loadTicker);
+</script>

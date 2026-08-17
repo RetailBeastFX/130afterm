@@ -1,9 +1,30 @@
 [build]
-  publish = "."
+  command = "npm run build"
+  publish = "dist"
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/now"
+  to = "/now/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/archive"
+  to = "/archive/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/workspace"
+  to = "/workspace/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/terminal"
+  to = "/terminal/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/connect"
+  to = "/connect/index.html"
   status = 200
 
 [[headers]]

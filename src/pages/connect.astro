@@ -1,0 +1,153 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AmbientBackground from '../components/AmbientBackground.astro';
+import Navbar from '../components/Navbar.astro';
+import EngineCanvas from '../components/EngineCanvas.tsx';
+---
+
+<Layout title="130 AM // CONNECT">
+  <div id="r3f-root" class="fixed inset-0 -z-10 w-screen h-screen">
+    <EngineCanvas client:load />
+  </div>
+  
+  <div id="main-container" style="perspective:1500px;transform-style:preserve-3d;transition:transform .1s ease-out;">
+    <AmbientBackground />
+    <Navbar />
+    
+<main id="swup" class="transition-fade  class="max-w-md mx-auto px-6 py-12 md:py-20 relative z-10 flex flex-col items-center"">
+
+    <!-- ── PROFILE ── -->
+    <div class="profile-frame">
+        <div class="profile-inner">
+            <img src="./profile.png" alt="130AfterM" onerror="this.src='https://placehold.co/200x200/111/444?text=130AM'">
+        </div>
+    </div>
+
+    <h1 class="text-3xl font-black tracking-tighter text-white mb-2 glitch-hover">130 AFTER M</h1>
+    <p class="text-[10px] tracking-[0.2em] text-zinc-500 font-mono uppercase mb-10 text-center">
+        Trader <span class="opacity-30">|</span> Builder <span class="opacity-30">|</span> Architect
+    </p>
+
+    <!-- ── LINKS LIST ── -->
+    <div class="w-full flex flex-col gap-4">
+        
+        <!-- Primary Link -->
+        <a href="https://whop.com/joined/retailbeastfx/products/retailbeastfx-smc-indicator/" target="_blank" rel="noopener" class="link-card primary">
+            <div class="link-icon-box"><i class="fas fa-microchip"></i></div>
+            <div class="link-content">
+                <div class="link-title">RBFX Indicator</div>
+                <div class="link-desc">MARKET ENGINE v7 &amp; ORB HUD</div>
+            </div>
+            <i class="fas fa-arrow-right link-arrow"></i>
+        </a>
+
+        <a href="https://www.tradingview.com/?aff_id=167048" target="_blank" rel="noopener" class="link-card">
+            <div class="link-icon-box"><i class="fas fa-chart-line"></i></div>
+            <div class="link-content">
+                <div class="link-title">TradingView</div>
+                <div class="link-desc">Charting & Analytics</div>
+            </div>
+            <i class="fas fa-arrow-right link-arrow"></i>
+        </a>
+
+        <a href="#" target="_blank" rel="noopener" class="link-card">
+            <div class="link-icon-box"><i class="fas fa-bolt"></i></div>
+            <div class="link-content">
+                <div class="link-title">Webull Active Trader</div>
+                <div class="link-desc">0DTE OPTIONS EXECUTION</div>
+            </div>
+            <i class="fas fa-arrow-right link-arrow"></i>
+        </a>
+
+        <!-- Affiliate Link -->
+        <a href="https://my.coinexx.com/register?refLink=NTAxMDA2&refRm=11" target="_blank" rel="noopener" class="link-card">
+            <div class="link-icon-box"><i class="fas fa-chart-pie"></i></div>
+            <div class="link-content">
+                <div class="link-title">Coinexx Broker</div>
+                <div class="link-desc">Forex Trading Partner</div>
+            </div>
+            <i class="fas fa-arrow-right link-arrow"></i>
+        </a>
+
+        <div class="h-px w-full bg-white/5 my-2"></div>
+
+        <!-- Social Links -->
+        <a href="https://youtube.com/@130AfterM" target="_blank" rel="noopener" class="link-card">
+            <div class="link-icon-box"><i class="fab fa-youtube"></i></div>
+            <div class="link-content">
+                <div class="link-title">YouTube</div>
+                <div class="link-desc">LIVE FORWARD TESTING &amp; VHS LOGS</div>
+            </div>
+            <i class="fas fa-arrow-right link-arrow"></i>
+        </a>
+
+        <a href="https://x.com/130AfterM" target="_blank" rel="noopener" class="link-card">
+            <div class="link-icon-box"><i class="fab fa-x-twitter"></i></div>
+            <div class="link-content">
+                <div class="link-title">X (Twitter)</div>
+                <div class="link-desc">ORB FORWARD TESTING &amp; SETUP NOTES</div>
+            </div>
+            <i class="fas fa-arrow-right link-arrow"></i>
+        </a>
+
+        <a href="https://tiktok.com/@130AfterM" target="_blank" rel="noopener" class="link-card">
+            <div class="link-icon-box"><i class="fab fa-tiktok"></i></div>
+            <div class="link-content">
+                <div class="link-title">TikTok</div>
+                <div class="link-desc">Short-form Mechanics</div>
+            </div>
+            <i class="fas fa-arrow-right link-arrow"></i>
+        </a>
+
+        <a href="https://threads.net/@130AfterM" target="_blank" rel="noopener" class="link-card">
+            <div class="link-icon-box"><i class="fa-brands fa-threads"></i></div>
+            <div class="link-content">
+                <div class="link-title">Threads</div>
+                <div class="link-desc">Casual Updates</div>
+            </div>
+            <i class="fas fa-arrow-right link-arrow"></i>
+        </a>
+
+        <a href="https://pinterest.com/130AfterM" target="_blank" rel="noopener" class="link-card">
+            <div class="link-icon-box"><i class="fab fa-pinterest"></i></div>
+            <div class="link-content">
+                <div class="link-title">Pinterest</div>
+                <div class="link-desc">Visual Inspiration &amp; Mood</div>
+            </div>
+            <i class="fas fa-arrow-right link-arrow"></i>
+        </a>
+
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <footer class="mt-16 text-center font-mono">
+        <p class="text-2xl font-black text-white mb-1 tracking-tight" style="font-family: Inter, sans-serif;">130AM</p>
+        <p class="text-[10px] tracking-[0.3em] text-zinc-700 uppercase mb-6">after hours.</p>
+        <div class="flex items-center justify-center gap-2 text-[8px] text-amber-500 opacity-80 uppercase tracking-widest">
+            <span class="blink">●</span> System Online
+        </div>
+    </footer>
+
+</main>
+  </div>
+
+  <script>
+    const isMobile = () => window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
+    const container = document.getElementById('main-container');
+
+    if (!isMobile()) {
+      document.addEventListener('mousemove', (e) => {
+        if (!container) return;
+        const x = (e.clientX / window.innerWidth) - 0.5;
+        const y = (e.clientY / window.innerHeight) - 0.5;
+        container.style.transform = `rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
+      });
+    }
+
+    // Scroll reveal
+    document.addEventListener('DOMContentLoaded', () => {
+      const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}}),{threshold:.1});
+      document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
+    });
+  </script>
+</Layout>

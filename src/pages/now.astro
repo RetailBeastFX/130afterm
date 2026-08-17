@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AmbientBackground from '../components/AmbientBackground.astro';
+import Navbar from '../components/Navbar.astro';
+import EngineCanvas from '../components/EngineCanvas.tsx';
+---
+
+<Layout title="130 AM // NOW" description="What is Bo doing right now? Live status from 130AfterM — trading, building, gaming, living.">
+  <div id="r3f-root" class="fixed inset-0 -z-10 w-screen h-screen">
+    <EngineCanvas client:load />
+  </div>
+  
+  <div id="main-container" style="perspective:1500px;transform-style:preserve-3d;transition:transform .1s ease-out;">
+    <AmbientBackground />
+    <Navbar />
+    
+<main class="relative z-10 max-w-3xl mx-auto px-4 md:px-6 py-12 pb-40">
+
+  <header class="mb-10 reveal">
+    <div class="font-mono text-[9px] tracking-[0.4em] text-zinc-700 uppercase mb-3">130 AM // BROADCAST TERMINAL</div>
+    <h1 class="text-5xl font-black text-white tracking-tight mb-3">NOW</h1>
+    <p class="text-zinc-600 text-sm font-mono" id="last-updated-label">Last updated: —</p>
+  </header>
+
+  <div id="now-grid" class="space-y-2 mb-12 reveal">
+    <div class="skeleton h-[62px] rounded-2xl"></div>
+    <div class="skeleton h-[62px] rounded-2xl"></div>
+    <div class="skeleton h-[62px] rounded-2xl"></div>
+    <div class="skeleton h-[62px] rounded-2xl"></div>
+    <div class="skeleton h-[62px] rounded-2xl"></div>
+    <div class="skeleton h-[62px] rounded-2xl"></div>
+  </div>
+
+  <div class="reveal">
+    <div class="font-mono text-[9px] tracking-[0.3em] text-zinc-700 uppercase mb-4">// RECENT EVENTS</div>
+    <div id="recent-events" class="space-y-2"></div>
+    <a href="./archive.html" class="inline-flex items-center gap-2 mt-5 font-mono text-[9px] tracking-widest text-zinc-600 hover:text-sky-400 transition-colors uppercase">
+      Full Archive <i class="fas fa-arrow-right text-xs"></i>
+    </a>
+  </div>
+
+</main>
+  </div>
+
+  <script>
+    const isMobile = () => window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
+    const container = document.getElementById('main-container');
+
+    if (!isMobile()) {
+      document.addEventListener('mousemove', (e) => {
+        if (!container) return;
+        const x = (e.clientX / window.innerWidth) - 0.5;
+        const y = (e.clientY / window.innerHeight) - 0.5;
+        container.style.transform = `rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
+      });
+    }
+
+    // specific now page scripts
+    const TYPE_META={trade:{label:"TRADE",color:"#ffb000",icon:"📈"},build:{label:"BUILD",color:"#38bdf8",icon:"🛠"},stream:{label:"LIVE",color:"#ef4444",icon:"📡"},gaming:{label:"PLAY",color:"#a78bfa",icon:"🎮"},life:{label:"LIFE",color:"#a1a1aa",icon:"🌱"}};
+    function updateTimestamp(){const el=document.getElementById("now-timestamp");if(!el)return;const n=new Date();el.textContent=n.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",timeZoneName:"short"});}
+    updateTimestamp();setInterval(updateTimestamp,30000);
+    
+    async function loadNow(){
+      let n={};
+      try{const r=await fetch("/data/now.json");n=await r.json();}catch(e){}
+      const rows=[{key:"TRADING",value:n.trading||"—",icon:"📈"},{key:"BUILDING",value:n.building||"—",icon:"🛠"},{key:"PLAYING",value:n.playing||"—",icon:"🎮"},{key:"LISTENING",value:n.listening||"—",icon:"🎧"},{key:"WORKING ON",value:n.working_on||"—",icon:"⚡"},{key:"MOOD",value:n.mood||"—",icon:"🔵"}];
+      const g=document.getElementById("now-grid");
+      if(g) {
+        g.innerHTML=rows.map(r=>"<div class='now-row'><div class='now-icon'>"+r.icon+"</div><div class='now-key'>"+r.key+"</div><div class='now-val'>"+r.value+"</div></div>").join("");
+      }
+      if(n.updated){
+        const d=new Date(n.updated);
+        const el = document.getElementById("last-updated-label");
+        if(el) {
+          el.textContent="Last updated: "+d.toLocaleDateString("en-US",{month:"short",day:"numeric"})+" at "+d.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"});
+        }
+      }
+    }
+
+    async function loadEvents(){
+      let evs=[];
+      try{const r=await fetch("/data/events.json");evs=await r.json();}catch(e){return;}
+      const c=document.getElementById("recent-events");
+      if(c) {
+        c.innerHTML=evs.slice(0,5).map(ev=>{const m=TYPE_META[ev.type]||{label:ev.type,color:"#52525b",icon:"●"};return"<a href='/archive.html' class='event-row'><span style='font-size:16px'>"+m.icon+"</span><div style='flex:1;min-width:0'><div style='font-size:13px;font-weight:600;color:#e4e4e7' class='truncate'>"+ev.title+"</div><div style='font-family:JetBrains Mono,monospace;font-size:9px;color:#3f3f46;margin-top:2px'>"+ev.date+"</div></div><span style='font-family:JetBrains Mono,monospace;font-size:9px;letter-spacing:.15em;color:"+m.color+"'>["+m.label+"]</span></a>";}).join("");
+      }
+    }
+    
+    // Load once DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      loadNow();
+      loadEvents();
+      const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}}),{threshold:.1});
+      document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
+    });
+  </script>
+</Layout>

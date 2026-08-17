@@ -1,0 +1,351 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AmbientBackground from '../components/AmbientBackground.astro';
+import Navbar from '../components/Navbar.astro';
+import EngineCanvas from '../components/EngineCanvas.tsx';
+---
+
+<Layout title="130 AM // WORKSPACE">
+  <div id="r3f-root" class="fixed inset-0 -z-10 w-screen h-screen">
+    <EngineCanvas client:load />
+  </div>
+  
+  <div id="main-container" style="perspective:1500px;transform-style:preserve-3d;transition:transform .1s ease-out;">
+    <AmbientBackground />
+    <Navbar />
+    
+<main class="relative z-10 max-w-7xl mx-auto px-4 md:px-6 py-8 pb-40">
+
+    <!-- ─── HEADER IDENTITY ─── -->
+    <header class="mb-8 reveal">
+        <div class="flex flex-col sm:flex-row sm:items-end gap-3 justify-between">
+            <div>
+                <h1 class="text-5xl md:text-6xl font-black tracking-tight text-white glitch-hover shimmer-text">130 AM</h1>
+                <p class="text-sm text-zinc-500 mt-2 font-medium tracking-wide">
+                    Father. Trader. Documenting the process. Not the highlight reel.
+                </p>
+            </div>
+            <div id="session-badge" class="session-badge session-after self-start sm:self-auto">
+                <span class="w-1.5 h-1.5 rounded-full bg-current inline-block"></span>
+                <span id="session-text">AFTER HOURS</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ─── BENTO GRID ─── -->
+    <div class="bento-grid">
+
+        <!-- ══ CARD 1: HERO / CLOCK (col-span-2, row-span-2) ══ -->
+        <div class="glass glass-amber animate-border p-8 flex flex-col col-span-2 row-span-2 reveal" style="grid-column: span 2; grid-row: span 2; min-height: 420px;">
+            <!-- Glow orb inside card -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div style="width:300px;height:300px;background:radial-gradient(circle,rgba(255,176,0,0.06) 0%,transparent 70%);border-radius:50%;"></div>
+            </div>
+
+            <div class="flex items-center justify-between mb-6">
+                <div class="label">130 AM // LIVE CLOCK</div>
+                <div id="market-bar" class="flex items-center gap-4 font-mono text-[9px] text-zinc-800">
+                    <span id="bar-asian"  class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-current"></span>Asian</span>
+                    <span id="bar-london" class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-current"></span>London</span>
+                    <span id="bar-ny"     class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-current"></span>NY</span>
+                </div>
+            </div>
+
+            <!-- Big clock -->
+            <div class="flex items-end gap-3 mb-2">
+                <div class="clock-display">
+                    <span id="clock-h">01</span><span class="clock-colon">:</span><span id="clock-m">30</span>
+                </div>
+                <div class="font-mono text-2xl text-amber-500/50 font-bold mb-2" id="clock-ampm">AM</div>
+            </div>
+
+            <p class="font-mono text-[9px] tracking-[0.4em] text-zinc-700 uppercase mb-auto">after hours.</p>
+
+            <!-- Profile row -->
+            <div class="mt-8 pt-6 border-t border-white/[0.06] flex items-center gap-5">
+                <div class="relative w-16 h-16 flex-shrink-0">
+                    <img src="./profile.png" alt="130 AM" class="w-full h-full object-cover rounded-2xl" style="filter:grayscale(10%) contrast(1.05);" onerror="this.style.display='none';">
+                </div>
+                <div>
+                    <div class="text-sm font-bold text-white mb-1.5">130 AM</div>
+                    <div class="flex gap-2 flex-wrap">
+                        <span class="pill pill-green"><span style="width:5px;height:5px;border-radius:50%;background:#4ade80;animation:pulse-amber 2s ease infinite;"></span>ONLINE</span>
+                        <span class="pill pill-amber" id="profile-session-badge">AFTER HOURS</span>
+                    </div>
+                    <div class="status-line mt-2.5"><strong>Focus:</strong> XAUUSD + SPY 0DTE</div>
+                    <div class="status-line"><strong>System:</strong> RBFX v6 — SMC Execution</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ CARD 2: DISCORD PRESENCE ══ -->
+        <div class="glass p-5 flex flex-col col-span-1 reveal" id="discord-card" style="min-height: 200px;">
+            <div class="label mb-4">// CURRENTLY</div>
+            <div id="lanyard-content" class="flex-1 flex flex-col justify-center">
+                <!-- Skeleton -->
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="skeleton w-12 h-12 rounded-xl flex-shrink-0"></div>
+                    <div class="flex-1">
+                        <div class="skeleton h-3 w-3/4 mb-2"></div>
+                        <div class="skeleton h-2.5 w-1/2"></div>
+                    </div>
+                </div>
+                <div class="skeleton h-2.5 w-full mb-2"></div>
+                <div class="skeleton h-2.5 w-4/5"></div>
+            </div>
+        </div>
+
+        <!-- ══ CARD 3: FOCUS ══ -->
+        <div class="glass p-5 flex flex-col col-span-1 reveal" style="min-height: 200px;">
+            <div class="label mb-4">// FOCUS</div>
+            <div class="flex-1 flex flex-col justify-end gap-3">
+                <div class="flex justify-between items-center border-b border-white/[0.06] pb-3">
+                    <div>
+                        <div class="text-[9px] text-zinc-600 font-mono mb-0.5">Forex</div>
+                        <span class="text-xl font-bold text-amber-400 tracking-wide">XAUUSD</span>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-[9px] text-zinc-600 font-mono mb-0.5">Pair 2</div>
+                        <span class="text-xl font-bold text-sky-400 tracking-wide">USDJPY</span>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <div class="text-[9px] text-zinc-600 font-mono mb-0.5">Options</div>
+                        <span class="text-lg font-bold text-emerald-400 tracking-wide">SPY 0DTE</span>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-[9px] text-zinc-600 font-mono mb-0.5">Framework</div>
+                        <span class="text-sm font-bold text-violet-400 tracking-wide">ICT / SMC</span>
+                    </div>
+                </div>
+                <div class="pt-2 border-t border-white/[0.04]">
+                    <div class="text-[9px] text-zinc-700 font-mono">System</div>
+                    <div class="text-sm font-bold text-white mt-0.5">RetailBeastFX v6</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ CARD 4: INNER CIRCLE (col-span-2) ══ -->
+        <div class="glass p-5 col-span-2 reveal" style="grid-column: span 2; min-height: 200px;">
+            <div class="flex items-center justify-between mb-4">
+                <div class="label">// INNER CIRCLE</div>
+                <span class="font-mono text-[9px] text-zinc-700">Core Pillars</span>
+            </div>
+            <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                <a href="./archive.html" class="inner-circle-item">
+                    <div class="inner-circle-icon">👨‍👦</div>
+                    <span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider leading-tight">Family</span>
+                </a>
+                <a href="./archive.html" class="inner-circle-item">
+                    <div class="inner-circle-icon">📊</div>
+                    <span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider leading-tight">XAUUSD</span>
+                </a>
+                <a href="./archive.html" class="inner-circle-item">
+                    <div class="inner-circle-icon">¥</div>
+                    <span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider leading-tight">USDJPY</span>
+                </a>
+                <a href="./terminal.html" class="inner-circle-item">
+                    <div class="inner-circle-icon">🤖</div>
+                    <span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider leading-tight">RBFX</span>
+                </a>
+                <a href="./setup.html" class="inner-circle-item">
+                    <div class="inner-circle-icon">🖥️</div>
+                    <span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider leading-tight">Setup</span>
+                </a>
+                <a href="./archive.html" class="inner-circle-item">
+                    <div class="inner-circle-icon">📓</div>
+                    <span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider leading-tight">Archive</span>
+                </a>
+                <a href="./terminal.html" class="inner-circle-item">
+                    <div class="inner-circle-icon">⚡</div>
+                    <span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider leading-tight">Labs</span>
+                </a>
+                <a href="./connect.html" class="inner-circle-item">
+                    <div class="inner-circle-icon">🔗</div>
+                    <span class="font-mono text-[8px] text-zinc-500 uppercase tracking-wider leading-tight">Connect</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- ══ CARD 5: ABOUT / VITALS ══ -->
+        <div class="glass p-6 flex flex-col col-span-1 reveal" style="min-height: 200px;">
+            <div class="label mb-4">// Digital_Garden // Vitals</div>
+            <div class="flex-1 bg-black/20 rounded-xl p-3 border border-white/[0.04] font-mono text-[9px] space-y-1">
+                <div class="status-line"><strong>Network:</strong> Connected</div>
+                <div class="status-line"><strong>System:</strong> RBFX v6</div>
+                <div class="status-line"><strong>Focus:</strong> Options + Forex</div>
+                <div class="status-line"><strong>Since:</strong> 2013</div>
+                <div class="status-line"><strong>Broker:</strong> Coinexx</div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-white/[0.06]">
+                <p class="text-xs text-zinc-600 leading-relaxed">1:30 after midnight. The hour noise stops and real work starts.</p>
+            </div>
+        </div>
+
+        <!-- ══ CARD 6: NOTEBOOK INDEX ══ -->
+        <div class="glass p-6 flex flex-col col-span-1 reveal" style="min-height: 200px;">
+            <div class="label mb-4">// Digital_Garden // Index</div>
+            <div class="space-y-1.5 flex-1">
+                <a href="./archive.html" class="flex items-center justify-between py-2 border-b border-white/[0.05] group">
+                    <div>
+                        <span class="text-xs text-zinc-300 group-hover:text-white transition-colors">Session_Logs</span>
+                        <span class="block font-mono text-[8px] text-zinc-700">Trades, reviews, raw P&amp;L</span>
+                    </div>
+                    <span class="font-mono text-[9px] text-zinc-700 group-hover:text-amber-400 transition-colors">→</span>
+                </a>
+                <a href="./terminal.html" class="flex items-center justify-between py-2 border-b border-white/[0.05] group">
+                    <div>
+                        <span class="text-xs text-zinc-300 group-hover:text-white transition-colors">Playbooks</span>
+                        <span class="block font-mono text-[8px] text-zinc-700">Working setups &amp; systems</span>
+                    </div>
+                    <span class="font-mono text-[9px] text-zinc-700 group-hover:text-amber-400 transition-colors">→</span>
+                </a>
+                <a href="./archive.html" class="flex items-center justify-between py-2 border-b border-white/[0.05] group">
+                    <div>
+                        <span class="text-xs text-zinc-300 group-hover:text-white transition-colors">Field_Notes</span>
+                        <span class="block font-mono text-[8px] text-zinc-700">Market observations, live</span>
+                    </div>
+                    <span class="font-mono text-[9px] text-zinc-700 group-hover:text-amber-400 transition-colors">→</span>
+                </a>
+                <a href="./connect.html" class="flex items-center justify-between py-2 group">
+                    <div>
+                        <span class="text-xs text-zinc-300 group-hover:text-white transition-colors">Connect</span>
+                        <span class="block font-mono text-[8px] text-zinc-700">Find me elsewhere</span>
+                    </div>
+                    <span class="font-mono text-[9px] text-zinc-700 group-hover:text-amber-400 transition-colors">→</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- ══ CARD 7: FEATURED WORK ══ -->
+        <div class="glass p-6 col-span-2 reveal" style="grid-column: span 2; min-height: 200px;">
+            <div class="label mb-5">// FEATURED</div>
+            <div class="grid grid-cols-2 gap-3">
+                <a href="./terminal.html" class="bg-white/[0.02] border border-white/[0.05] rounded-xl p-4 hover:border-amber-500/25 transition-colors group">
+                    <div class="text-[8px] font-mono text-amber-500/80 uppercase tracking-widest mb-2">Trading Tools</div>
+                    <div class="text-sm font-bold text-white mb-1 group-hover:text-amber-400 transition-colors">RetailBeastFX</div>
+                    <p class="text-[11px] text-zinc-600 leading-relaxed">Automated SMC mapping. Order blocks, FVGs, liquidity.</p>
+                </a>
+                <a href="./terminal.html" class="bg-white/[0.02] border border-white/[0.05] rounded-xl p-4 hover:border-amber-500/25 transition-colors group">
+                    <div class="text-[8px] font-mono text-amber-500/80 uppercase tracking-widest mb-2">Indicators</div>
+                    <div class="text-sm font-bold text-white mb-1 group-hover:text-amber-400 transition-colors">ICT Core Suite</div>
+                    <p class="text-[11px] text-zinc-600 leading-relaxed">Killzones, FVGs, session markers — ICT concepts visual.</p>
+                </a>
+                <div class="bg-white/[0.01] border border-white/[0.03] rounded-xl p-4 opacity-50">
+                    <div class="text-[8px] font-mono text-zinc-700 uppercase tracking-widest mb-2">Utilities — WIP</div>
+                    <div class="text-sm font-bold text-zinc-600 mb-1">Risk Calculator</div>
+                    <p class="text-[11px] text-zinc-700 leading-relaxed">Position sizing & R:R management.</p>
+                </div>
+                <div class="bg-white/[0.01] border border-white/[0.03] rounded-xl p-4 opacity-50">
+                    <div class="text-[8px] font-mono text-zinc-700 uppercase tracking-widest mb-2">Experiments</div>
+                    <div class="text-sm font-bold text-zinc-600 mb-1">Strategy Backtester</div>
+                    <p class="text-[11px] text-zinc-700 leading-relaxed">Systematic review framework. Early stage.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ CARD 8: GUESTBOOK / SCRATCHPAD TRIGGER ══ -->
+        <div class="glass glass-amber p-6 flex flex-col col-span-1 reveal" style="min-height: 200px; position: relative; overflow: hidden;">
+            <div class="absolute -right-8 -bottom-8 w-32 h-32" style="background:radial-gradient(circle,rgba(255,176,0,0.08) 0%,transparent 70%);border-radius:50%;"></div>
+            <div class="label mb-3">// Open_Guestbook</div>
+            <p class="font-mono text-[9px] text-zinc-700 mb-3">You're reading over my shoulder. Leave a note.</p>
+            <!-- Scratchpad preview -->
+            <div class="flex-1 bg-black/20 rounded-xl p-3 border border-white/[0.04] font-mono text-[9px] space-y-1 overflow-hidden">
+                <div class="text-zinc-700"><span class="text-amber-500/40">SYS —</span> Network synced. Real-time via Firebase.</div>
+                <div class="font-mono text-[9px] text-zinc-700" id="gb-preview-status">Loading messages...</div>
+            </div>
+            <div class="mt-3">
+                <button onclick="openGuestbook()" class="w-full py-2.5 px-4 rounded-xl border border-amber-500/25 text-amber-400 font-mono text-[10px] font-bold uppercase tracking-widest hover:bg-amber-500/10 transition-colors">
+                    + Leave a Mark
+                </button>
+            </div>
+        </div>
+
+        <!-- ══ CARD 9: CONNECT / SOCIAL ══ -->
+        <div class="glass p-6 col-span-1 reveal" style="min-height: 200px;">
+            <div class="label mb-4">// Find_Me_Elsewhere</div>
+            <div class="space-y-2">
+                <a href="https://x.com/130AfterM" target="_blank" class="flex items-center gap-3 py-2 px-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.06] hover:border-white/10 transition-colors text-zinc-400 hover:text-white group">
+                    <i class="fab fa-x-twitter text-xs w-4 text-center"></i>
+                    <span class="text-xs font-medium">X / Twitter</span>
+                </a>
+                <a href="https://youtube.com/@130AfterM" target="_blank" class="flex items-center gap-3 py-2 px-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.06] hover:border-red-500/20 transition-colors text-zinc-400 hover:text-red-400 group">
+                    <i class="fab fa-youtube text-xs w-4 text-center"></i>
+                    <span class="text-xs font-medium">YouTube</span>
+                </a>
+                <a href="https://tiktok.com/@130AfterM" target="_blank" class="flex items-center gap-3 py-2 px-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.06] hover:border-white/15 transition-colors text-zinc-400 hover:text-white group">
+                    <i class="fab fa-tiktok text-xs w-4 text-center"></i>
+                    <span class="text-xs font-medium">TikTok</span>
+                </a>
+                <a href="https://threads.net/@130AfterM" target="_blank" class="flex items-center gap-3 py-2 px-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.06] hover:border-white/15 transition-colors text-zinc-400 hover:text-white group">
+                    <i class="fa-brands fa-threads text-xs w-4 text-center"></i>
+                    <span class="text-xs font-medium">Threads</span>
+                </a>
+                <a href="https://www.facebook.com/130AfterM/" target="_blank" class="flex items-center gap-3 py-2 px-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.06] hover:border-blue-500/20 transition-colors text-zinc-400 hover:text-blue-400 group">
+                    <i class="fab fa-facebook text-xs w-4 text-center"></i>
+                    <span class="text-xs font-medium">Facebook</span>
+                </a>
+            </div>
+        </div>
+
+
+        <!-- ══ CARD 10: ATLAS NODE GRAPH (col-span-2, row-span-2) ══ -->
+        <div class="glass-static reveal" id="atlas-card"
+             style="grid-column: span 2; grid-row: span 2; min-height: 420px; overflow: hidden; position: relative; border-radius: var(--radius); border: 1px solid var(--glass-border);">
+
+            <!-- Overlay header — sits above the canvas, fades into transparent -->
+            <div style="position:absolute;top:0;left:0;right:0;padding:20px 22px;z-index:10;
+                        background:linear-gradient(to bottom, rgba(7,8,26,0.85) 0%, transparent 100%)"
+                 class="flex items-center justify-between">
+                <div>
+                    <div class="label">// Atlas_Node</div>
+                    <div class="font-mono text-[8px] text-zinc-700 mt-0.5">Knowledge graph — drag · zoom · explore</div>
+                </div>
+                <div class="flex gap-2">
+                    <span class="pill" style="background:rgba(255,176,0,0.1);color:#ffb000;border:1px solid rgba(255,176,0,0.2);">Markets</span>
+                    <span class="pill" style="background:rgba(56,189,248,0.1);color:#38bdf8;border:1px solid rgba(56,189,248,0.2);">Tech</span>
+                    <span class="pill" style="background:rgba(167,139,250,0.1);color:#a78bfa;border:1px solid rgba(167,139,250,0.2);">Life</span>
+                </div>
+            </div>
+
+            <!-- Bottom fade to protect lower edge -->
+            <div style="position:absolute;bottom:0;left:0;right:0;height:48px;z-index:10;
+                        background:linear-gradient(to top, rgba(7,8,26,0.7) 0%, transparent 100%);pointer-events:none;"></div>
+
+            <!-- Graph canvas container — fills the entire card -->
+            <div id="atlas-graph" style="width:100%;height:100%;min-height:420px;"></div>
+        </div>
+
+    </div><!-- /bento-grid -->
+
+    <!-- ─── FOOTER ─── -->
+    <footer class="mt-16 text-center font-mono border-t border-white/[0.05] pt-10">
+        <p class="text-3xl font-black text-white mb-1 tracking-tight">130 AM</p>
+        <p class="text-[10px] tracking-[0.3em] text-zinc-700 uppercase mb-4">after hours.</p>
+        <p class="text-[9px] tracking-[0.1em] text-zinc-800">&copy; 2026 130 AM. All Rights Reserved. <span class="text-zinc-900">1:30 after midnight.</span></p>
+    </footer>
+
+</main>
+  </div>
+
+  <script>
+    const isMobile = () => window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
+    const container = document.getElementById('main-container');
+
+    if (!isMobile()) {
+      document.addEventListener('mousemove', (e) => {
+        if (!container) return;
+        const x = (e.clientX / window.innerWidth) - 0.5;
+        const y = (e.clientY / window.innerHeight) - 0.5;
+        container.style.transform = `rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
+      });
+    }
+
+    // Scroll reveal
+    document.addEventListener('DOMContentLoaded', () => {
+      const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}}),{threshold:.1});
+      document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
+    });
+  </script>
+</Layout>

@@ -1,0 +1,421 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AmbientBackground from '../components/AmbientBackground.astro';
+import Navbar from '../components/Navbar.astro';
+import EngineCanvas from '../components/EngineCanvas.tsx';
+---
+
+<Layout title="130 AM // ARCHIVE">
+  <div id="r3f-root" class="fixed inset-0 -z-10 w-screen h-screen">
+    <EngineCanvas client:load />
+  </div>
+  
+  <div id="main-container" style="perspective:1500px;transform-style:preserve-3d;transition:transform .1s ease-out;">
+    <AmbientBackground />
+    <Navbar />
+    
+<main id="swup" class="transition-fade max-w-5xl mx-auto px-6 py-10 md:py-16 relative z-10">
+
+    <!-- ── HERO ── -->
+    <div class="hero-block mb-8">
+        <div class="font-mono text-[11px] font-bold tracking-[0.15em] text-amber-400 mb-3 flex items-center gap-3">
+            130AM // ARCHIVE
+            <span class="text-zinc-700 font-normal">|</span>
+            <span class="text-zinc-600 font-normal tracking-widest">Documented execution</span>
+        </div>
+        <p class="text-[15px] font-semibold text-zinc-200 leading-relaxed mb-2">Charts, notes, wins, losses, and lessons.</p>
+        <p class="text-sm text-zinc-500 leading-relaxed mb-4">Self-taught. Open systems over paid dependency.<br>Markets decoded through structure, repetition, and documentation.</p>
+        <div class="font-mono text-[10px] tracking-[0.1em] text-zinc-700 uppercase flex items-center gap-2">
+            <span class="blink text-amber-500">●</span> STATUS: EVOLVING
+            <span class="ml-4 text-zinc-800">1:30 After Midnight</span>
+        </div>
+    </div>
+
+    <!-- ── DEPTH SIGNAL ── -->
+    <div class="depth-signal">
+        <div>MODULES: <span>16</span></div>
+        <div class="opacity-30">|</div>
+        <div>ACTIVE_LOGS: <span>08</span></div>
+        <div class="opacity-30">|</div>
+        <div>TOOLS: <span>04</span></div>
+        <div class="opacity-30">|</div>
+        <div>STATUS: <span class="status-val">GROWING</span></div>
+    </div>
+
+    <!-- ══ 01 — FOUNDATION_LAYER ══ -->
+    <div class="tier-header">
+        <span class="tier-number">01</span>
+        <span class="tier-label">FOUNDATION_LAYER</span>
+        <span class="tier-status">// Core</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="module-card">
+            <div class="module-name">Market Basics</div>
+            <div class="module-meta">
+                <span class="badge badge-core">Core</span>
+                <div class="status-dot dot-live"></div>
+            </div>
+            <ul class="module-topics">
+                <li>BabyPips School of Pipsology</li>
+                <li>Session behavior &amp; overlap timing</li>
+                <li>Currency pair mechanics</li>
+                <li>Risk basics &amp; position sizing</li>
+            </ul>
+            <a href="https://www.babypips.com/learn/forex" target="_blank" rel="noopener" class="source-link">
+                <i class="fas fa-arrow-up-right-from-square text-[9px]"></i> babypips.com/learn/forex
+            </a>
+        </div>
+
+        <div class="module-card">
+            <div class="module-name">Options Mechanics</div>
+            <div class="module-meta">
+                <span class="badge badge-core">Core</span>
+                <div class="status-dot dot-live"></div>
+            </div>
+            <ul class="module-topics">
+                <li>Greeks: Delta, Gamma, Theta, Vega</li>
+                <li>Theta decay &amp; Vega exposure</li>
+                <li>Contract behavior &amp; expiry mechanics</li>
+                <li>Base execution strategies</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ══ 02 — CORE_METHOD ══ -->
+    <div class="tier-header">
+        <span class="tier-number">02</span>
+        <span class="tier-label">CORE_METHOD</span>
+        <span class="tier-status">// Current & Legacy Systems</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="module-card">
+            <div class="module-name">ORB Momentum Framework</div>
+            <div class="module-meta">
+                <span class="badge badge-system">System</span>
+                <div class="status-dot dot-live"></div>
+            </div>
+            <ul class="module-topics">
+                <li>15-Minute Opening Range (09:30-09:45 ET)</li>
+                <li>9 &amp; 21 EMA Trend Filtering</li>
+                <li>Breakout and Displacement Mechanics</li>
+                <li>Dynamic Trade Management FSM</li>
+            </ul>
+        </div>
+
+        <div class="module-card">
+            <div class="module-name">ICT 2022 Mentorship</div>
+            <div class="module-meta">
+                <span class="badge badge-system">System</span>
+                <div class="status-dot dot-live"></div>
+            </div>
+            <ul class="module-topics">
+                <li>Inner Circle Trader — YouTube</li>
+                <li>Market structure (BOS / CHoCH)</li>
+                <li>Liquidity &amp; Displacement</li>
+                <li>PD Arrays — FVG, OB, BB, SIBI</li>
+                <li>Draw on Liquidity (DOL)</li>
+                <li>Timing, Killzones &amp; AMD cycle</li>
+            </ul>
+            <a href="https://www.youtube.com/@InnerCircleTrader" target="_blank" rel="noopener" class="source-link">
+                <i class="fab fa-youtube text-[9px]"></i> youtube.com/@InnerCircleTrader
+            </a>
+        </div>
+
+        <div class="module-card">
+            <div class="module-name">SMC — Smart Money Concepts</div>
+            <div class="module-meta">
+                <span class="badge badge-system">System</span>
+                <div class="status-dot dot-live"></div>
+            </div>
+            <ul class="module-topics">
+                <li>TTrades — YouTube</li>
+                <li>Order Block theory</li>
+                <li>Supply &amp; Demand zones</li>
+                <li>Fair Value Gaps (FVG)</li>
+                <li>Reversals &amp; Break of Structure</li>
+                <li>Internal vs external liquidity</li>
+            </ul>
+            <a href="https://www.youtube.com/@TTrades" target="_blank" rel="noopener" class="source-link">
+                <i class="fab fa-youtube text-[9px]"></i> youtube.com/@TTrades
+            </a>
+        </div>
+
+    </div>
+
+    <!-- ══ 03 — VISUAL_DECODERS ══ -->
+    <div class="tier-header">
+        <span class="tier-number">03</span>
+        <span class="tier-label">VISUAL_DECODERS</span>
+        <span class="tier-status">// Active inputs</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="module-card">
+            <div class="module-name">ETM FX</div>
+            <div class="font-mono text-[8px] text-zinc-700 uppercase tracking-widest mb-3">Visual Structure</div>
+            <ul class="module-topics">
+                <li>Price action translation</li>
+                <li>Structural charting methods</li>
+                <li>Chart reading &amp; setup framing</li>
+            </ul>
+            <a href="https://www.youtube.com/@ETMFX" target="_blank" rel="noopener" class="source-link">
+                <i class="fab fa-youtube text-[9px]"></i> youtube.com/@ETMFX
+            </a>
+        </div>
+
+        <div class="module-card">
+            <div class="module-name">Smart Risk</div>
+            <div class="font-mono text-[8px] text-zinc-700 uppercase tracking-widest mb-3">Execution Examples</div>
+            <ul class="module-topics">
+                <li>Live trade mechanics</li>
+                <li>Entry modeling &amp; SL placement</li>
+                <li>Risk-adjusted position management</li>
+            </ul>
+            <a href="https://www.youtube.com/@SmartRisk" target="_blank" rel="noopener" class="source-link">
+                <i class="fab fa-youtube text-[9px]"></i> youtube.com/@SmartRisk
+            </a>
+        </div>
+
+    </div>
+
+    <!-- ══ 04 — TOOLING_STACK ══ -->
+    <div class="tier-header">
+        <span class="tier-number">04</span>
+        <span class="tier-label">TOOLING_STACK</span>
+        <span class="tier-status">// Deployed</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <div class="module-card">
+            <div class="module-name">RetailBeastFX v7</div>
+            <div class="font-mono text-[8px] text-amber-500 uppercase tracking-widest mb-3">Custom Engine</div>
+            <ul class="module-topics">
+                <li>Automated Session &amp; ORB Mapping</li>
+                <li>Thesis Integrity Engine</li>
+                <li>L5 Trade Management FSM</li>
+                <li>Multi-condition execution gating</li>
+            </ul>
+        </div>
+
+        <div class="module-card">
+            <div class="module-name">TradingView</div>
+            <div class="font-mono text-[8px] text-amber-500 uppercase tracking-widest mb-3">Primary Chart Engine</div>
+            <ul class="module-topics">
+                <li>Chart structure &amp; layouts</li>
+                <li>Custom Pine Script indicators</li>
+                <li>Multi-timeframe analysis</li>
+            </ul>
+            <a href="https://www.tradingview.com/?aff_id=167048" target="_blank" rel="noopener" class="source-link">
+                <i class="fas fa-arrow-up-right-from-square text-[9px]"></i> tradingview.com
+            </a>
+        </div>
+
+        <div class="module-card">
+            <div class="module-name">Thinkorswim</div>
+            <div class="font-mono text-[8px] text-amber-500 uppercase tracking-widest mb-3">Options Execution</div>
+            <ul class="module-topics">
+                <li>Options chain &amp; Greeks live</li>
+                <li>ThinkScript setups</li>
+                <li>Order execution</li>
+            </ul>
+            <a href="https://www.schwab.com/trading/thinkorswim" target="_blank" rel="noopener" class="source-link">
+                <i class="fas fa-arrow-up-right-from-square text-[9px]"></i> thinkorswim
+            </a>
+        </div>
+
+        <div class="module-card" style="border-color: rgba(255,176,0,0.15);">
+            <div class="module-name">Coinexx</div>
+            <div class="font-mono text-[8px] text-amber-500 uppercase tracking-widest mb-3">Forex Broker</div>
+            <ul class="module-topics">
+                <li>Live Forex account</li>
+                <li>MT4/5 integration</li>
+                <li>Unregulated — personally trusted</li>
+            </ul>
+            <a href="https://my.coinexx.com/register?refLink=NTAxMDA2&refRm=11" target="_blank" rel="noopener" class="source-link affiliate">
+                <i class="fas fa-arrow-up-right-from-square text-[9px]"></i> coinexx.com
+            </a>
+        </div>
+
+        <div class="module-card">
+            <div class="module-name">MetaTrader 5</div>
+            <div class="font-mono text-[8px] text-amber-500 uppercase tracking-widest mb-3">Forex / MQL5 Engine</div>
+            <ul class="module-topics">
+                <li>Forex order execution</li>
+                <li>MQL5 custom plugins</li>
+                <li>MT4 is optional / legacy</li>
+            </ul>
+            <a href="https://www.metatrader5.com" target="_blank" rel="noopener" class="source-link">
+                <i class="fas fa-arrow-up-right-from-square text-[9px]"></i> metatrader5.com
+            </a>
+        </div>
+
+    </div>
+
+    <!-- ══ 05 — MENTAL_FRAMEWORK ══ -->
+    <div class="tier-header">
+        <span class="tier-number">05</span>
+        <span class="tier-label">MENTAL_FRAMEWORK</span>
+        <span class="tier-status">// Stability protocol</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="module-card p-6" style="border-left: 2px solid rgba(255,176,0,0.3);">
+        <div class="flex flex-col md:flex-row gap-8">
+            <div class="flex-1">
+                <div class="module-name mb-4">Core Reads</div>
+                <ul class="module-topics">
+                    <li>Trading in the Zone — Mark Douglas</li>
+                    <li>The Best Loser Wins — Tom Hougaard</li>
+                    <li>The Mental Game of Trading — Jared Tendler</li>
+                </ul>
+                <div class="flex flex-wrap gap-2 mt-4">
+                    <a href="https://www.amazon.com/Trading-Zone-Confidence-Discipline-Attitude/dp/0735201447" target="_blank" rel="noopener" class="source-link">
+                        <i class="fab fa-amazon text-[9px]"></i> Trading in the Zone
+                    </a>
+                    <a href="https://www.amazon.com/Best-Loser-Wins-Why-Normal/dp/B09VL9D3P5" target="_blank" rel="noopener" class="source-link">
+                        <i class="fab fa-amazon text-[9px]"></i> Best Loser Wins
+                    </a>
+                    <a href="https://www.amazon.com/Mental-Game-Trading-Process-Performance/dp/1737872404" target="_blank" rel="noopener" class="source-link">
+                        <i class="fab fa-amazon text-[9px]"></i> Mental Game of Trading
+                    </a>
+                </div>
+            </div>
+            <div class="flex-1 flex items-center border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-8">
+                <p class="text-[13px] leading-relaxed text-zinc-500 italic">
+                    "Execution failure usually isn't strategy failure.<br>Risk, psychology, and process matter."
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 06 — AI_LAYER ══ -->
+    <div class="tier-header">
+        <span class="tier-number">06</span>
+        <span class="tier-label">AI_LAYER</span>
+        <span class="tier-status">// Augmented</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="module-card p-6">
+        <div class="flex flex-col md:flex-row gap-8">
+            <div class="flex-1">
+                <div class="font-mono text-[9px] text-zinc-600 uppercase tracking-widest mb-3">Input // Protocol</div>
+                <ul class="module-topics">
+                    <li>Trade review &amp; pattern analysis</li>
+                    <li>Mechanical prompting frameworks</li>
+                    <li>Setup breakdown &amp; journaling</li>
+                </ul>
+                <a href="https://chatgpt.com" target="_blank" rel="noopener" class="source-link mt-3 inline-flex">
+                    <i class="fas fa-robot text-[9px]"></i> chatgpt.com
+                </a>
+            </div>
+            <div class="flex-1 border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-8">
+                <div class="font-mono text-[9px] text-zinc-600 uppercase tracking-widest mb-3">Output // Mechanics</div>
+                <ul class="module-topics">
+                    <li>Structural clarity on messy setups</li>
+                    <li>Accelerated review &amp; journaling</li>
+                    <li>Logic decoding for confluences</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 07 — EXECUTION_LOGS ══ -->
+    <div class="tier-header">
+        <span class="tier-number">07</span>
+        <span class="tier-label">EXECUTION_LOGS</span>
+        <span class="tier-status">// Live archive — building</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
+        <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
+            <span class="font-mono text-[10px] font-bold text-zinc-400 mb-2">WINS</span>
+            <div class="font-mono text-[8px] text-amber-500 uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
+        </div>
+        <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
+            <span class="font-mono text-[10px] font-bold text-zinc-400 mb-2">LOSSES</span>
+            <div class="font-mono text-[8px] text-amber-500 uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
+        </div>
+        <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
+            <span class="font-mono text-[10px] font-bold text-zinc-400 mb-2">REVIEWS</span>
+            <div class="font-mono text-[8px] text-amber-500 uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
+        </div>
+        <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
+            <span class="font-mono text-[10px] font-bold text-zinc-400 mb-2 leading-tight">OPTIONS<br>JOURNAL</span>
+            <div class="font-mono text-[8px] text-amber-500 uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
+        </div>
+        <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
+            <span class="font-mono text-[10px] font-bold text-zinc-400 mb-2">VHS LOGS</span>
+            <div class="font-mono text-[8px] text-amber-500 uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
+        </div>
+        <div class="module-card status-building p-4 flex flex-col items-center justify-center text-center">
+            <span class="font-mono text-[10px] font-bold text-zinc-400 mb-2 leading-tight">SYSTEM<br>CHANGES</span>
+            <div class="font-mono text-[8px] text-amber-500 uppercase flex items-center gap-1"><span class="blink">●</span> BUILDING</div>
+        </div>
+    </div>
+
+    <!-- ══ 08 — SYSTEM_CHANGES.log ══ -->
+    <div class="tier-header">
+        <span class="tier-number">08</span>
+        <span class="tier-label">SYSTEM_CHANGES.log</span>
+        <span class="tier-status">// Documented evolution</span>
+        <div class="tier-line"></div>
+    </div>
+    <div class="module-card p-6 mb-12">
+        <div class="changelog-item">
+            <div class="changelog-date">2026.08</div>
+            <div class="changelog-text">Deployed Operator HUD v7.3. Pivoted primary execution logic from pure SMC to a momentum-based 15m ORB framework utilizing 9/21 EMA filters, heavily targeting SPY 0DTE options.</div>
+        </div>
+        <div class="changelog-item">
+            <div class="changelog-date">2026.05</div>
+            <div class="changelog-text">Integrated options layer via Rose Trading. Shifting focus toward Theta and Vega exposure. Coinexx added as primary Forex broker.</div>
+        </div>
+        <div class="changelog-item">
+            <div class="changelog-date">2026.03</div>
+            <div class="changelog-text">Removed Discord community dependency. Locked execution to open systems and public sources only.</div>
+        </div>
+        <div class="changelog-item">
+            <div class="changelog-date">2025.10</div>
+            <div class="changelog-text">ICT 2022 adoption. Rebuilt base mechanics around internal/external liquidity models. BOS, CHoCH, and FVG became primary confluences.</div>
+        </div>
+        <div class="changelog-item" style="margin-bottom: 0;">
+            <div class="changelog-date">2024.11</div>
+            <div class="changelog-text">Started BabyPips. First exposure to Forex market structure and session timing. 130AM profile initiated.</div>
+        </div>
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <footer class="text-center font-mono border-t border-white/[0.05] pt-8">
+        <p class="text-2xl font-black text-white mb-1 tracking-tight" style="font-family: Inter, sans-serif;">130AM</p>
+        <p class="text-[10px] tracking-[0.3em] text-zinc-700 uppercase mb-6">after hours.</p>
+        <p class="text-[9px] tracking-[0.15em] text-zinc-800">&copy; 2026 130AM. All Rights Reserved.</p>
+    </footer>
+
+</main>
+  </div>
+
+  <script>
+    const isMobile = () => window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
+    const container = document.getElementById('main-container');
+
+    if (!isMobile()) {
+      document.addEventListener('mousemove', (e) => {
+        if (!container) return;
+        const x = (e.clientX / window.innerWidth) - 0.5;
+        const y = (e.clientY / window.innerHeight) - 0.5;
+        container.style.transform = `rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
+      });
+    }
+
+    // Scroll reveal
+    document.addEventListener('DOMContentLoaded', () => {
+      const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}}),{threshold:.1});
+      document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
+    });
+  </script>
+</Layout>

@@ -1,0 +1,55 @@
+---
+// Navbar
+---
+<nav class="site-nav" id="main-nav">
+    <div class="max-w-7xl mx-auto px-5 py-3 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <img src="./logo.png" alt="130 AM" class="h-7 opacity-80" onerror="this.style.display='none';">
+            <div>
+                <span class="font-bold text-white tracking-tight text-sm">130 AM</span>
+                <span class="font-mono text-[8px] text-zinc-700 tracking-widest ml-2 hidden sm:inline">// after hours.</span>
+            </div>
+        </div>
+
+        <!-- Page identity pill (desktop only) -->
+        <div class="hidden md:flex items-center gap-1 font-mono text-[8px] tracking-widest text-zinc-700">
+            <span class="text-amber-500/60">00</span>
+            <span>//</span>
+            <span>Dashboard</span>
+        </div>
+
+        <!-- ⌘ MENU trigger -->
+        <button onclick="toggleControlPanel()" id="cp-trigger"
+            class="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] text-zinc-400 hover:text-white transition-all font-mono text-[9px] tracking-[0.2em] uppercase">
+            <i class="fas fa-bars-staggered text-[10px]"></i>
+            <span class="hidden sm:inline">⌘ Menu</span>
+        </button>
+
+        <!-- Live Status Button + Dropdown -->
+        <div class="relative flex-shrink-0" id="live-trigger">
+            <button id="live-btn" class="offline" onclick="toggleLiveMenu()">
+                <span class="live-dot-amber" id="live-dot"></span>
+                <span id="live-label">● TAPPED IN</span>
+            </button>
+            <div id="live-menu">
+                <div class="live-menu-label">Broadcast Channels</div>
+                <a href="https://youtube.com/@130AfterM" target="_blank" class="live-menu-item">
+                    <i class="fab fa-youtube text-red-500"></i> YouTube
+                </a>
+                <a href="https://twitch.tv/130AfterM" target="_blank" class="live-menu-item">
+                    <i class="fab fa-twitch text-purple-400"></i> Twitch
+                </a>
+                <a href="https://kick.com/130AfterM" target="_blank" class="live-menu-item">
+                    <i class="fas fa-broadcast-tower text-green-400"></i> Kick
+                </a>
+                <a href="https://tiktok.com/@130AfterM" target="_blank" class="live-menu-item">
+                    <i class="fab fa-tiktok text-white"></i> TikTok
+                </a>
+                <div class="live-menu-divider"></div>
+                <div id="broadcast-status-msg" class="live-menu-label" style="padding-top:8px;">
+                    Checking live status...
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
