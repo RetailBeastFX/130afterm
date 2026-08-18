@@ -2,10 +2,31 @@
   command = "npm run build"
   publish = "dist"
 
+# .html → clean path (prevents redirect loops from old links)
 [[redirects]]
-  from = "/now"
-  to = "/now/index.html"
-  status = 200
+  from = "/now.html"
+  to = "/now"
+  status = 301
+
+[[redirects]]
+  from = "/archive.html"
+  to = "/archive"
+  status = 301
+
+[[redirects]]
+  from = "/terminal.html"
+  to = "/terminal"
+  status = 301
+
+[[redirects]]
+  from = "/workspace.html"
+  to = "/workspace"
+  status = 301
+
+[[redirects]]
+  from = "/connect.html"
+  to = "/connect"
+  status = 301
 
 [[redirects]]
   from = "/archive"

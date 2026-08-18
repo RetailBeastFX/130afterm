@@ -1,16 +1,15 @@
+functionsDirectory = "C:\\Users\\Owner\\Projects\\130AfterM\\130afterm-portfolio\\netlify\\functions"
+functionsDirectoryOrigin = "default"
 headersOrigin = "config"
 redirectsOrigin = "config"
 plugins = []
-
-[functions]
-
-[functions."*"]
 
 [build]
 publish = "C:\\Users\\Owner\\Projects\\130AfterM\\130afterm-portfolio\\dist"
 publishOrigin = "config"
 commandOrigin = "config"
 command = "npm run build"
+functions = "C:\\Users\\Owner\\Projects\\130AfterM\\130afterm-portfolio\\netlify\\functions"
 
 [build.environment]
 
@@ -25,6 +24,10 @@ command = "npm run build"
 [build.processing.js]
 
 [build.services]
+
+[functions]
+
+[functions."*"]
 
 [[headers]]
 for = "/*"

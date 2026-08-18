@@ -32,5 +32,68 @@ const {
 	</head>
 	<body class="antialiased text-zinc-300">
 		<slot />
+
+    <!-- Global inline script: runs before module scripts, exposes functions to window -->
+    <script is:inline>
+      // ── Reveal animation (IntersectionObserver) ──────────────────────────
+      // Adds .visible to any .reveal element when it enters the viewport.
+      // Must be inline (not a module) so it runs synchronously and fast.
+      (function () {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.08 });
+        function observeAll() {
+          document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', observeAll);
+        } else {
+          observeAll();
+        }
+      })();
+
+      // ── Control Panel (⌘ Menu) ────────────────────────────────────────────
+      var cpOpen = false;
+      function toggleControlPanel() {
+        cpOpen = !cpOpen;
+        var overlay = document.getElementById('cp-overlay');
+        var panel   = document.getElementById('control-panel');
+        if (overlay) overlay.classList.toggle('active', cpOpen);
+        if (panel)   panel.classList.toggle('active', cpOpen);
+      }
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && cpOpen) toggleControlPanel();
+      });
+
+      // ── Live menu (● TAPPED IN) ───────────────────────────────────────────
+      var liveOpen = false;
+      function toggleLiveMenu() {
+        liveOpen = !liveOpen;
+        var menu = document.getElementById('live-menu');
+        if (menu) menu.classList.toggle('open', liveOpen);
+        document.addEventListener('click', function closeLive(e) {
+          if (!document.getElementById('live-trigger').contains(e.target)) {
+            liveOpen = false;
+            if (menu) menu.classList.remove('open');
+            document.removeEventListener('click', closeLive);
+          }
+        });
+      }
+
+      // ── Guestbook modal ───────────────────────────────────────────────────
+      function openGuestbook() {
+        var modal = document.getElementById('guestbook-modal');
+        if (modal) modal.classList.add('active');
+      }
+      function closeGuestbook() {
+        var modal = document.getElementById('guestbook-modal');
+        if (modal) modal.classList.remove('active');
+      }
+    </script>
 	</body>
 </html>
