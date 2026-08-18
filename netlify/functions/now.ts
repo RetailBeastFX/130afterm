@@ -1,8 +1,24 @@
 import type { Config, Context } from '@netlify/functions';
 import { getStore } from '@netlify/blobs';
 
+/**
+ * Allowlist of fields that can be written via this API.
+ *
+ * Lanyard-derived fields (playing, listening, watching) are NOT writable here.
+ * ActivityEvent data is never touched by this function.
+ *
+ * This mirrors EDITABLE_FIELDS in src/lib/now/updateNowState.ts.
+ * Keep them in sync.
+ */
+const EDITABLE_FIELDS = new Set([
+  'building',
+  'trading',
+  'working_on',
+  'mood',
+  'location',
+]);
+
 export default async function handler(req: Request, context: Context) {
-  // Get the store
   const store = getStore('now_state');
 
   // Handle GET request to fetch current state
@@ -39,7 +55,22 @@ export default async function handler(req: Request, context: Context) {
 
   try {
     const body = await req.json();
-    
+
+    // Strip fields not in the allowlist — Lanyard fields, ActivityEvent data, etc.
+    const filteredBody: Record<string, string> = {};
+    for (const [key, val] of Object.entries(body)) {
+      if (EDITABLE_FIELDS.has(key) && typeof val === 'string' && val.trim().length > 0 && val.length <= 120) {
+        filteredBody[key] = val.trim();
+      }
+    }
+
+    if (Object.keys(filteredBody).length === 0) {
+      return new Response(JSON.stringify({ error: 'No valid fields to update.' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     // Get the store
     const store = getStore('now_state');
     
@@ -54,10 +85,10 @@ export default async function handler(req: Request, context: Context) {
       console.log('No existing data or failed to parse');
     }
 
-    // Merge in new data
+    // Merge in validated data only
     const updatedData = {
       ...currentData,
-      ...body,
+      ...filteredBody,
       updated: new Date().toISOString()
     };
 

@@ -1,10 +1,22 @@
----
+﻿---
 import Layout from '../layouts/Layout.astro';
 import AmbientBackground from '../components/AmbientBackground.astro';
 import Navbar from '../components/Navbar.astro';
 import EngineCanvas from '../components/EngineCanvas.tsx';
+import { baseNowState, NOW_ROWS } from '../data/now';
+
+// ── Architecture note ──────────────────────────────────────────────────────
+// NowState and ActivityEvent are PARALLEL systems. They do NOT share data.
+//
+//   NowState  = what is happening RIGHT NOW (ephemeral)
+//   ActivityEvent = what happened (historical, durable)
+//
+// This page consumes NowState only.
+// The Lanyard integration augments baseNowState client-side.
+// ──────────────────────────────────────────────────────────────────────────
 
 const DISCORD_ID = '385513048237932564';
+const now = baseNowState;
 ---
 
 <Layout title="130 AM // NOW" description="What is Bo doing right now? Live status from 130AfterM — trading, building, gaming, living.">
@@ -22,7 +34,7 @@ const DISCORD_ID = '385513048237932564';
     <div class="font-mono text-[9px] tracking-[0.4em] text-zinc-700 uppercase mb-3">130 AM // BROADCAST TERMINAL</div>
     <h1 class="text-5xl font-black text-white tracking-tight mb-3">NOW</h1>
     <div class="flex items-center gap-3 flex-wrap">
-      <!-- Discord presence badge -->
+      <!-- Discord presence badge — updated by Lanyard client-side -->
       <div id="discord-badge" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/5 bg-white/[0.03]">
         <span id="discord-dot" class="w-2 h-2 rounded-full bg-zinc-700 inline-block"></span>
         <span id="discord-status-label" class="font-mono text-[9px] tracking-widest text-zinc-700 uppercase">Connecting...</span>
@@ -31,7 +43,7 @@ const DISCORD_ID = '385513048237932564';
     </div>
   </header>
 
-  <!-- Discord Live Presence card — shown when active -->
+  <!-- Discord Live Presence card — shown when active (Lanyard-driven) -->
   <div id="discord-presence-card" class="hidden mb-6 reveal">
     <div class="glass p-4 flex items-center gap-4" style="border-color: rgba(88,101,242,0.2);">
       <div style="width:40px;height:40px;border-radius:12px;background:rgba(88,101,242,0.12);border:1px solid rgba(88,101,242,0.25);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;" id="presence-icon">🎮</div>
@@ -46,7 +58,7 @@ const DISCORD_ID = '385513048237932564';
     </div>
   </div>
 
-  <!-- Spotify live card — shown when listening -->
+  <!-- Spotify live card — shown when listening (Lanyard-driven) -->
   <div id="spotify-card" class="hidden mb-6 reveal">
     <div class="glass p-4 flex items-center gap-4" style="border-color: rgba(29,185,84,0.2);">
       <img id="spotify-art" src="" alt="Album art" class="w-10 h-10 rounded-lg object-cover flex-shrink-0" style="display:none;" />
@@ -61,14 +73,26 @@ const DISCORD_ID = '385513048237932564';
     </div>
   </div>
 
-  <!-- Manual now rows (from now.json) -->
+  <!--
+    Now rows — server-rendered from baseNowState, then updated by client JS.
+    Lanyard data is merged on top of the base values at runtime.
+    No ActivityEvents are created from this state.
+  -->
   <div id="now-grid" class="space-y-2 mb-12 reveal">
-    <div class="skeleton h-[62px] rounded-2xl"></div>
-    <div class="skeleton h-[62px] rounded-2xl"></div>
-    <div class="skeleton h-[62px] rounded-2xl"></div>
-    <div class="skeleton h-[62px] rounded-2xl"></div>
+    {NOW_ROWS.map(row => {
+      const value = (now as any)[row.key];
+      const display = typeof value === 'string' ? value : '—';
+      return (
+        <div class="now-row" data-key={row.key}>
+          <div class="now-icon">{row.icon}</div>
+          <div class="now-key">{row.label}</div>
+          <div class="now-val">{display}</div>
+        </div>
+      );
+    })}
   </div>
 
+  <!-- Recent events from ActivityEvent — separate system, read-only bridge -->
   <div class="reveal">
     <div class="font-mono text-[9px] tracking-[0.3em] text-zinc-700 uppercase mb-4">// RECENT EVENTS</div>
     <div id="recent-events" class="space-y-2"></div>
@@ -90,9 +114,35 @@ const DISCORD_ID = '385513048237932564';
     .event-row:hover { border-color:rgba(255,255,255,0.1);background:rgba(2,8,20,0.8); }
     .skeleton { background:linear-gradient(90deg,rgba(255,255,255,0.03) 25%,rgba(255,255,255,0.07) 50%,rgba(255,255,255,0.03) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite; }
     @keyframes shimmer { to{background-position:-200% 0} }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.85); }
+    }
   </style>
 
   <script define:vars={{ DISCORD_ID }}>
+    /**
+     * Client-side NowState hydration.
+     *
+     * Execution order:
+     *   1. Page renders with server-side baseNowState values (no flash/skeleton).
+     *   2. Lanyard is fetched to augment live presence fields (playing, listening, status).
+     *   3. /api/now is fetched to get manually-updated fields (trading, building, etc.).
+     *   4. DOM is patched with live values where available.
+     *
+     * Architecture:
+     *   NowState (this) is SEPARATE from ActivityEvent (activity.ts).
+     *   No ActivityEvents are created here. No telemetry is logged.
+     *   If the user wants to "Log" a NowState moment as an ActivityEvent,
+     *   that is a future explicit action — NOT automatic.
+     *
+     * Future Lanyard integration:
+     *   The fetchLanyard() function below is the integration point.
+     *   It already maps the Lanyard response to partial NowState fields.
+     *   When Lanyard WebSocket is ready, replace the REST poll with
+     *   a WebSocket connection to wss://api.lanyard.rest/socket.
+     */
+
     const TYPE_META = {
       trade:  { label: 'TRADE',  color: '#ffb000', icon: '📈' },
       build:  { label: 'BUILD',  color: '#38bdf8', icon: '🛠' },
@@ -102,10 +152,10 @@ const DISCORD_ID = '385513048237932564';
     };
 
     const STATUS_CONFIG = {
-      online:  { color: '#22c55e', label: 'ONLINE',      dot: '#22c55e' },
-      idle:    { color: '#eab308', label: 'IDLE',         dot: '#eab308' },
+      online:  { color: '#22c55e', label: 'ONLINE',         dot: '#22c55e' },
+      idle:    { color: '#eab308', label: 'IDLE',           dot: '#eab308' },
       dnd:     { color: '#ef4444', label: 'DO NOT DISTURB', dot: '#ef4444' },
-      offline: { color: '#3f3f46', label: 'OFFLINE',     dot: '#3f3f46' },
+      offline: { color: '#3f3f46', label: 'OFFLINE',        dot: '#3f3f46' },
     };
 
     // Live timestamp
@@ -116,7 +166,6 @@ const DISCORD_ID = '385513048237932564';
     updateTimestamp();
     setInterval(updateTimestamp, 30000);
 
-    // Format elapsed time from timestamp
     function formatElapsed(ts) {
       if (!ts) return '';
       const ms = Date.now() - ts;
@@ -126,45 +175,36 @@ const DISCORD_ID = '385513048237932564';
       return `${m}m`;
     }
 
-    // Load Lanyard (Discord presence)
-    async function loadLanyard() {
+    // ── Future Lanyard integration point ──────────────────────────────────
+    // Replace this REST poll with a WebSocket for real-time updates.
+    // Map the response to partial NowState fields (playing, listening, status).
+    // ─────────────────────────────────────────────────────────────────────
+    async function fetchLanyard() {
       try {
         const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
-        if (!res.ok) {
-          setDiscordStatus('offline');
-          return;
-        }
+        if (!res.ok) { setDiscordStatus('offline'); return null; }
         const { data } = await res.json();
-        
-        // --- Status badge ---
+
         const status = data.discord_status || 'offline';
         setDiscordStatus(status);
 
-        // --- Active game / activity ---
-        const gameActivity = data.activities?.find(a => a.type === 0); // Playing
-        const customStatus  = data.activities?.find(a => a.type === 4); // Custom status
+        const gameActivity = data.activities?.find(a => a.type === 0);
+        const customStatus  = data.activities?.find(a => a.type === 4);
 
         if (gameActivity) {
           showPresenceCard({
-            icon: '🎮',
-            type: 'PLAYING',
-            typeColor: '#a78bfa',
+            icon: '🎮', type: 'PLAYING', typeColor: '#a78bfa',
             name: gameActivity.name,
             detail: gameActivity.details || gameActivity.state || '',
             elapsed: formatElapsed(gameActivity.timestamps?.start),
           });
         } else if (customStatus?.state) {
           showPresenceCard({
-            icon: customStatus.emoji?.name || '💬',
-            type: 'STATUS',
-            typeColor: '#38bdf8',
-            name: customStatus.state,
-            detail: '',
-            elapsed: '',
+            icon: customStatus.emoji?.name || '💬', type: 'STATUS', typeColor: '#38bdf8',
+            name: customStatus.state, detail: '', elapsed: '',
           });
         }
 
-        // --- Spotify ---
         if (data.listening_to_spotify && data.spotify) {
           const sp = data.spotify;
           const card = document.getElementById('spotify-card');
@@ -181,7 +221,7 @@ const DISCORD_ID = '385513048237932564';
           }
         }
 
-        // Update now.json fields that Lanyard can fill
+        // Return partial NowState fields from Lanyard
         return {
           playing: gameActivity ? gameActivity.name : null,
           listening: data.spotify ? `${data.spotify.song} — ${data.spotify.artist}` : null,
@@ -199,8 +239,6 @@ const DISCORD_ID = '385513048237932564';
       const label = document.getElementById('discord-status-label');
       if (dot) dot.style.background = cfg.dot;
       if (label) { label.textContent = cfg.label; label.style.color = cfg.color; }
-
-      // Animate dot for online/dnd
       if (status === 'online' || status === 'dnd') {
         dot?.style.setProperty('animation', 'pulse-dot 2s ease infinite');
       }
@@ -222,41 +260,33 @@ const DISCORD_ID = '385513048237932564';
       if (elapsedEl) elapsedEl.textContent = elapsed ? `${elapsed} elapsed` : '';
     }
 
-    // Load manual now.json fields
-    async function loadNow(lanyardData) {
-      let n = {};
-      try { const r = await fetch('/api/now'); n = await r.json(); } catch(e) {}
+    // ── Manual NowState fields from /api/now ──────────────────────────────
+    // Merges server-stored state on top of the static base already rendered.
+    // Lanyard values (playing, listening) take precedence over stored values.
+    // ─────────────────────────────────────────────────────────────────────
+    async function patchNowGrid(lanyardData) {
+      let stored = {};
+      try { const r = await fetch('/api/now'); stored = await r.json(); } catch(e) {}
 
-      const rows = [
-        { key: 'TRADING',    value: n.trading    || '—', icon: '📈' },
-        { key: 'BUILDING',   value: n.building   || '—', icon: '🛠' },
-        // Auto-filled from Lanyard if active, fallback to now.json
-        { key: 'PLAYING',    value: (lanyardData?.playing) || n.playing    || '—', icon: '🎮' },
-        { key: 'LISTENING',  value: (lanyardData?.listening) || n.listening  || '—', icon: '🎧' },
-        { key: 'WORKING ON', value: n.working_on  || '—', icon: '⚡' },
-        { key: 'MOOD',       value: n.mood        || '—', icon: '🔵' },
-      ];
+      const rows = document.querySelectorAll('#now-grid .now-row[data-key]');
+      rows.forEach(row => {
+        const key = row.getAttribute('data-key');
+        const valEl = row.querySelector('.now-val');
+        if (!valEl) return;
 
-      const g = document.getElementById('now-grid');
-      if (g) {
-        g.innerHTML = rows.map(r =>
-          `<div class="now-row">
-            <div class="now-icon">${r.icon}</div>
-            <div class="now-key">${r.key}</div>
-            <div class="now-val">${r.value}</div>
-          </div>`
-        ).join('');
-      }
-
-      if (n.updated) {
-        const d = new Date(n.updated);
-        const el = document.getElementById('last-updated-label');
-        // no longer shown — replaced by badge
-      }
+        let value = null;
+        // Lanyard-live fields take precedence
+        if (key === 'playing' && lanyardData?.playing) value = lanyardData.playing;
+        else if (key === 'listening' && lanyardData?.listening) value = lanyardData.listening;
+        // Then stored /api/now fields
+        else if (stored[key]) value = stored[key];
+        // Already rendered from baseNowState — only patch if we have a live value
+        if (value !== null) valEl.textContent = value;
+      });
     }
 
-    // Load recent events
-    async function loadEvents() {
+    // Recent ActivityEvents on /now — read-only, separate system
+    async function loadRecentEvents() {
       let evs = [];
       try { const r = await fetch('/data/events.json'); evs = await r.json(); } catch(e) { return; }
       const c = document.getElementById('recent-events');
@@ -294,21 +324,15 @@ const DISCORD_ID = '385513048237932564';
 
     // Boot
     (async () => {
-      const lanyardData = await loadLanyard();
-      await loadNow(lanyardData);
-      await loadEvents();
-      // Refresh Lanyard every 30s
+      const lanyardData = await fetchLanyard();
+      await patchNowGrid(lanyardData);
+      await loadRecentEvents();
+      // Poll Lanyard every 30s for live presence updates
       setInterval(async () => {
-        const data = await loadLanyard();
-        await loadNow(data);
+        const data = await fetchLanyard();
+        await patchNowGrid(data);
       }, 30000);
     })();
   </script>
 
-  <style>
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.5; transform: scale(0.85); }
-    }
-  </style>
 </Layout>

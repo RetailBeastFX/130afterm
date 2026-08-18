@@ -3,6 +3,25 @@ import Layout from '../layouts/Layout.astro';
 import AmbientBackground from '../components/AmbientBackground.astro';
 import Navbar from '../components/Navbar.astro';
 import EngineCanvas from '../components/EngineCanvas.tsx';
+import { baseNowState } from '../data/now';
+import { latestActivity } from '../data/activity';
+
+/**
+ * Terminal — Interface layer.
+ *
+ * READ:  ActivityEvent (historical memory) — activity.ts
+ * READ:  NowState (current state)          — now.ts + /api/now
+ * WRITE: NowState editable fields only     — via /api/now
+ *
+ * Terminal does NOT:
+ *   - Modify ActivityEvent data
+ *   - Write Lanyard-derived fields (playing, listening, watching)
+ *   - Automatically create ActivityEvents from NowState
+ *   - Implement "Log this" (future capability, not yet built)
+ */
+
+const now = baseNowState;
+const recentActivity = latestActivity(5);
 ---
 
 <Layout title="130 AM // TERMINAL">
@@ -14,7 +33,7 @@ import EngineCanvas from '../components/EngineCanvas.tsx';
     <AmbientBackground />
     <Navbar />
     
-<main id="swup" class="transition-fade  id="main-content" class="max-w-4xl mx-auto p-6 md:p-12 relative z-10"">
+<main id="main-content" class="max-w-4xl mx-auto p-6 md:p-12 relative z-10">
         
         <a href="./index.html" class="inline-flex items-center gap-2 text-[10px] tracking-widest text-zinc-500 hover:text-amber-500 mb-8 transition-colors font-mono glitch-hover">
             <i class="fas fa-arrow-left"></i> RETURN TO IDENTITY
@@ -37,6 +56,111 @@ import EngineCanvas from '../components/EngineCanvas.tsx';
                 <span id="mode-norm" class="opacity-50">NORM</span>
             </button>
         </header>
+
+        <!-- ══════════════════════════════════════════════
+             SYSTEM STATUS — interface into the data layers
+             READ:  NowState + ActivityEvent
+             WRITE: NowState editable fields only
+             ══════════════════════════════════════════════ -->
+        <section id="system-status" class="mb-10 reveal">
+            <h2 class="text-xs font-mono uppercase amber-text mb-4 border-l-2 border-orange-600 pl-3 tracking-widest">// SYSTEM_STATUS</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+                <!-- NOW STATE — reads from /api/now, falls back to baseNowState -->
+                <div class="glass-panel p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="font-mono text-[9px] tracking-widest text-zinc-600 uppercase">Now State</span>
+                        <span class="flex items-center gap-1.5">
+                            <span id="term-status-dot" class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block transition-colors"></span>
+                            <span id="term-status-label" class="font-mono text-[9px] tracking-widest text-zinc-600 uppercase">—</span>
+                        </span>
+                    </div>
+                    <div id="term-now-rows" class="space-y-2 font-mono text-[11px]">
+                        {[
+                          { key: 'building',   label: 'BUILDING',    icon: '🛠' },
+                          { key: 'trading',    label: 'TRADING',     icon: '📈' },
+                          { key: 'working_on', label: 'WORKING ON',  icon: '⚡' },
+                          { key: 'mood',       label: 'MOOD',        icon: '🔵' },
+                          { key: 'location',   label: 'LOCATION',    icon: '📍' },
+                        ].map(row => {
+                          const val = (now as any)[row.key] ?? '—';
+                          return (
+                            <div class="flex items-center gap-2" data-now-key={row.key}>
+                              <span class="text-zinc-700 w-24 flex-shrink-0 text-[9px] tracking-widest uppercase">{row.label}</span>
+                              <span class="text-zinc-300 flex-1 truncate now-field-val">{val}</span>
+                            </div>
+                          );
+                        })}
+                    </div>
+                </div>
+
+                <!-- RECENT ACTIVITY — read-only bridge from ActivityEvent system -->
+                <div class="glass-panel p-5">
+                    <div class="font-mono text-[9px] tracking-widest text-zinc-600 uppercase mb-4">Recent Activity</div>
+                    <div class="space-y-2">
+                        {recentActivity.map(ev => (
+                          <a href="/archive" class="flex items-center gap-2 group">
+                            <span class="text-zinc-700 font-mono text-[9px] w-16 flex-shrink-0">{ev.date.slice(5)}</span>
+                            <span class="font-mono text-[9px] tracking-widest text-zinc-600 uppercase w-14 flex-shrink-0">[{ev.type}]</span>
+                            <span class="text-zinc-400 text-[11px] truncate group-hover:text-white transition-colors">{ev.title}</span>
+                          </a>
+                        ))}
+                    </div>
+                    <a href="/archive" class="block mt-4 font-mono text-[9px] text-zinc-700 hover:text-amber-400 transition-colors tracking-widest">FULL ARCHIVE →</a>
+                </div>
+            </div>
+
+            <!-- DAILY SNAPSHOT — bulk update NowState fields -->
+            <div class="glass-panel p-5">
+                <div class="font-mono text-[9px] tracking-widest text-zinc-600 uppercase mb-4">// DAILY_SNAPSHOT <span class="text-zinc-800 normal-case tracking-normal">— commit current state</span></div>
+                
+                <div id="snapshot-form" class="space-y-3 font-mono text-[11px]">
+                    <!-- The inputs will be pre-filled via JS from the current state -->
+                    {[
+                      { key: 'building',   label: 'BUILDING' },
+                      { key: 'trading',    label: 'TRADING' },
+                      { key: 'working_on', label: 'FOCUS' },
+                      { key: 'mood',       label: 'MOOD' },
+                      { key: 'location',   label: 'LOCATION' },
+                    ].map(row => (
+                      <div class="flex items-center gap-2">
+                          <label class="text-zinc-500 w-24 flex-shrink-0 tracking-widest uppercase text-[9px]">{row.label}</label>
+                          <span class="text-zinc-600">[</span>
+                          <input
+                              type="text"
+                              data-snapshot-field={row.key}
+                              class="flex-1 bg-transparent border-none px-1 py-1 text-zinc-200 placeholder:text-zinc-800 focus:outline-none focus:ring-0 focus:text-amber-400 transition-colors"
+                              placeholder={`Enter ${row.key}...`}
+                              maxlength="120"
+                          />
+                          <span class="text-zinc-600">]</span>
+                      </div>
+                    ))}
+                    
+                    <div class="pt-4 flex items-center justify-between mt-2 border-t border-white/5">
+                        <div id="term-set-output" class="font-mono text-[10px] text-zinc-600 min-h-[1.2rem] flex-1 mr-4"></div>
+                        <div class="flex items-center gap-2">
+                            <button
+                                id="term-commit-btn"
+                                class="px-4 py-2 border border-amber-500/30 text-amber-400 font-mono text-[9px] tracking-widest uppercase hover:bg-amber-500/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed whitespace-nowrap"
+                            >
+                                [ COMMIT SNAPSHOT ]
+                            </button>
+                            <button
+                                id="term-log-btn"
+                                class="px-4 py-2 border border-white/20 text-zinc-300 font-mono text-[9px] tracking-widest uppercase hover:bg-white/10 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed whitespace-nowrap"
+                            >
+                                [ LOG THIS ]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 font-mono text-[9px] text-zinc-800 border-t border-white/5 pt-3">
+                    COMMIT updates /now · LOG THIS writes to /archive · Requires NOW_API_TOKEN
+                </div>
+            </div>
+        </section>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- ── LEFT COLUMN ── -->
@@ -175,7 +299,7 @@ import EngineCanvas from '../components/EngineCanvas.tsx';
                 <p class="text-[9px] mt-2 opacity-50 font-mono tracking-widest">01:30AM LOG</p>
             </div>
             <div class="text-[9px] opacity-50 font-mono tracking-widest text-center md:text-right leading-relaxed uppercase">
-                BUILD_VER: 3.3.0<br>
+                BUILD_VER: 3.4.0<br>
                 <span class="amber-text font-bold opacity-100">AFTER HOURS // GLASS</span>
             </div>
         </footer>
@@ -183,9 +307,9 @@ import EngineCanvas from '../components/EngineCanvas.tsx';
   </div>
 
   <script>
+    // ── Parallax ──────────────────────────────────────────────────────────
     const isMobile = () => window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
     const container = document.getElementById('main-container');
-
     if (!isMobile()) {
       document.addEventListener('mousemove', (e) => {
         if (!container) return;
@@ -195,10 +319,231 @@ import EngineCanvas from '../components/EngineCanvas.tsx';
       });
     }
 
-    // Scroll reveal
+    // ── Scroll reveal ─────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', () => {
-      const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}}),{threshold:.1});
-      document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
+      const obs = new IntersectionObserver(entries => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      }), { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
     });
+
+    // ── SYS/NORM mode toggle ──────────────────────────────────────────────
+    const modeToggle = document.getElementById('mode-toggle');
+    let sysMode = true;
+    if (modeToggle) {
+      modeToggle.addEventListener('click', () => {
+        sysMode = !sysMode;
+        document.getElementById('mode-sys').style.opacity = sysMode ? '1' : '0.5';
+        document.getElementById('mode-norm').style.opacity = sysMode ? '0.5' : '1';
+        document.querySelectorAll('[data-sys]').forEach(el => {
+          el.textContent = sysMode ? el.getAttribute('data-sys') : el.getAttribute('data-norm');
+        });
+        document.querySelectorAll('.artifacts-sys').forEach(el => el.style.display = sysMode ? '' : 'none');
+        document.querySelectorAll('.artifacts-norm').forEach(el => el.style.display = sysMode ? 'none' : '');
+      });
+      document.querySelectorAll('.artifacts-norm').forEach(el => el.style.display = 'none');
+    }
+
+    // ── SYSTEM STATUS — load live NowState ───────────────────────────────
+    // Reads /api/now and patches the Now State panel.
+    // Lanyard presence is fetched separately and shown in the status badge.
+    // ActivityEvent data is already server-rendered — no JS needed.
+    const STATUS_COLORS = {
+      online:  { bg: '#22c55e', label: 'ONLINE' },
+      idle:    { bg: '#eab308', label: 'IDLE' },
+      dnd:     { bg: '#ef4444', label: 'DO NOT DISTURB' },
+      offline: { bg: '#3f3f46', label: 'OFFLINE' },
+    };
+
+    async function loadTerminalNow() {
+      try {
+        const res = await fetch('/api/now');
+        if (!res.ok) return;
+        const stored = await res.json();
+
+        // Patch now-field values with persisted data
+        document.querySelectorAll('[data-now-key]').forEach(row => {
+          const key = row.getAttribute('data-now-key');
+          const valEl = row.querySelector('.now-field-val');
+          if (valEl && stored[key]) valEl.textContent = stored[key];
+        });
+
+        // Pre-fill the snapshot form inputs
+        document.querySelectorAll('input[data-snapshot-field]').forEach(input => {
+          const key = input.getAttribute('data-snapshot-field');
+          if (stored[key]) input.value = stored[key];
+        });
+      } catch (e) { /* use server-rendered defaults */ }
+    }
+
+    async function loadTerminalPresence() {
+      const DISCORD_ID = '385513048237932564';
+      try {
+        const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
+        if (!res.ok) return;
+        const { data } = await res.json();
+        const status = data.discord_status || 'offline';
+        const cfg = STATUS_COLORS[status] || STATUS_COLORS.offline;
+        const dot = document.getElementById('term-status-dot');
+        const label = document.getElementById('term-status-label');
+        if (dot) { dot.style.background = cfg.bg; }
+        if (label) { label.textContent = cfg.label; label.style.color = cfg.bg; }
+      } catch (e) {}
+    }
+
+    // ── DAILY SNAPSHOT — writes bulk NowState fields via /api/now ─────────
+    // Only EDITABLE_FIELDS are allowed. Validation happens client + server side.
+    // Lanyard fields and ActivityEvent data cannot be written here.
+    const EDITABLE = new Set(['building', 'trading', 'working_on', 'mood', 'location']);
+
+    const commitBtn = document.getElementById('term-commit-btn');
+    const setOutput = document.getElementById('term-set-output');
+
+    function setTermOutput(msg, color = '#52525b') {
+      if (setOutput) { setOutput.textContent = msg; setOutput.style.color = color; }
+    }
+
+    async function executeSnapshot() {
+      const payload = {};
+      let hasError = false;
+
+      // Gather all inputs
+      document.querySelectorAll('input[data-snapshot-field]').forEach(input => {
+        const key = input.getAttribute('data-snapshot-field');
+        const val = input.value.trim();
+        if (!EDITABLE.has(key)) return;
+        
+        if (!val) { setTermOutput(`Value for ${key} cannot be empty.`, '#ef4444'); hasError = true; }
+        else if (val.length > 120) { setTermOutput(`Value for ${key} too long (max 120 chars).`, '#ef4444'); hasError = true; }
+        else { payload[key] = val; }
+      });
+
+      if (hasError) return;
+      if (Object.keys(payload).length === 0) { setTermOutput('No fields to update.'); return; }
+
+      // Prompt for token (stored in sessionStorage for convenience)
+      let token = sessionStorage.getItem('now_token');
+      if (!token) {
+        token = prompt('NOW_API_TOKEN:');
+        if (!token) { setTermOutput('Cancelled.'); return; }
+        sessionStorage.setItem('now_token', token);
+      }
+
+      setTermOutput('Committing snapshot...', '#3f3f46');
+      if (commitBtn) commitBtn.disabled = true;
+      if (logBtn) logBtn.disabled = true;
+
+      try {
+        const res = await fetch('/api/now', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (res.status === 401) {
+          sessionStorage.removeItem('now_token');
+          setTermOutput('Unauthorized. Token cleared — try again.', '#ef4444');
+          return;
+        }
+        if (res.status === 400) {
+          const err = await res.json();
+          setTermOutput(err.error || 'Invalid request.', '#ef4444');
+          return;
+        }
+        if (!res.ok) {
+          setTermOutput(`Error ${res.status}`, '#ef4444');
+          return;
+        }
+
+        const result = await res.json();
+        setTermOutput(`✓ Snapshot committed successfully.`, '#22c55e');
+
+        // Patch the displayed values in the "Now State" read-panel immediately
+        for (const [field, value] of Object.entries(payload)) {
+          const matchingRow = document.querySelector(`[data-now-key="${field}"] .now-field-val`);
+          if (matchingRow) matchingRow.textContent = value;
+        }
+
+      } catch (e) {
+        setTermOutput((e as Error).message, '#ef4444');
+      } finally {
+        if (commitBtn) commitBtn.disabled = false;
+        if (logBtn) logBtn.disabled = false;
+      }
+    }
+
+    async function executeLogThis() {
+      const payload = {};
+      
+      // Gather all inputs (using current input values as the snapshot)
+      document.querySelectorAll('input[data-snapshot-field]').forEach(input => {
+        const key = input.getAttribute('data-snapshot-field');
+        const val = input.value.trim();
+        if (EDITABLE.has(key) && val) { payload[key] = val; }
+      });
+
+      if (Object.keys(payload).length === 0) { setTermOutput('No fields to log.'); return; }
+
+      // Prompt for token
+      let token = sessionStorage.getItem('now_token');
+      if (!token) {
+        token = prompt('NOW_API_TOKEN:');
+        if (!token) { setTermOutput('Cancelled.'); return; }
+        sessionStorage.setItem('now_token', token);
+      }
+
+      setTermOutput('Logging snapshot to archive...', '#3f3f46');
+      if (commitBtn) commitBtn.disabled = true;
+      if (logBtn) logBtn.disabled = true;
+
+      try {
+        const res = await fetch('/api/activity', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (res.status === 401) {
+          sessionStorage.removeItem('now_token');
+          setTermOutput('Unauthorized. Token cleared — try again.', '#ef4444');
+          return;
+        }
+        if (!res.ok) {
+          setTermOutput(`Error ${res.status}`, '#ef4444');
+          return;
+        }
+
+        const result = await res.json();
+        const dateStr = new Date().toISOString().slice(0, 16).replace('T', ' ');
+        setTermOutput(`[EVENT_COMMITTED] ${dateStr} — STATE SNAPSHOTTED → ARCHIVE`, '#22c55e');
+
+      } catch (e) {
+        setTermOutput((e as Error).message, '#ef4444');
+      } finally {
+        if (commitBtn) commitBtn.disabled = false;
+        if (logBtn) logBtn.disabled = false;
+      }
+    }
+
+    const logBtn = document.getElementById('term-log-btn');
+    if (commitBtn) commitBtn.addEventListener('click', executeSnapshot);
+    if (logBtn) logBtn.addEventListener('click', executeLogThis);
+    
+    // Add enter key listener to all snapshot inputs
+    document.querySelectorAll('input[data-snapshot-field]').forEach(input => {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') executeSnapshot();
+      });
+    });
+
+    // Boot
+    loadTerminalNow();
+    loadTerminalPresence();
   </script>
 </Layout>

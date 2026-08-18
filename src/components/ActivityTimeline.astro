@@ -38,6 +38,58 @@ const visibleEvents = events.slice(0, limit);
   </div>
 </section>
 
+<script>
+  async function loadDynamicEvents() {
+    try {
+      const res = await fetch('/api/activity');
+      if (!res.ok) return;
+      const events = await res.json();
+      
+      const listContainer = document.querySelector('.activity-timeline__list');
+      if (!listContainer || events.length === 0) return;
+
+      // Reverse to maintain chronological order when prepending (assuming array is latest first)
+      events.reverse().forEach(event => {
+        const article = document.createElement('article');
+        article.className = 'activity-event';
+        article.setAttribute('data-type', event.type);
+        
+        let tagsHtml = '';
+        if (event.tags && event.tags.length > 0) {
+          const tags = event.tags.map(t => `<span>${t}</span>`).join('');
+          tagsHtml = `<div class="activity-event__tags">${tags}</div>`;
+        }
+        
+        const titleHtml = event.href 
+          ? `<a href="${event.href}">${event.title}</a>` 
+          : event.title;
+          
+        const summaryHtml = event.summary ? `<p>${event.summary}</p>` : '';
+
+        article.innerHTML = `
+          <div class="activity-event__meta">
+            <time datetime="${event.date}">${event.date}</time>
+            <span class="activity-event__type">${event.type}</span>
+          </div>
+          <div class="activity-event__body">
+            <h3>${titleHtml}</h3>
+            ${summaryHtml}
+            ${tagsHtml}
+          </div>
+        `;
+        
+        listContainer.prepend(article);
+      });
+    } catch (e) {
+      console.error('Failed to load dynamic activity events:', e);
+    }
+  }
+
+  // Run on load and after swup transitions if using swup
+  document.addEventListener('DOMContentLoaded', loadDynamicEvents);
+  document.addEventListener('swup:contentReplaced', loadDynamicEvents);
+</script>
+
 <style>
   .activity-timeline {
     display: grid;

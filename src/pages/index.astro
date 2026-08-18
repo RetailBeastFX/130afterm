@@ -4,6 +4,10 @@ import AmbientBackground from '../components/AmbientBackground.astro';
 import Navbar from '../components/Navbar.astro';
 import ActivityTicker from '../components/ActivityTicker.astro';
 import EngineCanvas from '../components/EngineCanvas.tsx';
+import RecentActivity from '../components/RecentActivity.astro';
+import { latestActivity } from '../data/activity';
+
+const recentEvents = latestActivity(5);
 ---
 
 <Layout title="130 AM // after hours.">
@@ -171,6 +175,15 @@ import EngineCanvas from '../components/EngineCanvas.tsx';
             </div>
         </div>
 
+
+        <!-- == CARD 4.5: RECENT ACTIVITY (col-span-2) == -->
+        <div class="glass p-5 col-span-2 reveal" style="grid-column: span 2;">
+            <div class="flex items-center justify-between mb-4">
+                <div class="label">// RECENT_ACTIVITY</div>
+                <a href="/archive" class="font-mono text-[9px] text-zinc-700 hover:text-amber-400 transition-colors">full archive</a>
+            </div>
+            <RecentActivity events={recentEvents} />
+        </div>
         <!-- ══ CARD 5: ABOUT / VITALS ══ -->
         <div class="glass p-6 flex flex-col col-span-1 reveal" style="min-height: 200px;">
             <div class="label mb-4">// Digital_Garden // Vitals</div>
