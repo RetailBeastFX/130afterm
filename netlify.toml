@@ -29,8 +29,19 @@
   status = 301
 
 [[redirects]]
+  from = "/now"
+  to = "/now/index.html"
+  status = 200
+
+[[redirects]]
   from = "/archive"
   to = "/archive/index.html"
+  status = 200
+
+# Trailing-slash variants (prevents redirect loops)
+[[redirects]]
+  from = "/workspace/"
+  to = "/workspace/index.html"
   status = 200
 
 [[redirects]]
