@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    name: Astro Build Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify output
+        run: |
+          echo "Checking critical routes exist in dist/"
+          test -f dist/index.html          && echo "✓ index.html"
+          test -f dist/now/index.html      && echo "✓ now/index.html"
+          test -f dist/archive/index.html  && echo "✓ archive/index.html"
+          test -f dist/terminal/index.html && echo "✓ terminal/index.html"
+          test -f dist/connect/index.html  && echo "✓ connect/index.html"
+          test -f dist/workspace/index.html && echo "✓ workspace/index.html"

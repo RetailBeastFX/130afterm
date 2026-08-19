@@ -1,7 +1,9 @@
 {
-  "name": "astro-temp",
+  "name": "130afterm",
+  "description": "130 AM — personal operating system with a public read-only layer. Built on Astro, deployed on Netlify.",
+  "homepage": "https://130afterm.netlify.app",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "node": ">=22.12.0"
   },
