@@ -23,4 +23,5 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-.netlify/db/
+# Netlify CLI cache (contains absolute local paths — not portable)
+.netlify/
