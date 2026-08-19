@@ -95,8 +95,14 @@ Deployed automatically via Netlify on push to `master`.
 Manual deploy:
 
 ```bash
+# First time on a fresh clone — link to the correct Netlify site
+netlify link --name 130afterm
+
+# Then deploy
 netlify deploy --prod
 ```
+
+> **Note:** `.netlify/state.json` (which stores the site link) is gitignored because it contains absolute local paths. Run `netlify link --name 130afterm` once after cloning on a new machine.
 
 ### Required environment variable (Netlify UI)
 
