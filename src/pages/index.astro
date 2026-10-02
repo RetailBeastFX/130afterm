@@ -6,6 +6,7 @@ import ProfileHeader from '../components/ProfileHeader.astro';
 import RightNow from '../components/RightNow.astro';
 import RbCorner from '../components/RbCorner.astro';
 import LatestRants from '../components/LatestRants.astro';
+import QuoteWall from '../components/QuoteWall.astro';
 import Pinboard from '../components/Pinboard.astro';
 import CurrentlyShelf from '../components/CurrentlyShelf.astro';
 import Guestbook from '../components/Guestbook.astro';
@@ -33,6 +34,7 @@ const rantPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
       <LatestRants posts={rantPosts} />
       <Pinboard events={recentEvents} />
       <CurrentlyShelf />
+      <QuoteWall />
       <Guestbook />
       <LinkGarden compact />
     </div>
