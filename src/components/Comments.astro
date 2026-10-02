@@ -1,0 +1,185 @@
+---
+import { postSlug } from '../lib/blog';
+
+// Comments — per-post threads backed by /api/comments (Netlify Blobs).
+// Same house rules as the guestbook: validated server-side, honeypot, no links.
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+---
+
+<section class="reveal mt-2" id="comments" aria-label="Comments" data-slug={slug}>
+  <div class="flex items-baseline justify-between mb-1 flex-wrap gap-2">
+    <h2 class="display display-md">talk back</h2>
+    <span class="note note-mint">the floor is yours 💬</span>
+  </div>
+  <p class="body-faint text-sm mb-5">
+    got a thought on this one? leave it here. keep it kind.
+  </p>
+
+  <div id="cm-list" class="mb-6" aria-live="polite">
+    <p class="body-faint text-sm mono" id="cm-loading" style="font-size: 11px; letter-spacing: 0.1em;">
+      reading the thread…
+    </p>
+  </div>
+
+  <hr class="divider mb-6" />
+
+  <form id="cm-form" novalidate>
+    <label class="field">
+      <span class="field-label">your name</span>
+      <input
+        class="input"
+        type="text"
+        name="name"
+        id="cm-name"
+        maxlength="40"
+        autocomplete="nickname"
+        placeholder="what should the thread call you?"
+        required
+      />
+    </label>
+    <label class="field">
+      <span class="field-label">your comment</span>
+      <textarea
+        class="input"
+        name="message"
+        id="cm-message"
+        maxlength="500"
+        rows="3"
+        placeholder="say your piece. (500 chars)"
+        required
+      ></textarea>
+    </label>
+    <!-- honeypot — bots fill this, humans never see it -->
+    <label class="hp-trap" aria-hidden="true">
+      <span>website</span>
+      <input type="text" name="website" id="cm-website" tabindex="-1" autocomplete="off" />
+    </label>
+    <p id="cm-error" class="hidden mono mb-3" style="font-size: 11px; color: var(--rose);" role="alert"></p>
+    <button type="submit" class="btn btn-amber w-full" id="cm-submit">
+      drop it in the thread 📌
+    </button>
+  </form>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('comments');
+    if (!root) return;
+    var slug = root.getAttribute('data-slug') || '';
+
+    var list = root.querySelector('#cm-list');
+    var form = root.querySelector('#cm-form');
+    var nameInput = root.querySelector('#cm-name');
+    var msgInput = root.querySelector('#cm-message');
+    var honeypot = root.querySelector('#cm-website');
+    var errorEl = root.querySelector('#cm-error');
+    var submitBtn = root.querySelector('#cm-submit');
+
+    function showError(msg) {
+      if (!errorEl) return;
+      errorEl.textContent = msg;
+      errorEl.classList.remove('hidden');
+    }
+    function clearError() {
+      if (!errorEl) return;
+      errorEl.textContent = '';
+      errorEl.classList.add('hidden');
+    }
+
+    function fmtDate(iso) {
+      var d = iso ? new Date(iso) : null;
+      return d && !isNaN(d)
+        ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        : '';
+    }
+
+    function renderEntries(entries) {
+      if (!list) return;
+      if (!entries || entries.length === 0) {
+        list.innerHTML = '<p class="body-faint text-sm">no comments yet. first voice sets the tone.</p>';
+        return;
+      }
+      list.innerHTML = '';
+      entries.forEach(function (e) {
+        var wrap = document.createElement('div');
+        wrap.className = 'gb-entry';
+        var head = document.createElement('div');
+        var nameEl = document.createElement('span');
+        nameEl.className = 'gb-name';
+        nameEl.textContent = e.name || 'anon';
+        var dateEl = document.createElement('span');
+        dateEl.className = 'gb-date';
+        dateEl.textContent = fmtDate(e.createdAt);
+        head.appendChild(nameEl);
+        head.appendChild(dateEl);
+        var msg = document.createElement('p');
+        msg.className = 'gb-msg';
+        msg.textContent = e.message || '';
+        wrap.appendChild(head);
+        wrap.appendChild(msg);
+        list.appendChild(wrap);
+      });
+    }
+
+    async function load() {
+      try {
+        var res = await fetch('/api/comments?slug=' + encodeURIComponent(slug));
+        if (!res.ok) throw new Error('bad status');
+        renderEntries(await res.json());
+      } catch (e) {
+        if (list) {
+          list.innerHTML = '<p class="body-faint text-sm">the thread couldn\u2019t load just now — try a refresh.</p>';
+        }
+      }
+    }
+
+    if (form) {
+      form.addEventListener('submit', async function (ev) {
+        ev.preventDefault();
+        clearError();
+
+        var name = (nameInput.value || '').trim();
+        var message = (msgInput.value || '').trim();
+
+        if (!name) { showError('give the thread a name first.'); nameInput.focus(); return; }
+        if (!message) { showError('write something before dropping it in.'); msgInput.focus(); return; }
+        if (name.length > 40) { showError('name is too long (40 max).'); return; }
+        if (message.length > 500) { showError('comment is too long (500 max).'); return; }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'dropping in…';
+
+        try {
+          var res = await fetch('/api/comments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              slug: slug,
+              name: name,
+              message: message,
+              website: honeypot.value || '',
+            }),
+          });
+          if (!res.ok) {
+            var err = await res.json().catch(function () { return {}; });
+            throw new Error(err.error || 'the comment didn\u2019t stick. try again.');
+          }
+          nameInput.value = '';
+          msgInput.value = '';
+          clearError();
+          await load();
+        } catch (e) {
+          showError(e.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'drop it in the thread 📌';
+        }
+      });
+    }
+
+    load();
+  })();
+</script>

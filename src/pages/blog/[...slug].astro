@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import SiteGlow from '../../components/SiteGlow.astro';
 import Navbar from '../../components/Navbar.astro';
 import AskRb from '../../components/AskRb.astro';
+import Comments from '../../components/Comments.astro';
 import Footer from '../../components/Footer.astro';
 import { getCollection, render } from 'astro:content';
 import { postSlug } from '../../lib/blog';
@@ -64,6 +65,8 @@ function fmt(d: Date): string {
       <article class="card tape reveal prose-room">
         <Content />
       </article>
+
+      <Comments slug={postSlug(post)} />
 
       <div class="reveal flex items-center justify-between flex-wrap gap-3">
         <a
