@@ -1,0 +1,46 @@
+---
+import { top8 } from '../data/top8';
+
+// Bo's Top 8 — the MySpace grid. Genuinely personal, changes whenever.
+// Sticker tiles, two columns on mobile, four on desktop.
+const accents = ['sticker-rose', 'sticker-sky', 'sticker-mint', 'sticker-violet', 'sticker-amber'];
+---
+
+<section class="reveal" aria-label="Bo's top 8">
+  <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
+    <h2 class="display display-md">bo's top 8</h2>
+    <span class="note">subject to change without notice ✌</span>
+  </div>
+
+  <div class="grid gap-3" style="grid-template-columns: repeat(2, 1fr);">
+    {top8.map((entry, i) => (
+      <div
+        class:list={['card', 'card-flat', entry.placeholder && 'opacity-60']}
+        style="padding: 16px; display: flex; flex-direction: column; gap: 8px; min-height: 120px;"
+      >
+        <div class="flex items-center justify-between gap-2">
+          <span class="mono" style="font-size: 10px; letter-spacing: 0.14em; color: var(--ink-faint);">
+            {String(i + 1).padStart(2, '0')} · {entry.slot.toUpperCase()}
+          </span>
+          <span aria-hidden="true" style="font-size: 1.3rem;">{entry.icon}</span>
+        </div>
+        <p class="display text-lg leading-tight" style="overflow-wrap: break-word;">
+          {entry.placeholder ? '—' : entry.pick}
+        </p>
+        {entry.note && (
+          <span class:list={['sticker', accents[i % accents.length]]} style="align-self: flex-start; margin-top: auto;">
+            {entry.note}
+          </span>
+        )}
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  @media (min-width: 768px) {
+    section[aria-label="Bo's top 8"] .grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

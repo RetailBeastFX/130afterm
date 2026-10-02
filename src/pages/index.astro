@@ -7,6 +7,7 @@ import RightNow from '../components/RightNow.astro';
 import RbCorner from '../components/RbCorner.astro';
 import LatestRants from '../components/LatestRants.astro';
 import QuoteWall from '../components/QuoteWall.astro';
+import Top8 from '../components/Top8.astro';
 import Pinboard from '../components/Pinboard.astro';
 import CurrentlyShelf from '../components/CurrentlyShelf.astro';
 import Guestbook from '../components/Guestbook.astro';
@@ -35,6 +36,7 @@ const rantPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
       <Pinboard events={recentEvents} />
       <CurrentlyShelf />
       <QuoteWall />
+      <Top8 />
       <Guestbook />
       <LinkGarden compact />
     </div>

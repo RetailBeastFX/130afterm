@@ -29,6 +29,12 @@ export const rbNotes: RbNote[] = [
     title: 'First night in the new room',
     body: 'Redid the whole spot. Same 130 AM soul — just warmer, like a room you actually want to sit in. Guestbook\'s real now, so sign the wall before you head out. Glad you stopped by.',
   },
+  {
+    id: '2026-10-02-late-note',
+    date: '2026-10-02',
+    title: '10.02.26 // 1:17 AM',
+    body: 'Been messing with the site again. Quote wall, top 8, the rant room — it\'s starting to feel like an actual corner of the internet instead of a brochure. I think I\'m finally getting it where I want it.',
+  },
 ];
 
 /** Newest note first. */
