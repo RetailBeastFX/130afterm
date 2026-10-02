@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { postSlug } from '../lib/blog';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+const latest = posts.slice(0, 3);
+
+function fmt(d: Date): string {
+  const diff = Math.floor((Date.now() - d.getTime()) / 86_400_000);
+  if (diff === 0) return 'today';
+  if (diff === 1) return 'yesterday';
+  if (diff > 1 && diff < 30) return `${diff}d ago`;
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+---
+
+<section class="card tape tape-sky reveal" aria-label="Latest rants">
+  <div class="flex items-center justify-between mb-2 flex-wrap gap-2">
+    <span class="label">// latest rants</span>
+    <a href="/blog" class="mono" style="font-size: 10px; letter-spacing: 0.18em; color: var(--amber); min-height: 44px; display: inline-flex; align-items: center;">THE RANT ROOM →</a>
+  </div>
+
+  {latest.length > 0 ? (
+    latest.map((post) => (
+      <a href={`/blog/${postSlug(post)}/`} class="pin-row block">
+        <span class="pin-icon" aria-hidden="true">📝</span>
+        <span class="min-w-0">
+          <span class="pin-title block">{post.data.title}</span>
+          <span class="pin-summary block">{post.data.description}</span>
+        </span>
+        <time class="pin-date" datetime={post.data.date.toISOString().slice(0, 10)}>{fmt(post.data.date)}</time>
+      </a>
+    ))
+  ) : (
+    <p class="body-faint text-sm">nothing on the desk yet.</p>
+  )}
+</section>

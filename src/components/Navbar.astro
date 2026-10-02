@@ -1,55 +1,96 @@
 ---
-// Navbar
+interface Props {
+  active?: string;
+}
+
+const { active = 'home' } = Astro.props;
+
+const links = [
+  { key: 'home', href: '/', label: 'home', no: '01' },
+  { key: 'now', href: '/now', label: 'now', no: '02' },
+  { key: 'archive', href: '/archive', label: 'archive', no: '03' },
+  { key: 'links', href: '/links', label: 'links', no: '04' },
+  { key: 'blog', href: '/blog', label: 'rants', no: '05' },
+  { key: 'terminal', href: '/terminal', label: 'terminal', no: '06' },
+];
 ---
-<nav class="site-nav" id="main-nav">
-    <div class="max-w-7xl mx-auto px-5 py-3 flex items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-            <img src="./logo.png" alt="130 AM" class="h-7 opacity-80" onerror="this.style.display='none';">
-            <div>
-                <span class="font-bold text-white tracking-tight text-sm">130 AM</span>
-                <span class="font-mono text-[8px] text-zinc-700 tracking-widest ml-2 hidden sm:inline">// after hours.</span>
-            </div>
-        </div>
 
-        <!-- Page identity pill (desktop only) -->
-        <div class="hidden md:flex items-center gap-1 font-mono text-[8px] tracking-widest text-zinc-700">
-            <span class="text-amber-500/60">00</span>
-            <span>//</span>
-            <span>Dashboard</span>
-        </div>
+<nav class="site-nav" aria-label="Site navigation">
+  <div class="wrap flex items-center justify-between gap-4 py-2">
+    <a href="/" class="flex items-center gap-3 min-h-[48px]" aria-label="130 AM home">
+      <span
+        class="flex items-center justify-center w-9 h-9 rounded-xl text-sm font-bold"
+        style="background: var(--amber); color: #241a05; font-family: var(--font-display);"
+        aria-hidden="true"
+      >
+        1:30
+      </span>
+      <span class="leading-tight">
+        <span class="display block text-lg">130 AM</span>
+        <span class="label block" style="font-size: 8px;">// after hours.</span>
+      </span>
+    </a>
 
-        <!-- ⌘ MENU trigger -->
-        <button onclick="toggleControlPanel()" id="cp-trigger"
-            class="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] text-zinc-400 hover:text-white transition-all font-mono text-[9px] tracking-[0.2em] uppercase">
-            <i class="fas fa-bars-staggered text-[10px]"></i>
-            <span class="hidden sm:inline">⌘ Menu</span>
-        </button>
-
-        <!-- Live Status Button + Dropdown -->
-        <div class="relative flex-shrink-0" id="live-trigger">
-            <button id="live-btn" class="offline" onclick="toggleLiveMenu()">
-                <span class="live-dot-amber" id="live-dot"></span>
-                <span id="live-label">● TAPPED IN</span>
-            </button>
-            <div id="live-menu">
-                <div class="live-menu-label">Broadcast Channels</div>
-                <a href="https://youtube.com/@130AfterM" target="_blank" class="live-menu-item">
-                    <i class="fab fa-youtube text-red-500"></i> YouTube
-                </a>
-                <a href="https://twitch.tv/130AfterM" target="_blank" class="live-menu-item">
-                    <i class="fab fa-twitch text-purple-400"></i> Twitch
-                </a>
-                <a href="https://kick.com/130AfterM" target="_blank" class="live-menu-item">
-                    <i class="fas fa-broadcast-tower text-green-400"></i> Kick
-                </a>
-                <a href="https://tiktok.com/@130AfterM" target="_blank" class="live-menu-item">
-                    <i class="fab fa-tiktok text-white"></i> TikTok
-                </a>
-                <div class="live-menu-divider"></div>
-                <div id="broadcast-status-msg" class="live-menu-label" style="padding-top:8px;">
-                    Checking live status...
-                </div>
-            </div>
-        </div>
+    <div class="nav-links items-center gap-1" role="list">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          class:list={['nav-link', { active: active === l.key }]}
+          aria-current={active === l.key ? 'page' : undefined}
+        >
+          {l.label}
+        </a>
+      ))}
     </div>
+
+    <button
+      class="nav-burger"
+      id="nav-burger"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="menu-overlay"
+    >
+      ☰
+    </button>
+  </div>
 </nav>
+
+<div class="menu-overlay" id="menu-overlay" role="dialog" aria-modal="true" aria-label="Menu">
+  <button class="menu-close" id="menu-close" aria-label="Close menu">✕</button>
+  <nav class="mt-6" aria-label="Mobile navigation">
+    {links.map((l) => (
+      <a href={l.href} class="menu-link">
+        <span class="menu-no">{l.no}</span>
+        <span>{l.label}</span>
+      </a>
+    ))}
+  </nav>
+  <p class="note mt-auto text-center body-faint" style="font-size: 1.1rem; color: var(--ink-faint);">
+    1:30 after midnight. the hour noise stops.
+  </p>
+</div>
+
+<script>
+  (function () {
+    var burger = document.getElementById('nav-burger');
+    var overlay = document.getElementById('menu-overlay');
+    var close = document.getElementById('menu-close');
+    if (!burger || !overlay || !close) return;
+
+    function setOpen(open) {
+      overlay.classList.toggle('open', open);
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.body.style.overflow = open ? 'hidden' : '';
+      if (open) close.focus();
+    }
+
+    burger.addEventListener('click', function () { setOpen(true); });
+    close.addEventListener('click', function () { setOpen(false); });
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) setOpen(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') setOpen(false);
+    });
+  })();
+</script>

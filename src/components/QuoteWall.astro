@@ -1,0 +1,53 @@
+---
+import { quotes } from '../data/quotes';
+
+// Quote wall — favorite quotes pinned up like notebook scraps.
+// First entry is featured; the rest stack in a sticker grid.
+const [featured, ...rest] = quotes;
+const accents = ['sticker-rose', 'sticker-sky', 'sticker-mint', 'sticker-violet', 'sticker-amber'];
+---
+
+<section class="reveal" aria-label="Words that stuck — favorite quotes">
+  <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
+    <h2 class="display display-md">words that stuck</h2>
+    <span class="note">collected, not designed 📌</span>
+  </div>
+
+  {featured && (
+    <blockquote class="card tape pt-7 mb-4">
+      <p class="display text-xl leading-snug mb-3">“{featured.text}”</p>
+      <footer class="flex items-baseline justify-between gap-3 flex-wrap">
+        <cite class="mono not-italic" style="font-size: 10px; letter-spacing: 0.14em; color: var(--ink-faint);">
+          — {featured.author.toUpperCase()}
+        </cite>
+        {featured.note && <span class="note note-sky" style="font-size: 1.1rem;">{featured.note}</span>}
+      </footer>
+    </blockquote>
+  )}
+
+  {rest.length > 0 && (
+    <div class="grid gap-3" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));">
+      {rest.map((q, i) => (
+        <blockquote
+          class:list={['card', 'card-flat', q.placeholder && 'opacity-60']}
+          style="padding: 18px; display: flex; flex-direction: column; gap: 10px;"
+        >
+          <span class:list={['sticker', accents[i % accents.length]]} style="align-self: flex-start;">
+            {q.placeholder ? 'yours here' : 'pinned'}
+          </span>
+          <p class="text-sm leading-relaxed">“{q.text}”</p>
+          <footer class="mt-auto">
+            <cite class="mono not-italic block" style="font-size: 10px; letter-spacing: 0.12em; color: var(--ink-faint);">
+              — {q.author.toUpperCase()}
+            </cite>
+            {q.note && <span class="note block mt-1" style="font-size: 1.05rem; color: var(--ink-faint);">{q.note}</span>}
+          </footer>
+        </blockquote>
+      ))}
+    </div>
+  )}
+</section>
+
+<style>
+  .not-italic { font-style: normal; }
+</style>

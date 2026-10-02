@@ -1,0 +1,55 @@
+---
+import type { ActivityEvent } from '../types/activity';
+
+interface Props {
+  events: ActivityEvent[];
+}
+
+const { events } = Astro.props;
+
+const TYPE_META: Record<string, { icon: string; label: string }> = {
+  trade:   { icon: '📈', label: 'trade' },
+  build:   { icon: '🔧', label: 'build' },
+  media:   { icon: '🎬', label: 'media' },
+  life:    { icon: '🌙', label: 'life' },
+  gaming:  { icon: '🎮', label: 'gaming' },
+  stream:  { icon: '📡', label: 'stream' },
+  thought: { icon: '💭', label: 'thought' },
+  project: { icon: '⚡', label: 'project' },
+};
+
+function friendlyDate(dateStr: string): string {
+  const diff = Math.floor((Date.now() - new Date(dateStr + 'T00:00:00').getTime()) / 86_400_000);
+  if (diff === 0) return 'today';
+  if (diff === 1) return 'yesterday';
+  if (diff > 1 && diff < 30) return `${diff}d ago`;
+  return dateStr;
+}
+---
+
+<section class="card tape tape-sky reveal" aria-label="Recent activity">
+  <div class="flex items-center justify-between mb-2 flex-wrap gap-2">
+    <span class="label">// pinboard — lately</span>
+    <a href="/archive" class="mono" style="font-size: 10px; letter-spacing: 0.18em; color: var(--amber); min-height: 44px; display: inline-flex; align-items: center;">FULL ARCHIVE →</a>
+  </div>
+
+  {events.map((event) => {
+    const meta = TYPE_META[event.type] ?? { icon: '·', label: event.type };
+    const inner = (
+      <>
+        <span class="pin-icon" aria-hidden="true">{meta.icon}</span>
+        <span class="min-w-0">
+          <span class="pin-title block">{event.title}</span>
+          {event.summary && <span class="pin-summary block">{event.summary}</span>}
+          <span class="tag mt-2 inline-block">{meta.label}</span>
+        </span>
+        <time class="pin-date" datetime={event.date}>{friendlyDate(event.date)}</time>
+      </>
+    );
+    return event.href ? (
+      <a href={event.href} class="pin-row block">{inner}</a>
+    ) : (
+      <div class="pin-row">{inner}</div>
+    );
+  })}
+</section>

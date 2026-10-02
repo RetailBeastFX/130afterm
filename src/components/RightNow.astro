@@ -1,0 +1,178 @@
+---
+import { baseNowState, NOW_ROWS } from '../data/now';
+
+// Right Now card — live presence (Lanyard) + persisted /api/now fields.
+// Server-renders static baseline; client JS patches in live values.
+// Graceful fallback everywhere: never a skeleton forever.
+const DISCORD_ID = '385513048237932564';
+
+interface Props {
+  /** Hide the "open the full now page" button (used on /now itself). */
+  showLink?: boolean;
+}
+
+const { showLink = true } = Astro.props;
+---
+
+<section class="card tape reveal" id="right-now-card" aria-label="What Bo is doing right now">
+  <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+    <span class="label">// right now</span>
+    <span class="flex items-center gap-2">
+      <span id="rn-dot" class="status-dot" aria-hidden="true"></span>
+      <span id="rn-status" class="mono" style="font-size: 10px; letter-spacing: 0.2em; color: var(--ink-faint);">CHECKING IN…</span>
+    </span>
+  </div>
+
+  <!-- Live presence (Lanyard) -->
+  <div id="rn-live" class="hidden mb-4">
+    <div class="flex items-center gap-4 p-3 rounded-2xl" style="background: rgba(125,211,252,0.05); border: 1px solid rgba(125,211,252,0.16);">
+      <img
+        id="rn-art"
+        alt=""
+        class="rounded-xl flex-shrink-0"
+        style="width: 52px; height: 52px; object-fit: cover; display: none;"
+      />
+      <div id="rn-art-emoji" class="flex items-center justify-center flex-shrink-0 text-2xl" style="width: 52px; height: 52px; border-radius: 14px; background: rgba(125,211,252,0.1);" aria-hidden="true">🎮</div>
+      <div class="flex-1 min-w-0">
+        <div id="rn-live-type" class="mono" style="font-size: 9px; letter-spacing: 0.24em; color: var(--sky);">LISTENING</div>
+        <div id="rn-live-title" class="font-semibold text-sm truncate mt-0.5">—</div>
+        <div id="rn-live-sub" class="text-xs body-faint truncate">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Persisted fields from /api/now -->
+  <div id="rn-rows">
+    {NOW_ROWS.map((row) => {
+      const value = (baseNowState as Record<string, unknown>)[row.key];
+      const display = typeof value === 'string' && value ? value : '—';
+      return (
+        <div class="now-row" data-key={row.key}>
+          <span class="now-icon" aria-hidden="true">{row.icon}</span>
+          <span class="now-key">{row.label}</span>
+          <span class="now-val" data-val>{display}</span>
+        </div>
+      );
+    })}
+  </div>
+
+  {showLink && (
+    <p class="mt-4">
+      <a href="/now" class="btn btn-ghost w-full">open the full now page</a>
+    </p>
+  )}
+</section>
+
+<style>
+  .now-icon { font-size: 16px; width: 28px; text-align: center; flex-shrink: 0; }
+</style>
+
+<script define:vars={{ DISCORD_ID }}>
+  (function () {
+    var card = document.getElementById('right-now-card');
+    if (!card) return;
+
+    var dot = card.querySelector('#rn-dot');
+    var statusLabel = card.querySelector('#rn-status');
+    var live = card.querySelector('#rn-live');
+
+    var STATUS = {
+      online: { cls: 'online', label: 'ONLINE' },
+      idle: { cls: 'idle', label: 'IDLE' },
+      dnd: { cls: 'dnd', label: 'DO NOT DISTURB' },
+      offline: { cls: '', label: 'AWAY' },
+    };
+
+    function setStatus(s) {
+      var cfg = STATUS[s] || STATUS.offline;
+      if (dot) dot.className = 'status-dot ' + cfg.cls;
+      if (statusLabel) statusLabel.textContent = cfg.label;
+    }
+
+    function showLive(opts) {
+      if (!live) return;
+      live.classList.remove('hidden');
+      var typeEl = card.querySelector('#rn-live-type');
+      var titleEl = card.querySelector('#rn-live-title');
+      var subEl = card.querySelector('#rn-live-sub');
+      var art = card.querySelector('#rn-art');
+      var artEmoji = card.querySelector('#rn-art-emoji');
+      if (typeEl) { typeEl.textContent = opts.type; typeEl.style.color = opts.color; }
+      if (titleEl) titleEl.textContent = opts.title;
+      if (subEl) subEl.textContent = opts.sub || '';
+      if (opts.artUrl && art) {
+        art.src = opts.artUrl;
+        art.style.display = 'block';
+        if (artEmoji) artEmoji.style.display = 'none';
+      } else if (artEmoji) {
+        artEmoji.textContent = opts.emoji || '🎮';
+      }
+    }
+
+    function patchRows(fields) {
+      if (!fields) return;
+      card.querySelectorAll('#rn-rows .now-row').forEach(function (row) {
+        var key = row.getAttribute('data-key');
+        var valEl = row.querySelector('[data-val]');
+        if (key && valEl && fields[key]) valEl.textContent = fields[key];
+      });
+    }
+
+    async function boot() {
+      var lanyardFields = null;
+      try {
+        var res = await fetch('https://api.lanyard.rest/v1/users/' + DISCORD_ID);
+        if (res.ok) {
+          var json = await res.json();
+          var data = json.data || {};
+          var status = data.discord_status || 'offline';
+          setStatus(status);
+
+          var game = (data.activities || []).find(function (a) { return a.type === 0; });
+          var custom = (data.activities || []).find(function (a) { return a.type === 4; });
+
+          if (data.listening_to_spotify && data.spotify) {
+            var sp = data.spotify;
+            showLive({
+              type: '🎧 LISTENING NOW', color: '#6ee7b7',
+              title: sp.song, sub: sp.artist,
+              artUrl: sp.album_art_url,
+            });
+            lanyardFields = { listening: sp.song + ' — ' + sp.artist };
+          } else if (game) {
+            showLive({
+              type: '🎮 PLAYING', color: '#c4b5fd',
+              title: game.name, sub: game.details || game.state || '',
+              emoji: '🎮',
+            });
+            lanyardFields = { playing: game.name };
+          } else if (custom && custom.state) {
+            showLive({
+              type: '💬 STATUS', color: '#7dd3fc',
+              title: custom.state, sub: '',
+              emoji: (custom.emoji && custom.emoji.name) || '💬',
+            });
+          }
+        } else {
+          setStatus('offline');
+        }
+      } catch (e) {
+        // Network blocked or Lanyard down — static baseline stays. No skeleton forever.
+        setStatus('offline');
+      }
+
+      try {
+        var nowRes = await fetch('/api/now');
+        if (nowRes.ok) {
+          var stored = await nowRes.json();
+          patchRows(Object.assign({}, stored, lanyardFields || {}));
+        } else if (lanyardFields) {
+          patchRows(lanyardFields);
+        }
+      } catch (e) { /* static baseline stays */ }
+    }
+
+    boot();
+    setInterval(boot, 60000);
+  })();
+</script>

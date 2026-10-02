@@ -1,0 +1,83 @@
+---
+// Link garden — where to find Bo elsewhere.
+// Compact mode: teaser on the homepage pointing at the full /links stack.
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+
+const links = [
+  {
+    href: 'https://www.youtube.com/@130AfterM',
+    icon: '📺',
+    title: 'YouTube — 130AfterM',
+    desc: 'THE PERSON · VLOGS · BUILDS · STUDIOS',
+  },
+  {
+    href: 'https://www.youtube.com/@RetailBeastFX',
+    icon: '🎓',
+    title: 'YouTube — RetailBeastFX',
+    desc: 'THE LESSONS CHANNEL · TRADING MECHANICS',
+  },
+  {
+    href: 'https://x.com/130AfterM',
+    icon: '𝕏',
+    title: 'X / Twitter',
+    desc: '@130AFTERM · THOUGHTS & MARKET NOTES',
+  },
+  {
+    href: 'https://tiktok.com/@130AfterM',
+    icon: '🎵',
+    title: 'TikTok',
+    desc: '@130AFTERM · SHORT-FORM',
+  },
+  {
+    href: 'https://threads.net/@130AfterM',
+    icon: '🧵',
+    title: 'Threads',
+    desc: '@130AFTERM · CASUAL UPDATES',
+  },
+  {
+    href: 'https://www.facebook.com/130AfterM/',
+    icon: '📘',
+    title: 'Facebook',
+    desc: '130AFTERM PAGE',
+  },
+];
+---
+
+{compact ? (
+  <section class="card tape tape-rose reveal" aria-label="Find me elsewhere">
+    <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
+      <h2 class="display display-md">link garden</h2>
+      <span class="note note-rose">find me elsewhere 🔗</span>
+    </div>
+    <p class="body-dim text-sm mb-5">
+      the room has other doors — every channel, every profile, the tools, the code.
+    </p>
+    <a href="/links" class="btn btn-amber w-full">open the full link stack →</a>
+  </section>
+) : (
+  <section class="card tape reveal" aria-label="Find me elsewhere">
+    <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
+      <h2 class="display display-md">link garden</h2>
+      <span class="note note-rose">find me elsewhere 🔗</span>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      {links.map((l) => (
+        <a href={l.href} target="_blank" rel="noopener" class="link-row">
+          <span class="link-icon" aria-hidden="true">{l.icon}</span>
+          <span class="link-body">
+            <span class="link-title block">{l.title}</span>
+            <span class="link-desc block">{l.desc}</span>
+          </span>
+          <span class="link-arrow" aria-hidden="true">→</span>
+        </a>
+      ))}
+    </div>
+
+    <a href="/links" class="btn btn-ghost w-full mt-5">the standalone link page →</a>
+  </section>
+)}
