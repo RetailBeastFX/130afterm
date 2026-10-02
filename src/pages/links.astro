@@ -1,0 +1,113 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteGlow from '../components/SiteGlow.astro';
+
+// LINKS — the link-in-bio page. This is the URL for the social bios.
+// Minimal chrome, fast load, thumb-friendly. Standalone and complete.
+const links = [
+  {
+    href: 'https://www.youtube.com/@130AfterM',
+    icon: '📺',
+    title: 'YouTube — @130AfterM',
+    desc: 'THE PERSON · VLOGS · BUILDS · STUDIOS',
+    accent: 'var(--amber)',
+  },
+  {
+    href: 'https://www.youtube.com/@RetailBeastFX',
+    icon: '🎓',
+    title: 'YouTube — @RetailBeastFX',
+    desc: 'THE LESSONS · TRADING MECHANICS',
+    accent: 'var(--rose)',
+  },
+  {
+    href: 'https://x.com/130AfterM',
+    icon: '𝕏',
+    title: 'X / Twitter',
+    desc: '@130AFTERM · THOUGHTS & MARKET NOTES',
+    accent: 'var(--sky)',
+  },
+  {
+    href: 'https://tiktok.com/@130AfterM',
+    icon: '🎵',
+    title: 'TikTok',
+    desc: '@130AFTERM · SHORT-FORM',
+    accent: 'var(--mint)',
+  },
+  {
+    href: 'https://threads.net/@130AfterM',
+    icon: '🧵',
+    title: 'Threads',
+    desc: '@130AFTERM · CASUAL UPDATES',
+    accent: 'var(--violet)',
+  },
+  {
+    href: 'https://www.facebook.com/130AfterM/',
+    icon: '📘',
+    title: 'Facebook',
+    desc: '130AFTERM PAGE',
+    accent: 'var(--sky)',
+  },
+  {
+    href: 'https://github.com/RetailBeastFX',
+    icon: '💻',
+    title: 'GitHub',
+    desc: 'RETAILBEASTFX · THE CODE',
+    accent: 'var(--ink-dim)',
+  },
+  {
+    href: 'https://whop.com/joined/retailbeastfx/products/retailbeastfx-smc-indicator/',
+    icon: '🛠',
+    title: 'RetailBeastFX Tools',
+    desc: 'MARKET ENGINE · ORB HUD · INDICATORS',
+    accent: 'var(--coral)',
+  },
+];
+---
+
+<Layout
+  title="130 AM // links"
+  description="Find Bo everywhere — all the links, one spot."
+  active="links"
+>
+  <SiteGlow />
+
+  <main class="wrap pt-12 pb-8" style="max-width: 520px;">
+    <header class="flex flex-col items-center text-center gap-4 mb-8">
+      <figure class="polaroid w-36">
+        <img src="/profile.png" alt="Bo — 130 AM" onerror="this.style.display='none'" />
+        <figcaption>that's me ↑</figcaption>
+      </figure>
+      <div>
+        <h1 class="display display-lg">130 AM</h1>
+        <p class="mono mt-1" style="font-size: 11px; letter-spacing: 0.22em; color: var(--amber);">@130AFTERM</p>
+        <p class="note mt-3">father · trader · builder — after hours 🌙</p>
+      </div>
+    </header>
+
+    <nav class="flex flex-col gap-3" aria-label="All links">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          target="_blank"
+          rel="noopener"
+          class="link-row"
+          style={`border-left: 3px solid ${l.accent}; min-height: 72px;`}
+        >
+          <span class="link-icon" aria-hidden="true">{l.icon}</span>
+          <span class="link-body">
+            <span class="link-title block">{l.title}</span>
+            <span class="link-desc block">{l.desc}</span>
+          </span>
+          <span class="link-arrow" aria-hidden="true">→</span>
+        </a>
+      ))}
+    </nav>
+
+    <div class="text-center mt-8">
+      <a href="/" class="btn btn-ghost">← back to the room</a>
+      <p class="mono mt-6" style="font-size: 10px; letter-spacing: 0.14em; color: var(--ink-faint);">
+        130 AM · 1:30 AFTER MIDNIGHT
+      </p>
+    </div>
+  </main>
+</Layout>

@@ -1,5 +1,71 @@
 [
   {
+    "id": "2026-10-01-build-v12",
+    "type": "build",
+    "date": "2026-10-01",
+    "time": "21:30",
+    "title": "Wealth-OS V1.2 tagged",
+    "body": "Live holdings ingestion wired in, AES-256-GCM encrypted backup/restore shipped. 251 tests green.",
+    "tags": ["Wealth-OS", "build"],
+    "status": "published",
+    "mood": "locked-in"
+  },
+  {
+    "id": "2026-10-01-build-v11",
+    "type": "build",
+    "date": "2026-10-01",
+    "time": "18:00",
+    "title": "Wealth-OS V1.1 sealed",
+    "body": "Rules & Auto-Categorization Engine: order-aware rule center with live simulation.",
+    "tags": ["Wealth-OS", "build"],
+    "status": "published",
+    "mood": "locked-in"
+  },
+  {
+    "id": "2026-10-01-build-review",
+    "type": "build",
+    "date": "2026-10-01",
+    "time": "14:00",
+    "title": "Wealth-OS review backlog closed",
+    "body": "Full codebase review — 2 criticals + 7 importants fixed on branch, merged to main.",
+    "tags": ["Wealth-OS", "review"],
+    "status": "published",
+    "mood": "focused"
+  },
+  {
+    "id": "2026-10-01-build-roblox",
+    "type": "build",
+    "date": "2026-10-01",
+    "time": "12:00",
+    "title": "Roblox economy-sim repo created",
+    "body": "Luau/Rojo setup. Gaming + world-building lane for 130AM Studios.",
+    "tags": ["Roblox", "gaming", "build"],
+    "status": "published",
+    "mood": "curious"
+  },
+  {
+    "id": "2026-10-01-thought-brands",
+    "type": "thought",
+    "date": "2026-10-01",
+    "time": "10:00",
+    "title": "Two brands, one person",
+    "body": "RetailBeastFX teaches the mechanics. 130AM Studios documents the person. This site is the 130AM home.",
+    "tags": ["strategy", "130AM"],
+    "status": "published",
+    "mood": "clear"
+  },
+  {
+    "id": "2026-09-30-project-curriculum",
+    "type": "project",
+    "date": "2026-09-30",
+    "time": "22:00",
+    "title": "64-video RetailBeastFX curriculum drafted",
+    "body": "Six phases from market basics to strategies. RB mascot video pipeline approved.",
+    "tags": ["RetailBeastFX", "content"],
+    "status": "published",
+    "mood": "locked-in"
+  },
+  {
     "id": "2026-08-17-life-001",
     "type": "life",
     "date": "2026-08-17",

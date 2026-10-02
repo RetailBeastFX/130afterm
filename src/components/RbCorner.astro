@@ -1,0 +1,51 @@
+---
+import { rbNotes, latestNote, olderNotes } from '../data/rb-notes';
+
+// RB's corner — signed notes from the room. Newest featured, rest stacked.
+const featured = latestNote();
+const rest = olderNotes();
+
+function fmt(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00');
+  if (isNaN(d.getTime())) return dateStr;
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+---
+
+<section class="reveal" aria-label="RB's corner — notes from the room">
+  <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
+    <h2 class="display display-md">RB's corner</h2>
+    <span class="note">notes from the room 🛋</span>
+  </div>
+
+  {featured ? (
+    <article class="card tape pt-7 mb-4">
+      <div class="flex items-center gap-3 mb-3 flex-wrap">
+        <span class="sticker sticker-amber">fresh off the desk</span>
+        <time class="mono" style="font-size: 10px; color: var(--ink-faint); letter-spacing: 0.14em;" datetime={featured.date}>
+          {fmt(featured.date)}
+        </time>
+      </div>
+      <h3 class="display text-xl mb-2">{featured.title}</h3>
+      <p class="body-dim">{featured.body}</p>
+      <p class="note note-rose mt-4" style="font-size: 1.2rem;">— RB</p>
+    </article>
+  ) : (
+    <div class="card"><p class="body-faint text-sm">no notes on the desk yet.</p></div>
+  )}
+
+  {rest.length > 0 && (
+    <div class="flex flex-col gap-3">
+      {rest.map((note) => (
+        <article class="card card-flat" style="background: rgba(243,233,215,0.025); border: 1px solid var(--card-border); padding: 16px 18px;">
+          <div class="flex items-baseline justify-between gap-3 mb-1 flex-wrap">
+            <h3 class="font-semibold text-sm">{note.title}</h3>
+            <time class="mono" style="font-size: 10px; color: var(--ink-faint);" datetime={note.date}>{fmt(note.date)}</time>
+          </div>
+          <p class="text-sm body-faint">{note.body}</p>
+          <p class="note mt-2" style="font-size: 1.05rem; color: var(--ink-faint);">— RB</p>
+        </article>
+      ))}
+    </div>
+  )}
+</section>

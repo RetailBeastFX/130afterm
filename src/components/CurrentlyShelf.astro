@@ -1,0 +1,72 @@
+---
+import { baseNowState } from '../data/now';
+
+// "Currently into" shelf — four sticker chips with the live-ish fields.
+// Values come from baseNowState (server baseline) and get patched by /api/now client-side.
+const shelf = [
+  { key: 'trading', label: 'TRADING', icon: '📈', cls: 'sticker-rose', tape: 'tape tape-rose' },
+  { key: 'building', label: 'BUILDING', icon: '🔧', cls: 'sticker-sky', tape: 'tape tape-sky' },
+  { key: 'playing', label: 'PLAYING', icon: '🎮', cls: 'sticker-violet', tape: 'tape tape-violet' },
+  { key: 'listening', label: 'LISTENING', icon: '🎧', cls: 'sticker-mint', tape: 'tape tape-mint' },
+];
+---
+
+<section class="reveal" aria-label="Currently into">
+  <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
+    <h2 class="display display-md">currently into</h2>
+    <span class="note note-sky">the rotation ⟲</span>
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2" id="shelf-grid">
+    {shelf.map((item) => {
+      const value = (baseNowState as Record<string, unknown>)[item.key];
+      return (
+        <div class={`card ${item.tape} pt-6`} data-shelf-key={item.key}>
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-xl" aria-hidden="true">{item.icon}</span>
+            <span class="label">{item.label}</span>
+          </div>
+          <p class="font-semibold" data-shelf-val>
+            {typeof value === 'string' && value ? value : '—'}
+          </p>
+          <div class="mt-4">
+            <span class={`sticker ${item.cls}`}>{item.label.toLowerCase()}</span>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</section>
+
+<script>
+  // Patch shelf values from persisted /api/now (Lanyard listening may override)
+  (function () {
+    async function patch() {
+      var stored = {};
+      try {
+        var res = await fetch('/api/now');
+        if (res.ok) stored = await res.json();
+      } catch (e) { return; }
+      try {
+        var lres = await fetch('https://api.lanyard.rest/v1/users/385513048237932564');
+        if (lres.ok) {
+          var l = await lres.json();
+          var data = l.data || {};
+          var game = (data.activities || []).find(function (a) { return a.type === 0; });
+          if (game && game.name) stored.playing = game.name;
+          if (data.listening_to_spotify && data.spotify) {
+            stored.listening = data.spotify.song + ' — ' + data.spotify.artist;
+          }
+        }
+      } catch (e) { /* keep stored values */ }
+
+      document.querySelectorAll('#shelf-grid [data-shelf-key]').forEach(function (el) {
+        var key = el.getAttribute('data-shelf-key');
+        var valEl = el.querySelector('[data-shelf-val]');
+        if (key && valEl && stored[key]) valEl.textContent = stored[key];
+      });
+    }
+    patch();
+    setInterval(patch, 60000);
+  })();
+</script>

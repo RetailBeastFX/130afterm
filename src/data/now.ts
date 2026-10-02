@@ -52,12 +52,12 @@
  */
 export const baseNowState: NowState = {
   status: 'online',
-  building: '130AfterM — Architecture refactor',
-  trading: 'Watching SPY + XAUUSD',
-  working_on: 'Unified activity data layer',
+  building: 'Wealth-OS + the 130 AM site rebuild',
+  trading: 'Watching XAUUSD + SPY 0DTE',
+  working_on: '130AM Studios home base',
   mood: 'After hours. Locked in.',
   location: 'After Hours',
-  updatedAt: '2026-08-17T00:00:00-04:00',
+  updatedAt: '2026-10-01T00:00:00-04:00',
 };
 
 /**

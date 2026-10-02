@@ -6,157 +6,157 @@ interface Props {
   limit?: number;
 }
 
-const { events, limit = 6 } = Astro.props;
+const { events, limit = 100 } = Astro.props;
 const visibleEvents = events.slice(0, limit);
+
+const TYPE_META: Record<string, { icon: string; label: string; color: string }> = {
+  trade:   { icon: '📈', label: 'trade',   color: '#f472a7' },
+  build:   { icon: '🔧', label: 'build',   color: '#7dd3fc' },
+  media:   { icon: '🎬', label: 'media',   color: '#fb923c' },
+  life:    { icon: '🌙', label: 'life',    color: '#c4b5fd' },
+  gaming:  { icon: '🎮', label: 'gaming',  color: '#c4b5fd' },
+  stream:  { icon: '📡', label: 'stream',  color: '#f87171' },
+  thought: { icon: '💭', label: 'thought', color: '#6ee7b7' },
+  project: { icon: '⚡', label: 'project',  color: '#ffb000' },
+};
+
+function fmt(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00');
+  if (isNaN(d.getTime())) return dateStr;
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
 ---
 
-<section class="activity-timeline" aria-label="Recent activity">
-  <div class="label">// ACTIVITY</div>
-
-  <div class="activity-timeline__list">
-    {visibleEvents.map((event) => (
-      <article class="activity-event" data-type={event.type}>
-        <div class="activity-event__meta">
-          <time datetime={event.date}>{event.date}</time>
-          <span class="activity-event__type">{event.type}</span>
-        </div>
-
-        <div class="activity-event__body">
-          <h3>
-            {event.href ? <a href={event.href}>{event.title}</a> : event.title}
+<section class="activity-timeline" aria-label="Activity archive">
+  <div class="activity-timeline__list" id="archive-list">
+    {visibleEvents.map((event) => {
+      const meta = TYPE_META[event.type] ?? { icon: '·', label: event.type, color: '#8a7660' };
+      return (
+        <article class="card archive-card" data-type={event.type}>
+          <div class="flex items-center gap-2 mb-2 flex-wrap">
+            <span class="tag" style={`color: ${meta.color}; border-color: ${meta.color}44;`}>{meta.icon} {meta.label}</span>
+            <time class="mono" style="font-size: 10px; color: var(--ink-faint); letter-spacing: 0.1em;" datetime={event.date}>
+              {fmt(event.date)}{event.time ? ` · ${event.time}` : ''}
+            </time>
+          </div>
+          <h3 class="font-bold" style="font-size: 1.02rem; line-height: 1.35;">
+            {event.href ? <a href={event.href} class="archive-link">{event.title}</a> : event.title}
           </h3>
-          {event.summary && <p>{event.summary}</p>}
-
-          {event.tags?.length && (
-            <div class="activity-event__tags">
-              {event.tags.map((tag) => <span>{tag}</span>)}
+          {event.summary && <p class="text-sm body-faint mt-1.5">{event.summary}</p>}
+          {event.tags?.length ? (
+            <div class="flex flex-wrap gap-1.5 mt-3">
+              {event.tags.map((tag) => <span class="tag">{tag}</span>)}
             </div>
-          )}
-        </div>
-      </article>
-    ))}
+          ) : null}
+        </article>
+      );
+    })}
   </div>
 </section>
 
+<style>
+  .activity-timeline__list {
+    display: grid;
+    gap: 14px;
+  }
+  .archive-card {
+    padding: 18px 20px;
+  }
+  .archive-link {
+    color: inherit;
+  }
+  @media (hover: hover) {
+    .archive-link:hover { color: var(--amber); }
+  }
+</style>
+
 <script>
+  // Dynamic events from /api/activity (Netlify Blobs) — logged via the Terminal.
+  // Prepended above the static entries. Same card shape, built client-side.
   async function loadDynamicEvents() {
     try {
       const res = await fetch('/api/activity');
       if (!res.ok) return;
       const events = await res.json();
-      
-      const listContainer = document.querySelector('.activity-timeline__list');
-      if (!listContainer || events.length === 0) return;
+      const list = document.getElementById('archive-list');
+      if (!list || !events.length) return;
 
-      // Reverse to maintain chronological order when prepending (assuming array is latest first)
-      events.reverse().forEach(event => {
-        const article = document.createElement('article');
-        article.className = 'activity-event';
-        article.setAttribute('data-type', event.type);
-        
-        let tagsHtml = '';
-        if (event.tags && event.tags.length > 0) {
-          const tags = event.tags.map(t => `<span>${t}</span>`).join('');
-          tagsHtml = `<div class="activity-event__tags">${tags}</div>`;
+      const TYPE_COLORS = {
+        trade: '#f472a7', build: '#7dd3fc', media: '#fb923c', life: '#c4b5fd',
+        gaming: '#c4b5fd', stream: '#f87171', thought: '#6ee7b7', project: '#ffb000',
+      };
+      const TYPE_ICONS = {
+        trade: '📈', build: '🔧', media: '🎬', life: '🌙',
+        gaming: '🎮', stream: '📡', thought: '💭', project: '⚡',
+      };
+
+      function fmtDate(d) {
+        const dt = new Date(d + 'T00:00:00');
+        return isNaN(dt) ? d : dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+
+      function card(ev) {
+        const color = TYPE_COLORS[ev.type] || '#8a7660';
+        const icon = TYPE_ICONS[ev.type] || '·';
+        const tags = (ev.tags || []).map(function (t) {
+          var s = document.createElement('span');
+          s.className = 'tag';
+          s.textContent = t;
+          return s.outerHTML;
+        }).join('');
+
+        var article = document.createElement('article');
+        article.className = 'card archive-card';
+        article.setAttribute('data-type', ev.type || '');
+
+        var header = document.createElement('div');
+        header.className = 'flex items-center gap-2 mb-2 flex-wrap';
+        var tag = document.createElement('span');
+        tag.className = 'tag';
+        tag.style.color = color;
+        tag.style.borderColor = color + '44';
+        tag.textContent = icon + ' ' + (ev.type || 'note');
+        var time = document.createElement('time');
+        time.className = 'mono';
+        time.style.fontSize = '10px';
+        time.style.color = 'var(--ink-faint)';
+        time.style.letterSpacing = '0.1em';
+        time.setAttribute('datetime', ev.date || '');
+        time.textContent = fmtDate(ev.date || '') + (ev.time ? ' · ' + ev.time : '');
+        header.appendChild(tag);
+        header.appendChild(time);
+
+        var h3 = document.createElement('h3');
+        h3.className = 'font-bold';
+        h3.style.fontSize = '1.02rem';
+        h3.style.lineHeight = '1.35';
+        h3.textContent = ev.title || 'Untitled';
+
+        article.appendChild(header);
+        article.appendChild(h3);
+        if (ev.summary) {
+          var p = document.createElement('p');
+          p.className = 'text-sm body-faint mt-1.5';
+          p.textContent = ev.summary;
+          article.appendChild(p);
         }
-        
-        const titleHtml = event.href 
-          ? `<a href="${event.href}">${event.title}</a>` 
-          : event.title;
-          
-        const summaryHtml = event.summary ? `<p>${event.summary}</p>` : '';
+        if (tags) {
+          var tagRow = document.createElement('div');
+          tagRow.className = 'flex flex-wrap gap-1.5 mt-3';
+          tagRow.innerHTML = tags; // tags built from textContent — safe
+          article.appendChild(tagRow);
+        }
+        return article;
+      }
 
-        article.innerHTML = `
-          <div class="activity-event__meta">
-            <time datetime="${event.date}">${event.date}</time>
-            <span class="activity-event__type">${event.type}</span>
-          </div>
-          <div class="activity-event__body">
-            <h3>${titleHtml}</h3>
-            ${summaryHtml}
-            ${tagsHtml}
-          </div>
-        `;
-        
-        listContainer.prepend(article);
+      // API returns newest-first; reverse so prepending preserves order
+      events.slice().reverse().forEach(function (ev) {
+        list.prepend(card(ev));
       });
     } catch (e) {
-      console.error('Failed to load dynamic activity events:', e);
+      console.error('archive: failed to load dynamic events', e);
     }
   }
 
-  // Run on load and after swup transitions if using swup
   document.addEventListener('DOMContentLoaded', loadDynamicEvents);
-  document.addEventListener('swup:contentReplaced', loadDynamicEvents);
 </script>
-
-<style>
-  .activity-timeline {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .activity-timeline__list {
-    display: grid;
-    gap: 0.5rem;
-  }
-
-  .activity-event {
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: 1rem;
-    padding: 0.9rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .activity-event__meta {
-    display: grid;
-    align-content: start;
-    gap: 0.25rem;
-    color: #52525b;
-    font: 9px/1.4 monospace;
-    text-transform: uppercase;
-  }
-
-  .activity-event__type {
-    color: #ffb000;
-  }
-
-  .activity-event__body h3 {
-    margin: 0;
-    color: #f4f4f5;
-    font-size: 0.9rem;
-  }
-
-  .activity-event__body h3 a:hover {
-    color: #ffb000;
-  }
-
-  .activity-event__body p {
-    margin: 0.35rem 0 0;
-    color: #71717a;
-    font-size: 0.75rem;
-  }
-
-  .activity-event__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-    margin-top: 0.6rem;
-  }
-
-  .activity-event__tags span {
-    padding: 0.2rem 0.4rem;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 0.3rem;
-    color: #52525b;
-    font: 8px monospace;
-  }
-
-  @media (max-width: 640px) {
-    .activity-event {
-      grid-template-columns: 1fr;
-      gap: 0.35rem;
-    }
-  }
-</style>

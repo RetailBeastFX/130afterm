@@ -1,0 +1,173 @@
+---
+// Guestbook — real wall backed by /api/guestbook (Netlify Blobs).
+// Posts are public, validated server-side. Honeypot for spam.
+---
+<section class="card tape tape-violet reveal" id="guestbook" aria-label="Guestbook">
+  <div class="flex items-baseline justify-between mb-1 flex-wrap gap-2">
+    <h2 class="display display-md">guestbook</h2>
+    <span class="note note-rose">sign the wall ✍</span>
+  </div>
+  <p class="body-faint text-sm mb-5">
+    you stopped by the room. leave a mark — a hello, a thought, a track rec.
+  </p>
+
+  <div id="gb-list" class="mb-6" aria-live="polite">
+    <p class="body-faint text-sm mono" id="gb-loading" style="font-size: 11px; letter-spacing: 0.1em;">
+      reading the wall…
+    </p>
+  </div>
+
+  <hr class="divider mb-6" />
+
+  <form id="gb-form" novalidate>
+    <label class="field">
+      <span class="field-label">your name</span>
+      <input
+        class="input"
+        type="text"
+        name="name"
+        id="gb-name"
+        maxlength="40"
+        autocomplete="nickname"
+        placeholder="what should the wall call you?"
+        required
+      />
+    </label>
+    <label class="field">
+      <span class="field-label">your message</span>
+      <textarea
+        class="input"
+        name="message"
+        id="gb-message"
+        maxlength="280"
+        rows="3"
+        placeholder="say hi. keep it kind. (280 chars)"
+        required
+      ></textarea>
+    </label>
+    <!-- honeypot — bots fill this, humans never see it -->
+    <label class="hp-trap" aria-hidden="true">
+      <span>website</span>
+      <input type="text" name="website" id="gb-website" tabindex="-1" autocomplete="off" />
+    </label>
+    <p id="gb-error" class="hidden mono mb-3" style="font-size: 11px; color: var(--rose);" role="alert"></p>
+    <button type="submit" class="btn btn-amber w-full" id="gb-submit">
+      pin it to the wall 📌
+    </button>
+  </form>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('guestbook');
+    if (!root) return;
+
+    var list = root.querySelector('#gb-list');
+    var form = root.querySelector('#gb-form');
+    var nameInput = root.querySelector('#gb-name');
+    var msgInput = root.querySelector('#gb-message');
+    var honeypot = root.querySelector('#gb-website');
+    var errorEl = root.querySelector('#gb-error');
+    var submitBtn = root.querySelector('#gb-submit');
+
+    function showError(msg) {
+      if (!errorEl) return;
+      errorEl.textContent = msg;
+      errorEl.classList.remove('hidden');
+    }
+    function clearError() {
+      if (!errorEl) return;
+      errorEl.textContent = '';
+      errorEl.classList.add('hidden');
+    }
+
+    function entryHTML(e) {
+      var date = e.createdAt ? new Date(e.createdAt) : null;
+      var dateStr = date && !isNaN(date) ? date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+      return (
+        '<div class="gb-entry">' +
+          '<div><span class="gb-name"></span><span class="gb-date"></span></div>' +
+          '<p class="gb-msg"></p>' +
+        '</div>'
+      );
+    }
+
+    function renderEntries(entries) {
+      if (!list) return;
+      if (!entries || entries.length === 0) {
+        list.innerHTML = '<p class="body-faint text-sm">the wall is blank. first mark gets the spot of honor.</p>';
+        return;
+      }
+      list.innerHTML = '';
+      entries.forEach(function (e) {
+        var wrap = document.createElement('div');
+        wrap.innerHTML = entryHTML(e);
+        var entry = wrap.firstElementChild;
+        entry.querySelector('.gb-name').textContent = e.name || 'anon';
+        var date = e.createdAt ? new Date(e.createdAt) : null;
+        entry.querySelector('.gb-date').textContent =
+          date && !isNaN(date) ? date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+        entry.querySelector('.gb-msg').textContent = e.message || '';
+        list.appendChild(entry);
+      });
+    }
+
+    async function load() {
+      try {
+        var res = await fetch('/api/guestbook');
+        if (!res.ok) throw new Error('bad status');
+        var entries = await res.json();
+        renderEntries(entries);
+      } catch (e) {
+        if (list) {
+          list.innerHTML = '<p class="body-faint text-sm">the wall couldn\u2019t load just now — the room is still here though. try a refresh.</p>';
+        }
+      }
+    }
+
+    if (form) {
+      form.addEventListener('submit', async function (ev) {
+        ev.preventDefault();
+        clearError();
+
+        var name = (nameInput.value || '').trim();
+        var message = (msgInput.value || '').trim();
+
+        if (!name) { showError('give the wall a name first.'); nameInput.focus(); return; }
+        if (!message) { showError('write something before pinning it.'); msgInput.focus(); return; }
+        if (name.length > 40) { showError('name is too long (40 max).'); return; }
+        if (message.length > 280) { showError('message is too long (280 max).'); return; }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'pinning…';
+
+        try {
+          var res = await fetch('/api/guestbook', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: name,
+              message: message,
+              website: honeypot.value || '', // honeypot — server rejects if filled
+            }),
+          });
+          if (!res.ok) {
+            var err = await res.json().catch(function () { return {}; });
+            throw new Error(err.error || 'the pin didn\u2019t stick. try again.');
+          }
+          nameInput.value = '';
+          msgInput.value = '';
+          clearError();
+          await load();
+        } catch (e) {
+          showError(e.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'pin it to the wall 📌';
+        }
+      });
+    }
+
+    load();
+  })();
+</script>

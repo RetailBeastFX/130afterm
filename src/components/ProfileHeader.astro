@@ -1,0 +1,44 @@
+---
+// Profile header — polaroid avatar, name, mood line, session pill.
+---
+<header class="reveal">
+  <div class="flex flex-col items-center text-center gap-5">
+    <figure class="polaroid w-44">
+      <img src="/profile.png" alt="Bo — 130 AM" onerror="this.style.display='none'" />
+      <figcaption>after hours.</figcaption>
+    </figure>
+
+    <div>
+      <h1 class="display display-xl">130 AM</h1>
+      <p class="note mt-2">bo's corner of the internet 🌙</p>
+    </div>
+
+    <div id="session-pill" class="session-pill after">
+      <span class="status-dot online" style="width: 8px; height: 8px;" aria-hidden="true"></span>
+      <span id="session-label">AFTER HOURS</span>
+    </div>
+
+    <p class="body-dim text-sm max-w-sm">
+      father. trader. builder. this is the room where i keep everything —
+      the work, the charts, the builds, the late nights. pull up a chair.
+    </p>
+  </div>
+</header>
+
+<script>
+  // Market-session pill from the visitor's clock (UTC sessions)
+  (function () {
+    var el = document.getElementById('session-pill');
+    var label = document.getElementById('session-label');
+    if (!el || !label) return;
+    var h = new Date().getUTCHours();
+    var session = 'after';
+    var text = 'AFTER HOURS';
+    if (h >= 12 && h < 21) { session = 'ny'; text = 'NEW YORK SESSION'; }
+    else if (h >= 7 && h < 16) { session = 'london'; text = 'LONDON SESSION'; }
+    else if (h >= 0 && h < 8) { session = 'asian'; text = 'ASIAN SESSION'; }
+    el.classList.remove('after', 'asian', 'london', 'ny');
+    el.classList.add(session);
+    label.textContent = text;
+  })();
+</script>

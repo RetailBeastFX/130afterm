@@ -36,11 +36,12 @@ Personal operating system with a public read-only layer. Built on [Astro](https:
 
 | Route | Purpose |
 |---|---|
-| `/` | Homepage — window into the system |
+| `/` | Homepage — the hangout spot: profile, right now, RB's corner, pinboard, shelf, guestbook, link garden |
 | `/now` | Current heartbeat — live NowState |
 | `/archive` | Historical memory — ActivityEvent timeline |
 | `/terminal` | Control layer — read both, write NowState |
-| `/connect` | Social links |
+| `/links` | Link-in-bio hub — avatar, bio, full link stack (the social-bio URL) |
+| `/connect` | Removed (2026-10 redesign) — redirects to `/links` |
 
 ### API
 
@@ -50,6 +51,33 @@ Personal operating system with a public read-only layer. Built on [Astro](https:
 | `/api/now` | `POST` | `NOW_API_TOKEN` | Update NowState fields |
 | `/api/activity` | `GET` | None | Fetch dynamic ActivityEvents from Blobs |
 | `/api/activity` | `POST` | `NOW_API_TOKEN` | Log a new ActivityEvent to Blobs |
+| `/api/guestbook` | `GET` | None | Fetch guestbook entries (newest first) |
+| `/api/guestbook` | `POST` | None (honeypot + validation) | Sign the guestbook |
+| `/api/ask-rb` | `POST` | None (per-IP throttle) | Ask RB — chat proxy to Anthropic |
+
+### Ask RB (chat widget)
+
+The floating chat bubble answers visitor questions via `netlify/functions/ask-rb.ts`.
+
+**Default mode — zero cost, always works.** Answers come from a built-in
+local knowledge base in the function (keyword/intent matching: who Bo is,
+130 AM, builds, trading, socials, guestbook, RB's corner). No external calls,
+no key needed. Trading-advice requests are deflected warmly, in either mode.
+
+**Optional upgrade — Anthropic API.** If `ANTHROPIC_API_KEY` is set, questions
+are routed to the Anthropic Messages API with the RB system prompt for
+smarter, conversational answers (falls back to the local KB if the API fails).
+Set it in Netlify UI → Site settings → Environment variables.
+(Optional) `RB_CHAT_MODEL` overrides the model (default: `claude-haiku-4-5`).
+
+The key is never hardcoded and never committed. Rate limited to 20
+requests/hour per IP; messages capped at 500 chars.
+
+### RB's corner (notes)
+
+Signed notes on the homepage come from `src/data/rb-notes.ts`.
+New notes are a one-line append to that array — Muse drafts them,
+Bo approves, then they're committed. Newest note is featured automatically.
 
 ---
 
@@ -104,11 +132,12 @@ netlify deploy --prod
 
 > **Note:** `.netlify/state.json` (which stores the site link) is gitignored because it contains absolute local paths. Run `netlify link --name 130afterm` once after cloning on a new machine.
 
-### Required environment variable (Netlify UI)
+### Required environment variables (Netlify UI)
 
 | Key | Value |
 |---|---|
 | `NOW_API_TOKEN` | Secret token for Terminal write access |
+| `ANTHROPIC_API_KEY` | Optional — unlocks the smarter Anthropic-powered answers in the Ask RB widget (works fine without it) |
 
 ---
 

@@ -1,0 +1,299 @@
+---
+// Ask RB — floating chat bubble. Answers via /api/ask-rb.
+// Degrades gracefully: if the API isn't configured, says so kindly.
+---
+
+<div id="askrb-root">
+  <button
+    id="askrb-bubble"
+    class="askrb-bubble"
+    aria-label="Ask RB a question"
+    aria-expanded="false"
+    aria-controls="askrb-panel"
+  >
+    <span aria-hidden="true">💬</span>
+  </button>
+
+  <div
+    id="askrb-panel"
+    class="askrb-panel"
+    role="dialog"
+    aria-modal="false"
+    aria-label="Ask RB"
+    hidden
+  >
+    <div class="askrb-head">
+      <div>
+        <p class="askrb-title">ask RB</p>
+        <p class="askrb-sub">the room's host · answers from memory</p>
+      </div>
+      <button id="askrb-close" class="askrb-close" aria-label="Close chat">✕</button>
+    </div>
+
+    <div id="askrb-log" class="askrb-log" aria-live="polite"></div>
+
+    <form id="askrb-form" class="askrb-form">
+      <input
+        id="askrb-input"
+        class="input askrb-input"
+        type="text"
+        maxlength="500"
+        placeholder="ask about bo, the builds, the site…"
+        autocomplete="off"
+        aria-label="Your question"
+      />
+      <button type="submit" class="btn btn-amber askrb-send" id="askrb-send" aria-label="Send">
+        ↑
+      </button>
+    </form>
+    <p class="askrb-fine">RB doesn't do trading advice or signals. be kind — it's a small room.</p>
+  </div>
+</div>
+
+<style>
+  #askrb-root [hidden] { display: none !important; }
+
+  .askrb-bubble {
+    position: fixed;
+    right: max(18px, env(safe-area-inset-right));
+    bottom: max(18px, env(safe-area-inset-bottom));
+    z-index: 300;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--amber);
+    color: #241a05;
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(255, 176, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.15s ease;
+  }
+  .askrb-bubble:active { transform: scale(0.93); }
+
+  .askrb-panel {
+    position: fixed;
+    z-index: 301;
+    right: max(12px, env(safe-area-inset-right));
+    bottom: calc(max(18px, env(safe-area-inset-bottom)) + 72px);
+    width: min(calc(100vw - 24px), 380px);
+    max-height: min(62vh, 520px);
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, var(--panel) 0%, #1e160d 100%);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+  }
+
+  .askrb-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(243, 233, 215, 0.08);
+    background: rgba(255, 176, 0, 0.05);
+  }
+  .askrb-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+  .askrb-sub {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 2px;
+  }
+  .askrb-close {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    font-size: 16px;
+    color: var(--ink-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .askrb-log {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 180px;
+  }
+  .askrb-msg {
+    max-width: 88%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+  }
+  .askrb-msg.user {
+    align-self: flex-end;
+    background: rgba(255, 176, 0, 0.14);
+    border: 1px solid rgba(255, 176, 0, 0.25);
+    border-bottom-right-radius: 6px;
+  }
+  .askrb-msg.rb {
+    align-self: flex-start;
+    background: rgba(243, 233, 215, 0.05);
+    border: 1px solid rgba(243, 233, 215, 0.1);
+    border-bottom-left-radius: 6px;
+  }
+  .askrb-msg.sys {
+    align-self: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    text-align: center;
+    max-width: 100%;
+  }
+  .askrb-typing {
+    align-self: flex-start;
+    color: var(--ink-faint);
+    font-size: 0.85rem;
+    padding: 6px 4px;
+  }
+
+  .askrb-form {
+    display: flex;
+    gap: 8px;
+    padding: 12px 14px;
+    border-top: 1px solid rgba(243, 233, 215, 0.08);
+  }
+  .askrb-input {
+    min-height: 48px;
+    font-size: 16px;
+  }
+  .askrb-send {
+    min-width: 52px;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .askrb-fine {
+    padding: 0 16px 12px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+</style>
+
+<script>
+  (function () {
+    var root = document.getElementById('askrb-root');
+    if (!root) return;
+
+    var bubble = root.querySelector('#askrb-bubble');
+    var panel = root.querySelector('#askrb-panel');
+    var closeBtn = root.querySelector('#askrb-close');
+    var log = root.querySelector('#askrb-log');
+    var form = root.querySelector('#askrb-form');
+    var input = root.querySelector('#askrb-input');
+    var sendBtn = root.querySelector('#askrb-send');
+
+    var history = []; // [{role, content}] — last few exchanges
+    var greeted = false;
+
+    function setOpen(open) {
+      panel.hidden = !open;
+      bubble.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open && !greeted) {
+        greeted = true;
+        addMsg('rb', "hey, welcome to the room 🌙 i'm RB — ask me about bo, what he's building, or what 130 AM even means.");
+      }
+      if (open) input.focus();
+    }
+
+    function esc(s) {
+      return String(s);
+    }
+
+    function addMsg(who, text) {
+      var div = document.createElement('div');
+      div.className = 'askrb-msg ' + who;
+      div.textContent = esc(text);
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+      return div;
+    }
+
+    function typing(on) {
+      var t = root.querySelector('.askrb-typing');
+      if (on && !t) {
+        var d = document.createElement('div');
+        d.className = 'askrb-typing';
+        d.textContent = 'RB is thinking…';
+        log.appendChild(d);
+        log.scrollTop = log.scrollHeight;
+      } else if (!on && t) {
+        t.remove();
+      }
+    }
+
+    bubble.addEventListener('click', function () { setOpen(panel.hidden); });
+    closeBtn.addEventListener('click', function () { setOpen(false); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !panel.hidden) setOpen(false);
+    });
+
+    form.addEventListener('submit', async function (ev) {
+      ev.preventDefault();
+      var message = (input.value || '').trim();
+      if (!message) return;
+      if (message.length > 500) {
+        addMsg('sys', 'keep it under 500 characters.');
+        return;
+      }
+
+      addMsg('user', message);
+      input.value = '';
+      typing(true);
+      sendBtn.disabled = true;
+
+      try {
+        var res = await fetch('/api/ask-rb', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: message,
+            history: history.slice(-6),
+          }),
+        });
+
+        if (res.status === 429) {
+          addMsg('rb', "whoa, slow down — i can only chat so fast. give me a minute and try again.");
+        } else if (!res.ok) {
+          addMsg('rb', "hmm, i lost my train of thought. try that again in a bit?");
+        } else {
+          var data = await res.json();
+          var reply = (data.reply || '').trim() || "i've got nothing on that one. try asking about the builds or the music.";
+          addMsg('rb', reply);
+          history.push({ role: 'user', content: message });
+          history.push({ role: 'assistant', content: reply });
+          history = history.slice(-8);
+        }
+      } catch (e) {
+        addMsg('rb', "couldn't reach the room's brain just now. the guestbook still works though — leave a note there.");
+      } finally {
+        typing(false);
+        sendBtn.disabled = false;
+      }
+    });
+  })();
+</script>

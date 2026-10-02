@@ -1,70 +1,38 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import AmbientBackground from '../components/AmbientBackground.astro';
+import SiteGlow from '../components/SiteGlow.astro';
 import Navbar from '../components/Navbar.astro';
-import EngineCanvas from '../components/EngineCanvas.tsx';
 import ActivityTimeline from '../components/ActivityTimeline.astro';
-import { activity } from '../data/activity';
+import AskRb from '../components/AskRb.astro';
+import Footer from '../components/Footer.astro';
+import { sortedActivity } from '../data/activity';
+
+// ARCHIVE — the memory of the room. Historical, append-only.
+// Reads ActivityEvent data; merges live /api/activity entries client-side.
+const events = sortedActivity();
 ---
 
-<Layout title="130 AM // ARCHIVE">
-  <div id="r3f-root" class="fixed inset-0 -z-10 w-screen h-screen">
-    <EngineCanvas client:load />
-  </div>
-  
-  <div id="main-container" style="perspective:1500px;transform-style:preserve-3d;transition:transform .1s ease-out;">
-    <AmbientBackground />
-    <Navbar />
-    
-<main id="swup" class="transition-fade max-w-5xl mx-auto px-6 py-10 md:py-16 relative z-10">
+<Layout title="130 AM // ARCHIVE" description="The archive — charts, builds, notes, and milestones from the 130 AM room." active="archive">
+  <SiteGlow />
+  <Navbar active="archive" />
+  <AskRb />
 
-    <!-- ── HERO ── -->
-    <div class="hero-block mb-8">
-        <div class="font-mono text-[11px] font-bold tracking-[0.15em] text-amber-400 mb-3 flex items-center gap-3">
-            130AM // ARCHIVE
-            <span class="text-zinc-700 font-normal">|</span>
-            <span class="text-zinc-600 font-normal tracking-widest">Documented execution</span>
-        </div>
-        <p class="text-[15px] font-semibold text-zinc-200 leading-relaxed mb-2">Charts, notes, wins, losses, and lessons.</p>
-        <p class="text-sm text-zinc-500 leading-relaxed mb-4">Self-taught. Open systems over paid dependency.<br>Markets decoded through structure, repetition, and documentation.</p>
-        <div class="font-mono text-[10px] tracking-[0.1em] text-zinc-700 uppercase flex items-center gap-2">
-            <span class="blink text-amber-500">●</span> STATUS: EVOLVING
-            <span class="ml-4 text-zinc-800">1:30 After Midnight</span>
-        </div>
+  <main class="wrap pt-10 pb-4">
+    <div class="stack">
+      <header class="reveal">
+        <span class="label">// the memory</span>
+        <h1 class="display display-lg mt-2">archive</h1>
+        <p class="note mt-2">everything worth remembering 📼</p>
+        <p class="body-dim text-sm mt-4 max-w-md">
+          charts, notes, wins, losses, lessons. append-only — what's written here stays.
+        </p>
+      </header>
+
+      <div class="reveal">
+        <ActivityTimeline events={events} limit={100} />
+      </div>
     </div>
+  </main>
 
-    <!-- ── ACTIVITY TIMELINE ── -->
-    <div class="mt-8 mb-16">
-      <ActivityTimeline events={activity} limit={100} />
-    </div>
-
-    <!-- ── FOOTER ── -->
-    <footer class="text-center font-mono border-t border-white/[0.05] pt-8">
-        <p class="text-2xl font-black text-white mb-1 tracking-tight" style="font-family: Inter, sans-serif;">130AM</p>
-        <p class="text-[10px] tracking-[0.3em] text-zinc-700 uppercase mb-6">after hours.</p>
-        <p class="text-[9px] tracking-[0.15em] text-zinc-800">&copy; 2026 130AM. All Rights Reserved.</p>
-    </footer>
-
-</main>
-  </div>
-
-  <script>
-    const isMobile = () => window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
-    const container = document.getElementById('main-container');
-
-    if (!isMobile()) {
-      document.addEventListener('mousemove', (e) => {
-        if (!container) return;
-        const x = (e.clientX / window.innerWidth) - 0.5;
-        const y = (e.clientY / window.innerHeight) - 0.5;
-        container.style.transform = `rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
-      });
-    }
-
-    // Scroll reveal
-    document.addEventListener('DOMContentLoaded', () => {
-      const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}}),{threshold:.1});
-      document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
-    });
-  </script>
+  <Footer />
 </Layout>

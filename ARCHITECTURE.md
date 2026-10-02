@@ -1,5 +1,10 @@
 # 130AfterM Architecture
 
+> **Note (2026-10):** the presentation layer was fully redesigned on branch
+> `redesign/personal-hangout` ("favorite hangout spot" identity, mobile-first).
+> The rules below about the visual identity are historical; the data/backend
+> contracts (ActivityEvent / NowState, Terminal write layer) still hold.
+
 ## Direction
 
 130AfterM is a personal broadcast terminal: a living record of what is being built, traded, played, documented, and lived.

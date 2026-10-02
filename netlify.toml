@@ -25,7 +25,29 @@
 
 [[redirects]]
   from = "/connect.html"
-  to = "/connect"
+  to = "/links"
+  status = 301
+
+# /connect was folded into /links in the 2026-10 redesign
+[[redirects]]
+  from = "/connect"
+  to = "/links"
+  status = 301
+
+[[redirects]]
+  from = "/connect/"
+  to = "/links"
+  status = 301
+
+# /workspace was removed in the 2026-10 redesign — send it home
+[[redirects]]
+  from = "/workspace"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/workspace/"
+  to = "/"
   status = 301
 
 [[redirects]]
@@ -40,23 +62,18 @@
 
 # Trailing-slash variants (prevents redirect loops)
 [[redirects]]
-  from = "/workspace/"
-  to = "/workspace/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/workspace"
-  to = "/workspace/index.html"
-  status = 200
-
-[[redirects]]
   from = "/terminal"
   to = "/terminal/index.html"
   status = 200
 
 [[redirects]]
-  from = "/connect"
-  to = "/connect/index.html"
+  from = "/links"
+  to = "/links/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/links/"
+  to = "/links/index.html"
   status = 200
 
 [[headers]]
