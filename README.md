@@ -41,6 +41,9 @@ Personal operating system with a public read-only layer. Built on [Astro](https:
 | `/archive` | Historical memory — ActivityEvent timeline |
 | `/terminal` | Control layer — read both, write NowState |
 | `/links` | Link-in-bio hub — avatar, bio, full link stack (the social-bio URL) |
+| `/blog` | The rant room — Bo's personal blog (thoughts, rants), newest first |
+| `/blog/:slug` | Individual post pages |
+| `/rss.xml` | RSS feed for the rant room |
 | `/connect` | Removed (2026-10 redesign) — redirects to `/links` |
 
 ### API
@@ -78,6 +81,14 @@ requests/hour per IP; messages capped at 500 chars.
 Signed notes on the homepage come from `src/data/rb-notes.ts`.
 New notes are a one-line append to that array — Muse drafts them,
 Bo approves, then they're committed. Newest note is featured automatically.
+
+## Writing a rant (blog workflow)
+
+1. New file: `src/content/blog/my-post-slug.md` with frontmatter (`title`, `date: YYYY-MM-DD`, `description`, `tags: []`, optional `draft: true`).
+2. Write the post in markdown below the frontmatter.
+3. `git add`, commit, `git push` — Netlify rebuilds and it goes live.
+4. Drafts (`draft: true`) are hidden from `/blog`, post pages, and RSS until published.
+5. Feed lives at `/rss.xml`; the homepage shows the 3 newest rants automatically.
 
 ---
 

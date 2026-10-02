@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar.astro';
 import ProfileHeader from '../components/ProfileHeader.astro';
 import RightNow from '../components/RightNow.astro';
 import RbCorner from '../components/RbCorner.astro';
+import LatestRants from '../components/LatestRants.astro';
 import Pinboard from '../components/Pinboard.astro';
 import CurrentlyShelf from '../components/CurrentlyShelf.astro';
 import Guestbook from '../components/Guestbook.astro';
@@ -12,8 +13,11 @@ import LinkGarden from '../components/LinkGarden.astro';
 import AskRb from '../components/AskRb.astro';
 import Footer from '../components/Footer.astro';
 import { latestActivity } from '../data/activity';
+import { getCollection } from 'astro:content';
+import { sortNewest } from '../lib/blog';
 
 const recentEvents = latestActivity(6);
+const rantPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(sortNewest);
 ---
 
 <Layout title="130 AM // after hours." active="home">
@@ -26,6 +30,7 @@ const recentEvents = latestActivity(6);
       <ProfileHeader />
       <RightNow />
       <RbCorner />
+      <LatestRants posts={rantPosts} />
       <Pinboard events={recentEvents} />
       <CurrentlyShelf />
       <Guestbook />

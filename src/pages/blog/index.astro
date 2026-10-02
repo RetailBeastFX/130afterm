@@ -1,0 +1,78 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SiteGlow from '../../components/SiteGlow.astro';
+import Navbar from '../../components/Navbar.astro';
+import AskRb from '../../components/AskRb.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+import { postSlug, sortNewest } from '../../lib/blog';
+
+// THE RANT ROOM — Bo's personal blog. Thoughts, rants, whatever's on his mind.
+// Drafts are excluded from the listing.
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(sortNewest);
+
+function fmt(d: Date): string {
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+---
+
+<Layout
+  title="130 AM // the rant room"
+  description="Bo's personal blog — thoughts, rants, and whatever's on his mind. Unedited on purpose."
+  active="blog"
+>
+  <SiteGlow />
+  <Navbar active="blog" />
+  <AskRb />
+
+  <main class="wrap pt-10 pb-4">
+    <div class="stack">
+      <header class="reveal">
+        <span class="label">// the blog</span>
+        <h1 class="display display-lg mt-2">the rant room</h1>
+        <p class="note mt-2">thoughts & rants, unedited on purpose 📝</p>
+        <p class="body-dim text-sm mt-4 max-w-md">
+          whatever's on Bo's mind. no curriculum, no lessons — just the person, thinking out loud.
+        </p>
+      </header>
+
+      {posts.length > 0 ? (
+        <div class="flex flex-col gap-4">
+          {posts.map((post, i) => (
+            <a
+              href={`/blog/${postSlug(post)}/`}
+              class={`card block reveal ${i % 2 === 0 ? 'tape' : 'tape tape-sky'}`}
+            >
+              <div class="flex items-center gap-3 mb-2 flex-wrap">
+                <time
+                  class="mono"
+                  style="font-size: 10px; color: var(--ink-faint); letter-spacing: 0.14em;"
+                  datetime={post.data.date.toISOString().slice(0, 10)}
+                >
+                  {fmt(post.data.date)}
+                </time>
+                {post.data.tags.map((tag) => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
+              <h2 class="display text-xl mb-2">{post.data.title}</h2>
+              <p class="body-dim text-sm">{post.data.description}</p>
+              <span
+                class="mono mt-3 inline-block"
+                style="font-size: 10px; letter-spacing: 0.18em; color: var(--amber);"
+              >
+                READ →
+              </span>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="card reveal">
+          <p class="body-faint text-sm">nothing on the desk yet. check back after hours.</p>
+        </div>
+      )}
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
