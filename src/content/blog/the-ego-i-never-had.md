@@ -2,7 +2,7 @@
 title: "What Exactly Are You Trying to Take Away? The Ego I Never Had? 😂"
 date: 2026-10-02
 description: "On people who go out their way to humble you when you weren't even trying to stunt in the first place."
-tags: ["thoughts", "humility", "real talk"]
+tags: ["thoughts", "humility", "real talk", "misrecognition"]
 ---
 
 Nah, real talk, why do some people always feel the need to humble somebody who's already humble?

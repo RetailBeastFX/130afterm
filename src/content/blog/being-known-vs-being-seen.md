@@ -2,7 +2,7 @@
 title: "Being known vs. being seen"
 date: 2026-10-02
 description: "Raw note: on being around people who know of you but don't really know you."
-tags: ["thoughts", "raw note"]
+tags: ["thoughts", "raw note", "misrecognition"]
 draft: true
 ---
 
