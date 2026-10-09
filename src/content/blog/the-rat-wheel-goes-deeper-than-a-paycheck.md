@@ -3,6 +3,8 @@ title: "The Rat Wheel Goes Deeper Than a Paycheck"
 date: 2026-10-09
 description: "On debt, the work-recover-work cycle, and what AI exposes about who really benefits from progress."
 tags: ["thoughts", "work", "freedom"]
+category: Money
+highlight: "Debt will have you working for your own freedom while keeping you too broke to actually be free."
 ---
 
 The system doesn't just trap you with what you make. It traps you with what you owe.

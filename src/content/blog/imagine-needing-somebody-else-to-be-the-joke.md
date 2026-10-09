@@ -3,6 +3,8 @@ title: "Imagine Needing Somebody Else to Be the Joke"
 date: 2026-10-09
 description: "On people who need an audience to mock someone different — and why not laughing doesn't make you the weird one."
 tags: ["thoughts", "misrecognition"]
+category: Society
+highlight: "You don't have to understand somebody to leave them alone."
 ---
 
 It's always been weird to me how some people need an audience to make fun of somebody.

@@ -3,6 +3,8 @@ title: "You Gotta Perform Just to Prove You Can Do the Job"
 date: 2026-10-08
 description: "On job interviews feeling like auditions — and why charisma isn't competence."
 tags: ["thoughts", "work", "misrecognition"]
+category: Society
+highlight: "Some people know how to work a room. Some people know how to do the work."
 ---
 
 One thing about job interviews that always rubbed me the wrong way is how much of that shit feels like a performance.

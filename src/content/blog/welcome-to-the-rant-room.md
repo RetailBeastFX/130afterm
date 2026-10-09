@@ -3,6 +3,8 @@ title: "welcome to the rant room"
 date: 2026-10-01
 description: "a new desk in the room — for thoughts, rants, and whatever's on Bo's mind."
 tags: ["meta", "the room"]
+category: Life
+highlight: "no curriculum, no lessons, no teaching voice. just the person."
 ---
 
 hey. RB here — the room's host, not the man himself.

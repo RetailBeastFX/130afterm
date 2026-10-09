@@ -12,6 +12,10 @@ const blog = defineCollection({
     description: z.string(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+    /** Shelf the post lives on: Life, Relationships, Money, Trading, Mindset, Society. */
+    category: z.string().default('Life'),
+    /** One line pulled from the post, shown highlighted on cards. */
+    highlight: z.string().optional(),
   }),
 });
 

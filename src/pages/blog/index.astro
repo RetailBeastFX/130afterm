@@ -5,15 +5,17 @@ import Navbar from '../../components/Navbar.astro';
 import AskRb from '../../components/AskRb.astro';
 import Footer from '../../components/Footer.astro';
 import { getCollection } from 'astro:content';
-import { postSlug, sortNewest } from '../../lib/blog';
+import { postSlug, sortNewest, readingTime } from '../../lib/blog';
 
 // THE RANT ROOM — Bo's personal blog. Thoughts, rants, whatever's on his mind.
 // Drafts are excluded from the listing.
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(sortNewest);
 
 function fmt(d: Date): string {
-  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
+
+const accents = ['sticker-amber', 'sticker-rose', 'sticker-sky', 'sticker-mint', 'sticker-violet'];
 ---
 
 <Layout
@@ -43,22 +45,28 @@ function fmt(d: Date): string {
               href={`/blog/${postSlug(post)}/`}
               class={`card block reveal ${i % 2 === 0 ? 'tape' : 'tape tape-sky'}`}
             >
-              <div class="flex items-center gap-3 mb-2 flex-wrap">
+              <div class="flex items-center gap-3 mb-3 flex-wrap">
+                <span class:list={['sticker', accents[i % accents.length]]}>
+                  {post.data.category}
+                </span>
                 <time
                   class="mono"
                   style="font-size: 10px; color: var(--ink-faint); letter-spacing: 0.14em;"
                   datetime={post.data.date.toISOString().slice(0, 10)}
                 >
-                  {fmt(post.data.date)}
+                  {fmt(post.data.date)} · {readingTime(post)} min read
                 </time>
-                {post.data.tags.map((tag) => (
-                  <span class="tag">{tag}</span>
-                ))}
               </div>
-              <h2 class="display text-xl mb-2">{post.data.title}</h2>
-              <p class="body-dim text-sm">{post.data.description}</p>
+              <h2 class="hand mb-3" style="font-size: 1.9rem; line-height: 1.15;">{post.data.title}</h2>
+              {post.data.highlight ? (
+                <p class="text-sm leading-relaxed mb-2">
+                  <mark class="hl">{post.data.highlight}</mark>
+                </p>
+              ) : (
+                <p class="body-dim text-sm mb-2">{post.data.description}</p>
+              )}
               <span
-                class="mono mt-3 inline-block"
+                class="mono mt-2 inline-block"
                 style="font-size: 10px; letter-spacing: 0.18em; color: var(--amber);"
               >
                 READ →
@@ -76,3 +84,21 @@ function fmt(d: Date): string {
 
   <Footer />
 </Layout>
+
+<style>
+  /* Handwritten post titles */
+  .hand {
+    font-family: var(--font-hand);
+    font-weight: 500;
+    color: var(--ink);
+  }
+  /* Yellow marker highlight */
+  .hl {
+    background: linear-gradient(100deg, rgba(255, 213, 74, 0.32), rgba(255, 213, 74, 0.2));
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    padding: 0 3px;
+    border-radius: 2px;
+    color: var(--ink);
+  }
+</style>

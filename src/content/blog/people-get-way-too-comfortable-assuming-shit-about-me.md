@@ -3,6 +3,8 @@ title: "People Get Way Too Comfortable Assuming Shit About Me"
 date: 2026-10-09
 description: "On being quiet without being a blank slate — and why not arguing doesn't mean you agree."
 tags: ["thoughts", "misrecognition"]
+category: Life
+highlight: "There's a difference between trying to understand somebody and deciding you already have them figured out."
 ---
 
 I think being quiet, passive, and not really argumentative makes people way too comfortable talking down to me. It's like because I'm not the type to go back and forth with everybody, people assume they can say whatever they want, downplay what I'm dealing with, or tell me who I am like I don't know myself.

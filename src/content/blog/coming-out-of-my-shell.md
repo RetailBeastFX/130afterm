@@ -3,6 +3,8 @@ title: "I Don't Need Help Coming Out of My Shell. 😂"
 date: 2026-10-03
 description: "On being quiet without being broken — and why 'come out of your shell' isn't the compliment people think it is."
 tags: ["thoughts", "introversion", "misrecognition"]
+category: Life
+highlight: "Some of us aren't trying to come out of our shells. Some of us are just tired of people knocking on them. 😂"
 ---
 
 You know what I hate? When people assume you need a little encouragement just because you're quiet.
