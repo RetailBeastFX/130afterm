@@ -19,4 +19,24 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+// The Trading Lab — public research journal for Bo's trading development.
+// Evolving notes, not posts: each note carries a research status and gets
+// updated as evidence accumulates. Never a conclusion, never a signal.
+const lab = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/lab' }),
+  schema: z.object({
+    title: z.string(),
+    /** Research note number, shown as 001, 002… */
+    number: z.number().int().positive(),
+    date: z.coerce.date(),
+    updated: z.coerce.date().optional(),
+    description: z.string(),
+    status: z
+      .enum(['observation', 'hypothesis', 'testing', 'validated'])
+      .default('observation'),
+    instruments: z.array(z.string()).default([]),
+    tags: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { blog, lab };

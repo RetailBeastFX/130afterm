@@ -1,0 +1,165 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SiteGlow from '../../components/SiteGlow.astro';
+import Navbar from '../../components/Navbar.astro';
+import AskRb from '../../components/AskRb.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('lab');
+  return notes.map((note) => ({
+    params: { slug: note.id.replace(/\.md$/, '') },
+    props: { note },
+  }));
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+
+function pad(n: number): string {
+  return String(n).padStart(3, '0');
+}
+
+function fmt(d: Date): string {
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+const statusClass: Record<string, string> = {
+  observation: 'sticker-sky',
+  hypothesis: 'sticker-amber',
+  testing: 'sticker-rose',
+  validated: 'sticker-mint',
+};
+
+const statusLabel: Record<string, string> = {
+  observation: 'OBSERVATION',
+  hypothesis: 'HYPOTHESIS',
+  testing: 'IN TESTING',
+  validated: 'VALIDATED IN TESTING',
+};
+---
+
+<Layout
+  title={`130 AM // lab ${pad(note.data.number)} — ${note.data.title}`}
+  description={note.data.description}
+  active="lab"
+>
+  <SiteGlow />
+  <Navbar active="lab" />
+  <AskRb />
+
+  <main class="wrap pt-10 pb-4" style="max-width: 680px;">
+    <div class="stack">
+      <div class="reveal">
+        <a
+          href="/lab/"
+          class="mono"
+          style="font-size: 10px; letter-spacing: 0.18em; color: var(--ink-faint); min-height: 44px; display: inline-flex; align-items: center;"
+        >
+          ← BACK TO THE LAB
+        </a>
+      </div>
+
+      <header class="reveal">
+        <div class="flex items-center gap-3 mb-4 flex-wrap">
+          <span
+            class="mono"
+            style="font-size: 11px; color: var(--ink-faint); letter-spacing: 0.18em;"
+          >
+            RESEARCH NOTE · {pad(note.data.number)}
+          </span>
+          <span class:list={['sticker', statusClass[note.data.status]]}>
+            {statusLabel[note.data.status]}
+          </span>
+        </div>
+        <h1 class="display" style="font-size: 2.2rem; line-height: 1.15;">{note.data.title}</h1>
+        <p class="body-dim text-sm mt-3">{note.data.description}</p>
+        <div class="flex items-center gap-4 mt-4 flex-wrap">
+          {note.data.instruments.map((i) => (
+            <span class="mono" style="font-size: 10px; color: var(--ink-faint); letter-spacing: 0.12em;">{i}</span>
+          ))}
+          <time
+            class="mono"
+            style="font-size: 10px; color: var(--ink-faint); letter-spacing: 0.14em;"
+            datetime={(note.data.updated ?? note.data.date).toISOString().slice(0, 10)}
+          >
+            UPDATED {fmt(note.data.updated ?? note.data.date)}
+          </time>
+        </div>
+      </header>
+
+      <article class="card tape reveal lab-prose">
+        <Content />
+      </article>
+
+      {note.data.tags.length > 0 && (
+        <div class="reveal flex items-center gap-2 flex-wrap">
+          {note.data.tags.map((tag) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )}
+
+      <div class="reveal flex items-center justify-between flex-wrap gap-3">
+        <a href="/lab/" class="btn btn-ghost">← more notes</a>
+        <p class="body-faint text-sm" style="font-size: 12px;">
+          this note evolves. status updates as evidence accumulates.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+
+  <style>
+    /* Lab reading styles — clean, precise, no handwriting. */
+    .lab-prose {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--ink-dim);
+    }
+    .lab-prose > *:first-child { margin-top: 0; }
+    .lab-prose > *:last-child { margin-bottom: 0; }
+    .lab-prose p { margin: 1em 0; }
+    .lab-prose h2 {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      color: var(--amber);
+      margin: 1.8em 0 0.7em;
+      text-transform: uppercase;
+    }
+    .lab-prose h2::before {
+      content: '// ';
+      color: var(--ink-faint);
+    }
+    .lab-prose ul, .lab-prose ol { margin: 1em 0; padding-left: 1.4em; }
+    .lab-prose li { margin: 0.4em 0; }
+    .lab-prose li::marker { color: var(--amber); }
+    .lab-prose strong { color: var(--ink); }
+    .lab-prose em { color: var(--ink); }
+    .lab-prose hr {
+      border: none;
+      border-top: 1px dashed var(--card-border);
+      margin: 1.8em 0;
+    }
+    .lab-prose blockquote {
+      margin: 1.4em 0;
+      padding: 0.6em 0 0.6em 1.1em;
+      border-left: 3px solid var(--amber);
+      color: var(--ink);
+    }
+    .lab-prose blockquote p { margin: 0.3em 0; }
+    .lab-prose code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      background: rgba(255, 176, 0, 0.1);
+      padding: 0.15em 0.4em;
+      border-radius: 6px;
+      color: var(--amber);
+    }
+    .lab-prose a { color: var(--amber); text-decoration: underline; text-underline-offset: 3px; }
+  </style>
+</Layout>

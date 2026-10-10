@@ -1,0 +1,119 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SiteGlow from '../../components/SiteGlow.astro';
+import Navbar from '../../components/Navbar.astro';
+import AskRb from '../../components/AskRb.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+// THE TRADING LAB — public research journal. Evolving notes on models,
+// experiments, and observations. Document the process, not the conclusion.
+const notes = (await getCollection('lab')).sort((a, b) => a.data.number - b.data.number);
+
+function pad(n: number): string {
+  return String(n).padStart(3, '0');
+}
+
+function fmt(d: Date): string {
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+const statusClass: Record<string, string> = {
+  observation: 'sticker-sky',
+  hypothesis: 'sticker-amber',
+  testing: 'sticker-rose',
+  validated: 'sticker-mint',
+};
+
+const statusLabel: Record<string, string> = {
+  observation: 'OBSERVATION',
+  hypothesis: 'HYPOTHESIS',
+  testing: 'IN TESTING',
+  validated: 'VALIDATED IN TESTING',
+};
+---
+
+<Layout
+  title="130 AM // the trading lab"
+  description="Bo's public trading research journal — evolving notes on models, experiments, and observations. Process, not conclusions."
+  active="lab"
+>
+  <SiteGlow />
+  <Navbar active="lab" />
+  <AskRb />
+
+  <main class="wrap pt-10 pb-4">
+    <div class="stack">
+      <header class="reveal">
+        <span class="label">// research</span>
+        <h1 class="display display-lg mt-2">the trading lab</h1>
+        <p class="note mt-2">research notes, evolving in public 🔬</p>
+        <p class="body-dim text-sm mt-4 max-w-md">
+          where models get investigated, not announced. each note carries a research status
+          and gets updated as evidence accumulates — never a conclusion, never a signal.
+        </p>
+      </header>
+
+      {notes.length > 0 ? (
+        <div class="flex flex-col gap-3">
+          {notes.map((note) => (
+            <a href={`/lab/${note.id.replace(/\.md$/, '')}/`} class="card block reveal lab-card">
+              <div class="flex items-center gap-3 mb-2 flex-wrap">
+                <span
+                  class="mono"
+                  style="font-size: 11px; color: var(--ink-faint); letter-spacing: 0.14em;"
+                >
+                  {pad(note.data.number)}
+                </span>
+                <span class:list={['sticker', statusClass[note.data.status]]}>
+                  {statusLabel[note.data.status]}
+                </span>
+                {note.data.instruments.map((i) => (
+                  <span class="mono" style="font-size: 10px; color: var(--ink-faint);">{i}</span>
+                ))}
+              </div>
+              <h2 class="display text-xl mb-1">{note.data.title}</h2>
+              <p class="body-dim text-sm">{note.data.description}</p>
+              <div
+                class="mono mt-3"
+                style="font-size: 10px; letter-spacing: 0.14em; color: var(--ink-faint);"
+              >
+                UPDATED {fmt(note.data.updated ?? note.data.date)}
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="card reveal">
+          <p class="body-faint text-sm">no notes on the bench yet.</p>
+        </div>
+      )}
+
+      <p class="reveal body-faint text-sm" style="font-size: 12px;">
+        research statuses: observation → hypothesis → testing → validated in testing.
+        "validated" means the results met predefined criteria in the data tested —
+        it is not a claim about future profitability.
+      </p>
+    </div>
+  </main>
+
+  <Footer />
+
+  <style>
+    /* Lab cards: technical, compact, grid-line precision. */
+    .lab-card {
+      position: relative;
+    }
+    .lab-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 18px;
+      bottom: 18px;
+      width: 3px;
+      border-radius: 2px;
+      background: linear-gradient(to bottom, var(--amber), transparent);
+      opacity: 0.7;
+    }
+  </style>
+</Layout>
