@@ -5,7 +5,6 @@ description: "On outgrowing the romantic ideal — and choosing to stop audition
 tags: ["thoughts", "relationships", "misrecognition"]
 category: Relationships
 highlight: "I spent years trying to become somebody worth choosing. Now I just want to live without feeling like I have to be chosen at all."
-draft: true
 ---
 
 When I was younger, I was a whole hopeless romantic.
