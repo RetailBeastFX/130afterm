@@ -5,7 +5,6 @@ description: "A rant about approval, misrepresentation, and the need to have the
 tags: ["thoughts", "mindset", "misrecognition"]
 category: Mindset
 highlight: "I don't need everybody to understand me. I need to stop acting like every misunderstanding is my responsibility to fix."
-draft: true
 ---
 
 I’ve been thinking about how much energy we spend trying to control what other people think about us.
@@ -83,5 +82,3 @@ I don’t need everybody to understand me. I need to stop acting like every misu
 That’s the difference between wanting to be understood and needing to be understood.
 
 One is human. The other can become a prison.
-
-— Bo
