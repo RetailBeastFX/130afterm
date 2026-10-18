@@ -1,77 +1,78 @@
 ---
 title: "Auditioning for the Verdict"
-date: 2026-10-17
+date: 2026-10-18
 description: "A follow-up on the need to be understood — and the quiet moment when defending the truth turns into auditioning for the verdict."
 tags: ["thoughts", "mindset", "misrecognition"]
 category: Mindset
-highlight: "Are you trying to establish the truth, or are you waiting for the other person to make the truth feel real by acknowledging it?"
-draft: true
+highlight: "Are you trying to establish the truth, or are you waiting on somebody else to make it feel real by acknowledging it?"
 ---
 
 I ended the last rant with a question I couldn't shake.
 
 Why am I working so hard to be understood by somebody whose opinion I don't even respect?
 
-I've been sitting with that. And the honest answer is more uncomfortable than I expected.
+I've been sitting with that one. And the answer made me uncomfortable.
 
-It's not that I want their approval. I meant that when I said it. I don't want their friendship, their respect, or their good opinion of me.
+Because it's not about approval. I meant what I said. I don't want their friendship. I don't want their respect. I don't need them to like me.
 
-But I still needed them to stop being wrong about me. And I had to ask myself why.
+But I still needed them to stop being wrong about me.
 
-I think there are three different things that can be happening, and they get mixed together.
+Why?
 
-Sometimes you want somebody to think well of you. That's approval. Straightforward.
+I think there's a few different things going on, and they all look the same from the outside.
 
-Sometimes you want somebody to understand what actually happened. That's about accuracy. Also straightforward.
+Sometimes you want somebody to think good of you. That's approval. Simple.
 
-But sometimes you need their perception corrected because being seen negatively feels intolerable. Not because you admire them. Not because their opinion has value. Because something in you can't rest while their wrong version of you is still out there.
+Sometimes you just want the facts straight. Somebody got it twisted and you want to correct it. That's about accuracy. Also simple.
 
-That third one is the one that kept pulling at me.
+But then there's this other thing. Where you don't admire the person, you don't value their opinion, you wouldn't take advice from them about nothing — but you still can't rest until they stop seeing you wrong.
 
-Because here's what I realized: you can outgrow the need to be liked and still be chained to the need to be understood correctly. You can stop caring about popularity and still lose sleep over somebody's wrong impression of you. Those aren't the same hunger.
+That last one is the one I couldn't let go of.
 
-So I started trying to figure out where the line is. When does defending yourself stop being about the truth and start being about control?
+Because it means you can outgrow the need to be liked and still be stuck on the need to be seen right. You can stop chasing popularity and still lose sleep over somebody's wrong idea of you. I don't think those are the same hunger.
 
-And I think the answer has to do with jurisdiction. What's actually yours, and what was never yours to begin with.
+So where's the line? When does defending yourself stop being about the truth and start being about control?
 
-What's yours: how you acted. Whether you were honest, whether you treated people fair, whether you owned what you did. That's yours.
+I think it comes down to what's actually in your hands and what ain't.
 
-What's yours: your response. Whether you explain yourself, correct the record, set a boundary, or walk away. That's yours too.
+How you moved — that's yours. Whether you were honest, whether you treated people right, whether you owned your part. Nobody can take that from you.
 
-What's yours: deciding whether somebody's criticism deserves your attention. Not every accusation earns an investigation. Anybody can make a claim about you — that doesn't mean they bought a seat at the table of your self-examination.
+How you respond — that's yours too. You can explain yourself. You can correct the record. You can set a boundary. You can walk away. Your call.
 
-What's not yours: what they conclude. You can hand somebody the truth and they can still walk away believing whatever they walked in with. You can't dictate what somebody does with information.
+Whether somebody's criticism is even worth your time — that's yours. Just because somebody said something about you don't mean you owe them an investigation. Anybody can make a claim. That don't give them access to your self-examination.
 
-What's not yours: their realization. They might never admit they were wrong. Not in a week, not in a year, not ever.
+But what they decide to believe? That ain't yours. You can lay out the truth plain as day and somebody will still walk away thinking what they came in thinking. You can't control what people do with information.
 
-What's not yours: the feeling of closure. You can work toward peace, but you can't force an unresolved situation to feel finished just because you need it to.
+Whether they ever admit they were wrong? That ain't yours either. Might happen next week. Might happen never.
 
-You can try to persuade somebody. You can care about changing their mind. That's influence, and influence is fine.
+And that feeling of closure you're waiting on — hating to say it, but that ain't fully yours. You can work toward peace, but you can't force a situation to feel finished just because you're tired of carrying it.
 
-But influence isn't authority. You can make your case. You can't require the verdict.
+You can try to change somebody's mind. Nothing wrong with that. That's influence.
 
-That last line stuck with me, because it named something I'd been doing without seeing it.
+But influence ain't authority. You can make your case. You can't make them rule in your favor.
 
-There's a moment — and it's quiet, you almost don't notice it — where defending the truth turns into auditioning for the verdict.
+And that's when I saw what I'd been doing.
 
-It starts honest. You're correcting the record. You're saying what happened. That's legitimate.
+There's a moment — it's quiet, you barely notice it happening — where you're not defending the truth no more. You're auditioning for the verdict.
 
-But somewhere along the way, the motive shifts. You're not establishing the truth anymore. You're waiting for them to make it feel real by acknowledging it. You're not done when you've said your piece — you're done when they agree. And if they don't agree, you're not done at all.
+It starts off honest. You're setting the record straight. Saying what happened. Nothing wrong with that.
 
-That's the audition. You're performing your innocence for a judge who never agreed to preside, waiting on a ruling they were never obligated to give.
+But then something shifts. You're not trying to establish the truth anymore. You're waiting on them to make it feel real by agreeing with you. You're not finished when you've said your piece. You're finished when they say you were right. And if they never say it, you're never finished.
 
-And here's the part that messed me up: I had built an expectation I never said out loud. If I know who I am, and I know what happened, then eventually they should see it too. The truth should produce recognition. The explanation should work. The evidence should settle it.
+That's the audition. You're pleading your case to a judge who never agreed to hear it, waiting on a ruling nobody owed you.
 
-But nobody agreed to that. Nobody owes you their eventual understanding. That's a debt nobody signed up to pay, and I've been acting like it's past due.
+The part that messed me up is I had this expectation I never even said out loud. If I know who I am, and I know what happened, then eventually they supposed to see it too. The truth should speak for itself. The evidence should settle it.
 
-Wanting recognition doesn't make you entitled to receive it. The truth doesn't stop being true just because somebody refuses to acknowledge it. That's the part I had to sit with.
+But nobody signed up for that. Nobody owes you their understanding. I've been acting like somebody's late on a payment they never agreed to make.
 
-You don't have to pretend their opinion is harmless. You don't have to forgive them. You don't even have to convince yourself it doesn't bother you. You just have to stop making their agreement a prerequisite for moving forward.
+And look — wanting to be understood don't make you entitled to be understood. The truth don't stop being true because somebody won't acknowledge it. I had to sit with that one for a while.
 
-So here's where I landed, and it's the question I'll leave you with because it's the one I'm still asking myself:
+You don't have to act like their opinion don't matter. You don't have to forgive them. You don't even have to pretend it don't bother you. You just gotta stop making their agreement the thing your peace depends on.
 
-Are you trying to establish the truth, or are you waiting for the other person to make the truth feel real by acknowledging it?
+So I'll leave it where I landed, because I'm still working through it myself:
 
-The first one can be your responsibility.
+Are you trying to establish the truth, or are you waiting on somebody else to make it feel real by acknowledging it?
+
+The first one, that's on you.
 
 The second one never was.
