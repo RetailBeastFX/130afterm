@@ -5,7 +5,6 @@ description: "On letting people underestimate you — and knowing which misunder
 tags: ["thoughts", "mindset", "misrecognition"]
 category: Mindset
 highlight: "Not everybody needs access to every part of me, and not everybody needs to understand me."
-draft: true
 ---
 
 Sometimes I think there's an advantage to letting people underestimate you. You don't always have to show everything you know or correct every assumption people make about you. Sometimes it's better to sit back and observe.
