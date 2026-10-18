@@ -19,12 +19,12 @@
   --amber: #ffb000;
   --amber-soft: rgba(255, 176, 0, 0.12);
 
-  /* Sticker accents */
-  --rose: #f472a7;
-  --sky: #7dd3fc;
-  --mint: #6ee7b7;
-  --violet: #c4b5fd;
-  --coral: #fb923c;
+  /* Hardened accents — deep, desaturated, no pastels */
+  --rose: #d94848;
+  --sky: #6b8cae;
+  --mint: #8a9a5b;
+  --violet: #7a7090;
+  --coral: #c96f2e;
 
   /* Card chrome */
   --card-border: rgba(243, 233, 215, 0.09);
@@ -94,8 +94,8 @@ img {
   overflow: hidden;
   background:
     radial-gradient(1100px 520px at 50% -8%, rgba(255, 176, 0, 0.1), transparent 70%),
-    radial-gradient(800px 500px at 88% 42%, rgba(167, 139, 250, 0.06), transparent 70%),
-    radial-gradient(900px 600px at 8% 88%, rgba(251, 146, 60, 0.05), transparent 70%),
+    radial-gradient(800px 500px at 88% 42%, rgba(122, 112, 144, 0.07), transparent 70%),
+    radial-gradient(900px 600px at 8% 88%, rgba(201, 111, 46, 0.06), transparent 70%),
     linear-gradient(180deg, #1b130b 0%, var(--bg) 34%, var(--bg-deep) 100%);
 }
 
@@ -170,10 +170,10 @@ img {
   z-index: 2;
 }
 
-.tape-rose::before { background: linear-gradient(180deg, #4a2c36 0%, #372129 100%); }
-.tape-sky::before { background: linear-gradient(180deg, #2c3e4c 0%, #212f3a 100%); }
-.tape-violet::before { background: linear-gradient(180deg, #39334c 0%, #2b2639 100%); }
-.tape-mint::before { background: linear-gradient(180deg, #2c4139 0%, #213129 100%); }
+.tape-rose::before { background: linear-gradient(180deg, #4a2a2c 0%, #382123 100%); }
+.tape-sky::before { background: linear-gradient(180deg, #2a3a48 0%, #212c38 100%); }
+.tape-violet::before { background: linear-gradient(180deg, #35334a 0%, #282639 100%); }
+.tape-mint::before { background: linear-gradient(180deg, #3a4028 0%, #2c3122 100%); }
 
 /* Stamp badge — rubber-stamp, inked edge */
 .sticker {

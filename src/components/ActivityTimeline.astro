@@ -10,13 +10,13 @@ const { events, limit = 100 } = Astro.props;
 const visibleEvents = events.slice(0, limit);
 
 const TYPE_META: Record<string, { icon: string; label: string; color: string }> = {
-  trade:   { icon: '📈', label: 'trade',   color: '#f472a7' },
-  build:   { icon: '🔧', label: 'build',   color: '#7dd3fc' },
-  media:   { icon: '🎬', label: 'media',   color: '#fb923c' },
-  life:    { icon: '🌙', label: 'life',    color: '#c4b5fd' },
-  gaming:  { icon: '🎮', label: 'gaming',  color: '#c4b5fd' },
+  trade:   { icon: '📈', label: 'trade',   color: '#d94848' },
+  build:   { icon: '🔧', label: 'build',   color: '#6b8cae' },
+  media:   { icon: '🎬', label: 'media',   color: '#c96f2e' },
+  life:    { icon: '🌙', label: 'life',    color: '#7a7090' },
+  gaming:  { icon: '🎮', label: 'gaming',  color: '#7a7090' },
   stream:  { icon: '📡', label: 'stream',  color: '#f87171' },
-  thought: { icon: '💭', label: 'thought', color: '#6ee7b7' },
+  thought: { icon: '💭', label: 'thought', color: '#8a9a5b' },
   project: { icon: '⚡', label: 'project',  color: '#ffb000' },
 };
 
@@ -82,8 +82,8 @@ function fmt(dateStr: string): string {
       if (!list || !events.length) return;
 
       const TYPE_COLORS = {
-        trade: '#f472a7', build: '#7dd3fc', media: '#fb923c', life: '#c4b5fd',
-        gaming: '#c4b5fd', stream: '#f87171', thought: '#6ee7b7', project: '#ffb000',
+        trade: '#d94848', build: '#6b8cae', media: '#c96f2e', life: '#7a7090',
+        gaming: '#7a7090', stream: '#f87171', thought: '#8a9a5b', project: '#ffb000',
       };
       const TYPE_ICONS = {
         trade: '📈', build: '🔧', media: '🎬', life: '🌙',

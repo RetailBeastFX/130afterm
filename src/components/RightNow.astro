@@ -134,21 +134,21 @@ const { showLink = true } = Astro.props;
           if (data.listening_to_spotify && data.spotify) {
             var sp = data.spotify;
             showLive({
-              type: '🎧 LISTENING NOW', color: '#6ee7b7',
+              type: '🎧 LISTENING NOW', color: '#8a9a5b',
               title: sp.song, sub: sp.artist,
               artUrl: sp.album_art_url,
             });
             lanyardFields = { listening: sp.song + ' — ' + sp.artist };
           } else if (game) {
             showLive({
-              type: '🎮 PLAYING', color: '#c4b5fd',
+              type: '🎮 PLAYING', color: '#7a7090',
               title: game.name, sub: game.details || game.state || '',
               emoji: '🎮',
             });
             lanyardFields = { playing: game.name };
           } else if (custom && custom.state) {
             showLive({
-              type: '💬 STATUS', color: '#7dd3fc',
+              type: '💬 STATUS', color: '#6b8cae',
               title: custom.state, sub: '',
               emoji: (custom.emoji && custom.emoji.name) || '💬',
             });

@@ -228,7 +228,7 @@ const recentActivity = latestActivity(5);
           setTermOutput(err.error || ('Error ' + res.status), '#f87171');
           return;
         }
-        setTermOutput('✓ Snapshot committed. /now is updated.', '#6ee7b7');
+        setTermOutput('✓ Snapshot committed. /now is updated.', '#8a9a5b');
         // Patch the read panel immediately
         for (const [field, value] of Object.entries(payload)) {
           const row = document.querySelector('[data-now-key="' + field + '"] [data-val]');
@@ -268,7 +268,7 @@ const recentActivity = latestActivity(5);
           return;
         }
         const dateStr = new Date().toISOString().slice(0, 16).replace('T', ' ');
-        setTermOutput('[EVENT COMMITTED] ' + dateStr + ' — snapshot → archive', '#6ee7b7');
+        setTermOutput('[EVENT COMMITTED] ' + dateStr + ' — snapshot → archive', '#8a9a5b');
       } catch (e) {
         setTermOutput(e.message, '#f87171');
       } finally {
