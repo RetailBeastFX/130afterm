@@ -94,6 +94,67 @@ const {
         );
         marks.forEach(function (m) { mio.observe(m); });
       })();
+
+      // ── Terminal typing ─────────────────────────────────────────────
+      // [data-type] labels type out on load; lab note section headers
+      // type out when scrolled into view. No-JS keeps full text.
+      (function () {
+        function clean(el) {
+          return el.textContent.replace(/\s+/g, ' ').trim();
+        }
+        function typeInto(el, text, speed) {
+          var cursor = document.createElement('span');
+          cursor.className = 'type-cursor';
+          el.textContent = '';
+          el.appendChild(cursor);
+          var i = 0;
+          var timer = setInterval(function () {
+            i += 1;
+            el.textContent = text.slice(0, i);
+            el.appendChild(cursor);
+            if (i >= text.length) {
+              clearInterval(timer);
+              setTimeout(function () {
+                if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
+              }, 900);
+            }
+          }, speed);
+        }
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        // Above-fold labels
+        document.querySelectorAll('[data-type]').forEach(function (el) {
+          var text = clean(el);
+          function start() { typeInto(el, text, 55); }
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', start);
+          } else {
+            start();
+          }
+        });
+
+        // Lab note section headers — clear early, type on scroll
+        var heads = document.querySelectorAll('.lab-prose h2');
+        if (!heads.length) return;
+        var tio = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                var el = entry.target;
+                tio.unobserve(el);
+                typeInto(el, el.getAttribute('data-fulltext'), 34);
+              }
+            });
+          },
+          { threshold: 0.6 }
+        );
+        heads.forEach(function (h) {
+          h.setAttribute('data-fulltext', clean(h));
+          h.textContent = '';
+          tio.observe(h);
+        });
+      })();
     </script>
   </body>
 </html>
