@@ -1,0 +1,60 @@
+---
+// Ticker — a slow market-style marquee of Bo's own highlight lines.
+// Ambient, not interactive: pure CSS motion, pauses on hover.
+interface Props {
+  items: string[];
+}
+
+const { items } = Astro.props;
+if (items.length === 0) return;
+const loop = [...items, ...items];
+---
+
+<div class="ticker reveal" aria-hidden="true">
+  <div class="ticker-track">
+    {loop.map((text) => (
+      <span class="ticker-item">{text}</span>
+    ))}
+  </div>
+</div>
+
+<style>
+  .ticker {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    overflow: hidden;
+    border-top: 1px solid var(--card-border);
+    border-bottom: 1px solid var(--card-border);
+    background: rgba(0, 0, 0, 0.32);
+    padding: 13px 0;
+  }
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker-scroll 70s linear infinite;
+  }
+  .ticker-item {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-dim);
+    white-space: nowrap;
+    padding: 0 30px;
+    position: relative;
+  }
+  .ticker-item::after {
+    content: '///';
+    position: absolute;
+    right: -8px;
+    color: var(--amber);
+    opacity: 0.75;
+    letter-spacing: 0;
+  }
+  @keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (hover: hover) {
+    .ticker:hover .ticker-track { animation-play-state: paused; }
+  }
+</style>
