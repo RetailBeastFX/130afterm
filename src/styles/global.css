@@ -187,16 +187,16 @@ img {
   text-transform: uppercase;
   padding: 7px 12px;
   border-radius: 3px;
-  transform: rotate(-1.5deg);
+  transform: rotate(var(--r, -1.5deg));
   border: 2px solid;
   background: rgba(0, 0, 0, 0.28);
 }
 
 .sticker-amber { color: var(--amber); border-color: rgba(255, 176, 0, 0.65); }
-.sticker-rose { color: var(--rose); border-color: rgba(244, 114, 167, 0.6); transform: rotate(1.2deg); }
-.sticker-sky { color: var(--sky); border-color: rgba(125, 211, 252, 0.55); transform: rotate(-1deg); }
-.sticker-mint { color: var(--mint); border-color: rgba(110, 231, 183, 0.55); transform: rotate(1deg); }
-.sticker-violet { color: var(--violet); border-color: rgba(196, 181, 253, 0.55); }
+.sticker-rose { color: var(--rose); border-color: rgba(217, 72, 72, 0.6); --r: 1.2deg; }
+.sticker-sky { color: var(--sky); border-color: rgba(107, 140, 174, 0.6); --r: -1deg; }
+.sticker-mint { color: var(--mint); border-color: rgba(138, 154, 91, 0.6); --r: 1deg; }
+.sticker-violet { color: var(--violet); border-color: rgba(122, 112, 144, 0.6); }
 .sticker-ghost {
   color: var(--ink-dim);
   border-color: rgba(243, 233, 215, 0.25);
@@ -294,15 +294,11 @@ img {
   box-shadow: 0 6px 22px rgba(255, 176, 0, 0.28);
 }
 
-.btn-amber:active { transform: scale(0.97); }
-
 .btn-ghost {
   border-color: rgba(243, 233, 215, 0.18);
   color: var(--ink);
   background: rgba(243, 233, 215, 0.04);
 }
-
-.btn-ghost:active { transform: scale(0.97); }
 
 /* Link row — chunky, thumb-friendly */
 .link-row {
@@ -474,6 +470,44 @@ img {
   76% { opacity: 1; }
   77% { opacity: 0.82; }
   79% { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PHYSICALITY — things press, land, and push back
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Pressable cards */
+a.card,
+button.card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.5s ease;
+}
+a.card:active,
+button.card:active {
+  transform: translateY(3px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+/* Stamps land with weight when their card reveals */
+.reveal.visible .sticker {
+  animation: stamp-land 0.4s cubic-bezier(0.25, 1.2, 0.4, 1);
+}
+@keyframes stamp-land {
+  0% { transform: rotate(var(--r, -1.5deg)) scale(1.7); opacity: 0; }
+  60% { transform: rotate(var(--r, -1.5deg)) scale(0.94); opacity: 1; }
+  100% { transform: rotate(var(--r, -1.5deg)) scale(1); opacity: 1; }
+}
+
+/* Buttons push back */
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Link rows dip on tap */
+.link-row {
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.12s ease;
+}
+.link-row:active {
+  transform: translateY(2px);
 }
 
 /* ═══════════════════════════════════════════════════════════════════
