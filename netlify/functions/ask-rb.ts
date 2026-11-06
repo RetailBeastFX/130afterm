@@ -25,8 +25,14 @@ const KB: Array<{ match: string[]; answer: string }> = [
     answer:
       "Bo's family goes back to Virginia — his 3rd great-grandparents Benjamin and Carrie Jones were born there in the 1830s-40s. His grandfathers are Norman William Marshall (born 1947, Washington, DC) and Alvin Edward Bland (born 1952, Virginia). Bo is Alvin Edward Marshall — named after his dad, Alvin Edward Smith, and his grandfather Alvin Edward Bland too. His great-grandmother is Helen Louise Davis, born 1943 in Prince William, Virginia.",
   },
+  // Deebo — before the generic bio, so 'deebo' questions get the origin story.
   {
-    match: ['who is bo', 'about bo', 'who are you', 'your name', 'who is rb', 'bo is', 'alvin', 'deebo', 'where is bo from', 'where does bo live', 'arlington'],
+    match: ['deebo', 'nickname', 'nick name', 'why is he called', 'why is bo called', 'where did deebo', 'how did he get the name'],
+    answer:
+      "Deebo is Bo — he's been called that since before he could talk. His family started calling him that around when Friday came out, because even as a baby he had the character's traits: taking pacifiers and bottles, the attitude, all of it.",
+  },
+  {
+    match: ['who is bo', 'about bo', 'who are you', 'your name', 'who is rb', 'bo is', 'alvin', 'where is bo from', 'where does bo live', 'arlington'],
     answer:
       "Bo is Alvin Edward Marshall, from Arlington, Virginia — father of two sons, Kairo and Kamal. Self-taught trader and builder. I'm RB, the voice of his hangout spot: I keep the room warm and answer questions about him.",
   },
@@ -247,6 +253,7 @@ const SYSTEM_PROMPT = [
   '- Builder: RetailBeastFX (trading tools, journaling, indicators), Pine Audit (Pine Script audit tool, being published), Wealth-OS (personal wealth-tracking app), and 130AM Studios (documents the person — the journey, building in public, experiments).',
   '- Born August 17, 1995. Siblings: grew up with brother Maleak and sister Kanisha (same mom and dad); also has a brother and sister from his dad and a brother from his mom, who he doesn\u2019t know very well. Still with the mother of his children.',
   '- On background: Bo is Black — both his parents are Black — and he doesn\u2019t refer to himself as mixed. His AncestryDNA is mostly West African (Igboland the largest piece at 27%) with English ancestry too (14%).',
+  '- Deebo is Bo\u2019s nickname since before he could talk — his family started calling him that around when Friday came out, because even as a baby he had the character\u2019s traits.',
   '- Family: Virginia roots back to 3rd great-grandparents Benjamin and Carrie Jones (born 1830s-40s, Virginia). Grandfathers: Norman William Marshall (born 1947, Washington, DC) and Alvin Edward Bland (born 1952, Virginia). Bo is Alvin Edward Marshall, named after his dad Alvin Edward Smith and his grandfather Alvin Edward Bland. Great-grandmother: Helen Louise Davis (born 1943, Prince William, Virginia).',
   '- Saving for a Luray Caverns boys trip after Halloween.',
   '- On money: making money, building wealth, and gaining control over your time are three different things — the goal is assets that give you options, not just a bigger paycheck.',
