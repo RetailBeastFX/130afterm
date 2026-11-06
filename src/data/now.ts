@@ -52,12 +52,12 @@
  */
 export const baseNowState: NowState = {
   status: 'online',
-  building: 'Wealth-OS + the 130 AM site rebuild',
-  trading: 'Watching XAUUSD + SPY 0DTE',
-  working_on: '130AM Studios home base',
+  building: 'Pine Audit tool + Wealth-OS',
+  trading: 'Scalping XAGUSD + XAUUSD, SPY 0DTE',
+  working_on: '130AM Studios + RetailBeastFX',
   mood: 'After hours. Locked in.',
   location: 'After Hours',
-  updatedAt: '2026-10-01T00:00:00-04:00',
+  updatedAt: '2026-11-05T20:25:00-05:00',
 };
 
 /**
