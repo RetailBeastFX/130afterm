@@ -23,7 +23,7 @@ const KB: Array<{ match: string[]; answer: string }> = [
   {
     match: ['grandfather', 'grandmother', 'grandparents', 'ancestor', 'ancestors', 'family history', 'family tree', 'family from', 'named after', 'who is he named', 'great-grand', 'great grand', 'helen', 'norman', 'bland'],
     answer:
-      "Bo's family goes back to Virginia — his 3rd great-grandparents Benjamin and Carrie Jones were born there in the 1830s-40s. His grandfathers are Norman William Marshall (born 1947, Washington, DC) and Alvin Edward Bland (born 1952, Virginia) — Bo is Alvin Edward Marshall, named after him. His great-grandmother is Helen Louise Davis, born 1943 in Prince William, Virginia.",
+      "Bo's family goes back to Virginia — his 3rd great-grandparents Benjamin and Carrie Jones were born there in the 1830s-40s. His grandfathers are Norman William Marshall (born 1947, Washington, DC) and Alvin Edward Bland (born 1952, Virginia). Bo is Alvin Edward Marshall — named after his dad, Alvin Edward Smith, and his grandfather Alvin Edward Bland too. His great-grandmother is Helen Louise Davis, born 1943 in Prince William, Virginia.",
   },
   {
     match: ['who is bo', 'about bo', 'who are you', 'your name', 'who is rb', 'bo is', 'alvin', 'deebo', 'where is bo from', 'where does bo live', 'arlington'],
@@ -247,7 +247,7 @@ const SYSTEM_PROMPT = [
   '- Builder: RetailBeastFX (trading tools, journaling, indicators), Pine Audit (Pine Script audit tool, being published), Wealth-OS (personal wealth-tracking app), and 130AM Studios (documents the person — the journey, building in public, experiments).',
   '- Born August 17, 1995. Siblings: grew up with brother Maleak and sister Kanisha (same mom and dad); also has a brother and sister from his dad and a brother from his mom, who he doesn\u2019t know very well. Still with the mother of his children.',
   '- On background: Bo is Black — both his parents are Black — and he doesn\u2019t refer to himself as mixed. His AncestryDNA is mostly West African (Igboland the largest piece at 27%) with English ancestry too (14%).',
-  '- Family: Virginia roots back to 3rd great-grandparents Benjamin and Carrie Jones (born 1830s-40s, Virginia). Grandfathers: Norman William Marshall (born 1947, Washington, DC) and Alvin Edward Bland (born 1952, Virginia) — Bo is Alvin Edward Marshall, named after him. Great-grandmother: Helen Louise Davis (born 1943, Prince William, Virginia).',
+  '- Family: Virginia roots back to 3rd great-grandparents Benjamin and Carrie Jones (born 1830s-40s, Virginia). Grandfathers: Norman William Marshall (born 1947, Washington, DC) and Alvin Edward Bland (born 1952, Virginia). Bo is Alvin Edward Marshall, named after his dad Alvin Edward Smith and his grandfather Alvin Edward Bland. Great-grandmother: Helen Louise Davis (born 1943, Prince William, Virginia).',
   '- Saving for a Luray Caverns boys trip after Halloween.',
   '- On money: making money, building wealth, and gaining control over your time are three different things — the goal is assets that give you options, not just a bigger paycheck.',
   '- Two brands, one person: RetailBeastFX teaches the mechanics of trading. 130AM Studios documents the person — the building, the life, the process. This site is the 130AM home.',
