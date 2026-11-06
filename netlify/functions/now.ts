@@ -1,5 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import { getStore } from '@netlify/blobs';
+import { baseNowState } from '../../src/data/now';
 
 /**
  * Allowlist of fields that can be written via this API.
@@ -19,25 +20,23 @@ const EDITABLE_FIELDS = new Set([
 ]);
 
 export default async function handler(req: Request, context: Context) {
-  const store = getStore('now_state');
-
-  // Handle GET request to fetch current state
+  // Handle GET request to fetch current state.
+  // Returns the static baseline merged with any stored overrides,
+  // so clients (and Ask RB) always get a complete picture.
+  // Blobs access is guarded: if the store is unreachable, the
+  // baseline still answers instead of the whole function failing.
   if (req.method === 'GET') {
+    let stored: Record<string, unknown> = {};
     try {
+      const store = getStore('now_state');
       const existingStr = await store.get('current', { type: 'text' });
-      if (existingStr) {
-        return new Response(existingStr, {
-          headers: { 'Content-Type': 'application/json' }
-        });
-      }
-      return new Response('{}', {
-        headers: { 'Content-Type': 'application/json' }
-      });
+      if (existingStr) stored = JSON.parse(existingStr);
     } catch (e) {
-      return new Response('{}', {
-        headers: { 'Content-Type': 'application/json' }
-      });
+      // Blobs unavailable — baseline stays
     }
+    return new Response(JSON.stringify({ ...baseNowState, ...stored }), {
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   // Only allow POST for updates

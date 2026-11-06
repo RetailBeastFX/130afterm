@@ -32,13 +32,20 @@
 
     <div id="askrb-log" class="askrb-log" aria-live="polite"></div>
 
+    <div id="askrb-chips" class="askrb-chips">
+      <button type="button" class="askrb-chip" data-q="what's Bo up to?">what's Bo up to?</button>
+      <button type="button" class="askrb-chip" data-q="what does he trade?">what does he trade?</button>
+      <button type="button" class="askrb-chip" data-q="what's he building?">what's he building?</button>
+      <button type="button" class="askrb-chip" data-q="what is 130 AM?">what is 130 AM?</button>
+    </div>
+
     <form id="askrb-form" class="askrb-form">
       <input
         id="askrb-input"
         class="input askrb-input"
         type="text"
         maxlength="500"
-        placeholder="ask about bo, the builds, the site…"
+        placeholder="ask about bo, what he's up to, the builds…"
         autocomplete="off"
         aria-label="Your question"
       />
@@ -172,6 +179,31 @@
     padding: 12px 14px;
     border-top: 1px solid rgba(243, 233, 215, 0.08);
   }
+
+  .askrb-chips {
+    display: flex;
+    gap: 6px;
+    padding: 10px 14px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .askrb-chips::-webkit-scrollbar { display: none; }
+  .askrb-chip {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--ink-dim);
+    background: rgba(243, 233, 215, 0.05);
+    border: 1px solid rgba(243, 233, 215, 0.12);
+    border-radius: 999px;
+    padding: 7px 11px;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .askrb-chip:active {
+    border-color: rgba(255, 176, 0, 0.5);
+    color: var(--amber);
+  }
   .askrb-input {
     min-height: 48px;
     font-size: 16px;
@@ -250,6 +282,14 @@
     closeBtn.addEventListener('click', function () { setOpen(false); });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && !panel.hidden) setOpen(false);
+    });
+
+    // Suggestion chips — tap to ask
+    root.querySelectorAll('.askrb-chip').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        input.value = chip.getAttribute('data-q') || '';
+        form.requestSubmit();
+      });
     });
 
     form.addEventListener('submit', async function (ev) {

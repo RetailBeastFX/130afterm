@@ -19,9 +19,9 @@ import type { Config, Context } from '@netlify/functions';
 
 const KB: Array<{ match: string[]; answer: string }> = [
   {
-    match: ['who is bo', 'about bo', 'who are you', 'your name', 'who is rb', 'bo is', 'alvin', 'deebo'],
+    match: ['who is bo', 'about bo', 'who are you', 'your name', 'who is rb', 'bo is', 'alvin', 'deebo', 'where is bo from', 'where does bo live', 'arlington'],
     answer:
-      "Bo is Alvin Edward Marshall, from Manassas, Virginia — father of two sons, Kairo and Kamal. Self-taught trader and builder. I'm RB, the voice of his hangout spot: I keep the room warm and answer questions about him.",
+      "Bo is Alvin Edward Marshall, from Arlington, Virginia — father of two sons, Kairo and Kamal. Self-taught trader and builder. I'm RB, the voice of his hangout spot: I keep the room warm and answer questions about him.",
   },
   {
     match: ['130 am', 'what is 130', '130am', 'name mean', 'after hours'],
@@ -36,7 +36,7 @@ const KB: Array<{ match: string[]; answer: string }> = [
   {
     match: ['wealth-os', 'wealth os', 'wealthos', 'wealth app', 'wealth tracking'],
     answer:
-      "Wealth-OS is the personal wealth-tracking app Bo built: React + Vite frontend, Express + Plaid backend with transaction sync, a rules engine, transfer detection, and encrypted backup. It's open-source under his GitHub. A 130AM Studios build-in-public story waiting to happen.",
+      "Wealth-OS is the personal wealth-tracking app Bo built: React + Vite frontend, Express + Plaid backend with transaction sync, a rules engine, transfer detection, and encrypted backup. It's open-source under his GitHub.",
   },
   {
     match: ['130am studios', 'studios', 'content', 'youtube', 'videos', 'channel'],
@@ -44,9 +44,9 @@ const KB: Array<{ match: string[]; answer: string }> = [
       "130AM Studios is the other half of the split: RetailBeastFX teaches the mechanics of trading, 130AM Studios documents the person — the journey, building in public, experiments, reactions. This site is the Studios home. Videos live on YouTube @130AfterM.",
   },
   {
-    match: ['trade', 'trading', 'forex', 'xauusd', 'gold', 'usdjpy', 'spy', 'options', 'ict', 'smc', 'orb', 'strategy', 'setup'],
+    match: ['trade', 'trading', 'forex', 'xauusd', 'gold', 'xagusd', 'silver', 'usdjpy', 'spy', 'options', 'ict', 'smc', 'orb', 'strategy', 'setup'],
     answer:
-      "Bo trades forex (XAUUSD, USD/JPY), equities, and options — ICT/SMC framework with opening-range breakouts and VWAP/EMA confluence, including SPY 0DTE. That's all I'll say on setups though — I don't do trading advice or signals. The mechanics live on the RetailBeastFX lessons channel.",
+      "Bo trades forex — XAUUSD and XAGUSD scalping, USD/JPY — plus equities and options. ICT/SMC framework with opening-range breakouts and VWAP/EMA confluence, including SPY 0DTE. That's all I'll say on setups though — I don't do trading advice or signals. The mechanics live on the RetailBeastFX lessons channel.",
   },
   {
     match: ['signal', 'should i buy', 'should i sell', 'entry', 'what should i trade', 'call or put', 'financial advice', 'make money'],
@@ -54,7 +54,7 @@ const KB: Array<{ match: string[]; answer: string }> = [
       "Nope — I don't do trading advice, signals, or entries. Warm room, hard rule. If you want to learn how Bo reads the market, the RetailBeastFX YouTube channel is the place.",
   },
   {
-    match: ['find', 'social', 'socials', 'link', 'follow', 'where', 'x.com', 'twitter', 'tiktok', 'threads', 'facebook', 'github', 'contact'],
+    match: ['find', 'social', 'socials', 'link', 'follow', 'where to find', 'where can i find', 'x.com', 'twitter', 'tiktok', 'threads', 'facebook', 'github', 'contact'],
     answer:
       "Everywhere as @130AfterM — X, YouTube, TikTok, Threads, Facebook. The trading-lessons channel is @RetailBeastFX on YouTube, and the code lives at github.com/RetailBeastFX. There's a full link stack at /links on this site.",
   },
@@ -89,9 +89,24 @@ const KB: Array<{ match: string[]; answer: string }> = [
       "Bo's building a Roblox economy sim — Luau/Rojo, a whole little world economy. It lives in the 130AM Studios gaming lane. He plays too, when the charts are quiet.",
   },
   {
-    match: ['now', 'doing right now', 'currently', 'up to'],
+    match: ['pine audit', 'pine script', 'audit tool', 'mcp'],
     answer:
-      "Check the /now page — that's the live heartbeat: what he's trading, building, playing, and listening to, plus Discord presence when he's around.",
+      "Pine Audit is Bo's Pine Script audit tool — it catches the mistakes that only show up when TradingView compiles your code, before you paste it in. Still being published; a template pack comes after it.",
+  },
+  {
+    match: ['money', 'wealth', 'ownership', 'dividend', 'compounding', 'paycheck', 'financial freedom', 'rich'],
+    answer:
+      "Bo's take: making money, building wealth, and gaining control over your time are three different things. A good salary can still leave you depending on the next paycheck — the goal is building assets that give you options. He wrote it up in the Rant Room: 'Making Money, Building Wealth, and Gaining Control Are Three Different Things.'",
+  },
+  {
+    match: ['luray', 'caverns', 'boys trip', 'vacation'],
+    answer:
+      "Bo's putting together a Luray Caverns boys trip after Halloween — him, his brother, his cousin, and all their boys, splitting a cabin for a few nights. He's been saving for it through Prolific surveys and side work.",
+  },
+  {
+    match: ['rant', 'rant room', 'blog', 'write', 'writing', 'writes'],
+    answer:
+      "The Rant Room is where Bo writes — /blog on this site. Misrecognition, money, work, all of it in his own words. Newest one is about money, wealth, and control being three different things.",
   },
   {
     match: ['site', 'website', 'redesign', 'hangout'],
@@ -115,7 +130,39 @@ const FALLBACK =
 const ADVICE_DEFLECT =
   "Nope — I don't do trading advice, signals, or entries. Warm room, hard rule. If you want to learn how Bo reads the market, the RetailBeastFX YouTube channel is the place.";
 
-function answerLocal(message: string): string {
+const NOW_FALLBACK =
+  "Check the /now page — that's the live heartbeat: what he's trading, building, playing, and listening to, plus Discord presence when he's around.";
+
+// "What's he up to" — answered live from /api/now (baseline + stored
+// overrides), not deflected to a page. Falls back to the /now pointer
+// if the status can't be reached.
+async function nowAnswer(req: Request): Promise<string> {
+  try {
+    const res = await fetch(new URL('/api/now', req.url));
+    if (!res.ok) return NOW_FALLBACK;
+    const f = (await res.json()) as Record<string, unknown>;
+    const str = (k: string) => (typeof f[k] === 'string' && f[k] ? (f[k] as string) : '');
+    const trading = str('trading');
+    const building = str('building');
+    const workingOn = str('working_on');
+    const mood = str('mood');
+    if (!trading && !building && !workingOn) return NOW_FALLBACK;
+    const parts: string[] = [];
+    if (trading) parts.push(`trading ${trading}`);
+    if (building) parts.push(`building ${building}`);
+    if (workingOn) parts.push(`working on ${workingOn}`);
+    const moodBit = mood ? ` Mood: ${mood}` : '';
+    return `Right now he's ${parts.join(', ')}.${moodBit} The full /now page has the live heartbeat if you want more.`;
+  } catch {
+    return NOW_FALLBACK;
+  }
+}
+
+function isNowQuestion(text: string): boolean {
+  return /\bnow\b|right now|currently|up to|upto|lately|these days|what'?s (he|bo) (doing|up to)|how'?s (he|bo) (doing|getting on)|what.*doing lately/.test(text);
+}
+
+async function answerLocal(message: string, req: Request): Promise<string> {
   const text = message.toLowerCase();
   // Trading-advice requests deflect first, before the general trading info
   if (
@@ -125,6 +172,7 @@ function answerLocal(message: string): string {
   ) {
     return ADVICE_DEFLECT;
   }
+  if (isNowQuestion(text)) return nowAnswer(req);
   for (const item of KB) {
     if (item.match.some((k) => text.includes(k))) return item.answer;
   }
@@ -140,10 +188,11 @@ const SYSTEM_PROMPT = [
   "You are RB, the voice and host of the 130 AM hangout spot — Bo's personal corner of the internet. Warm, brief, a little playful. You speak like the room's host, not a press release.",
   '',
   'What you know:',
-  '- Bo is Alvin Edward Marshall, from Manassas, Virginia. Father of two sons, Kairo and Kamal.',
-  '- Trader: forex (XAUUSD, USD/JPY), equities, options. Framework: ICT/SMC concepts, opening-range breakouts (ORB), VWAP/EMA confluence.',
-  '- Builder: RetailBeastFX (trading tools, journaling, indicators) and 130AM Studios (documents the person — the journey, building in public, experiments).',
-  '- Wealth-OS: his personal wealth-tracking app (React + Vite + Express + Plaid, rules engine, encrypted backup). Roblox economy sim in Luau.',
+  '- Bo is Alvin Edward Marshall, from Arlington, Virginia. Father of two sons, Kairo and Kamal.',
+  '- Trader: forex (XAUUSD and XAGUSD scalping, USD/JPY), equities, options. Framework: ICT/SMC concepts, opening-range breakouts (ORB), VWAP/EMA confluence, including SPY 0DTE.',
+  '- Builder: RetailBeastFX (trading tools, journaling, indicators), Pine Audit (Pine Script audit tool, being published), Wealth-OS (personal wealth-tracking app), and 130AM Studios (documents the person — the journey, building in public, experiments).',
+  '- Saving for a Luray Caverns boys trip after Halloween.',
+  '- On money: making money, building wealth, and gaining control over your time are three different things — the goal is assets that give you options, not just a bigger paycheck.',
   '- Two brands, one person: RetailBeastFX teaches the mechanics of trading. 130AM Studios documents the person — the building, the life, the process. This site is the 130AM home.',
   '- Learning Latin American Spanish. Pescatarian. Night owl — 1:30 AM is the hour noise stops and real work starts.',
   '- Find him: @130AfterM on X, YouTube, TikTok, Threads, Facebook; lessons channel @RetailBeastFX on YouTube; code at github.com/RetailBeastFX; full links at /links.',
@@ -276,7 +325,7 @@ export default async function handler(req: Request, _context: Context) {
     // LLM failed — fall through to the local knowledge base
   }
 
-  return json({ reply: answerLocal(message) });
+  return json({ reply: await answerLocal(message, req) });
 }
 
 export const config: Config = {
