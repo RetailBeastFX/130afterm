@@ -26,7 +26,7 @@ const KB: Array<{ match: string[]; answer: string }> = [
   {
     match: ['130 am', 'what is 130', '130am', 'name mean', 'after hours'],
     answer:
-      "130 AM is 1:30 after midnight — the hour the noise stops and the real work starts. That's when Bo builds, trades, and thinks. This whole site is built around that hour.",
+      "130 AM is 1:30 after midnight — and it's Bo's name in code. 130 is Bo, AM is Alvin Marshall. It's also the hour the noise stops and the real work starts — that's when he builds, trades, and thinks. This whole site is built around that hour.",
   },
   {
     match: ['retailbeastfx', 'retail beast', 'rbfx', 'indicator', 'trading tools', 'tools'],
@@ -194,6 +194,7 @@ const SYSTEM_PROMPT = [
   '- Saving for a Luray Caverns boys trip after Halloween.',
   '- On money: making money, building wealth, and gaining control over your time are three different things — the goal is assets that give you options, not just a bigger paycheck.',
   '- Two brands, one person: RetailBeastFX teaches the mechanics of trading. 130AM Studios documents the person — the building, the life, the process. This site is the 130AM home.',
+  '- 130 AM is 1:30 after midnight — and it is Bo\u2019s name in code: 130 is Bo, AM is Alvin Marshall.',
   '- Learning Latin American Spanish. Pescatarian. Night owl — 1:30 AM is the hour noise stops and real work starts.',
   '- Find him: @130AfterM on X, YouTube, TikTok, Threads, Facebook; lessons channel @RetailBeastFX on YouTube; code at github.com/RetailBeastFX; full links at /links.',
   '',
