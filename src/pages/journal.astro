@@ -1,0 +1,174 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteGlow from '../components/SiteGlow.astro';
+import Navbar from '../components/Navbar.astro';
+import AskRb from '../components/AskRb.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+// THE TRADING JOURNAL — the record of somebody figuring trading out in real
+// time. Not mastery, not a strategy for sale, not a highlight reel. Entries
+// document what Bo is learning, testing, misunderstood, and still figuring out.
+const entries = (await getCollection('lab'))
+  .filter((note) => note.data.tags.includes('journal'))
+  .sort((a, b) => a.data.number - b.data.number);
+
+// Topics on the bench — planned, not written yet. No entry appears here
+// until the evidence behind it exists.
+const planned = [
+  {
+    title: 'Chasing $100',
+    description: 'How daily profit targets affected my decisions.',
+  },
+  {
+    title: 'The Strategy Hopping',
+    description: 'Trying different trading concepts and figuring out what actually works.',
+  },
+  {
+    title: 'The Cost of Learning',
+    description: 'Deposits, losses, subscriptions, tools, and time.',
+  },
+  {
+    title: 'Trading vs. Gambling',
+    description: 'Where the distinction actually shows up in my own behavior.',
+  },
+  {
+    title: 'The Waiting Game',
+    description: 'Learning when not to enter a trade.',
+  },
+  {
+    title: "Building My Own Rules",
+    description: "Testing my own trading rules instead of blindly following somebody else's.",
+  },
+];
+
+function pad(n: number): string {
+  return String(n).padStart(3, '0');
+}
+
+function fmt(d: Date): string {
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+const statusClass: Record<string, string> = {
+  observation: 'sticker-sky',
+  hypothesis: 'sticker-amber',
+  testing: 'sticker-rose',
+  validated: 'sticker-mint',
+};
+
+const statusLabel: Record<string, string> = {
+  observation: 'OBSERVATION',
+  hypothesis: 'HYPOTHESIS',
+  testing: 'IN TESTING',
+  validated: 'VALIDATED IN TESTING',
+};
+---
+
+<Layout
+  title="130 AM // the trading journal"
+  description="Bo's trading journal — documenting what he's learning, testing, misunderstood, and still figuring out. Process, not a highlight reel."
+  active="journal"
+>
+  <SiteGlow />
+  <Navbar active="journal" />
+  <AskRb />
+
+  <main class="wrap pt-10 pb-4">
+    <div class="stack">
+      <header class="reveal">
+        <span class="label" data-type>// journal</span>
+        <h1 class="display display-lg mt-2">the trading journal</h1>
+        <p class="note mt-2">figuring it out in real time 📓</p>
+        <p class="body-dim text-sm mt-4 max-w-md">
+          not somebody who mastered the markets. somebody documenting what he's
+          learning, what he's testing, what he misunderstood, and what he's still
+          trying to figure out. no strategy for sale, no pretending profitable —
+          good weeks, humbled weeks, and whatever the records actually say.
+        </p>
+      </header>
+
+      {entries.length > 0 ? (
+        <div class="flex flex-col gap-3">
+          {entries.map((note) => (
+            <a href={`/lab/${note.id.replace(/\.md$/, '')}/`} class="card block reveal lab-card">
+              <div class="flex items-center gap-3 mb-2 flex-wrap">
+                <span
+                  class="mono"
+                  style="font-size: 11px; color: var(--ink-faint); letter-spacing: 0.14em;"
+                >
+                  {pad(note.data.number)}
+                </span>
+                <span class:list={['sticker', statusClass[note.data.status]]}>
+                  {statusLabel[note.data.status]}
+                </span>
+                {note.data.instruments.map((i) => (
+                  <span class="mono" style="font-size: 10px; color: var(--ink-faint);">{i}</span>
+                ))}
+              </div>
+              <h2 class="display text-xl mb-1">{note.data.title}</h2>
+              <p class="body-dim text-sm">{note.data.description}</p>
+              <div
+                class="mono mt-3"
+                style="font-size: 10px; letter-spacing: 0.14em; color: var(--ink-faint);"
+              >
+                UPDATED {fmt(note.data.updated ?? note.data.date)}
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="card reveal">
+          <p class="body-faint text-sm">no journal entries yet.</p>
+        </div>
+      )}
+
+      <div class="reveal">
+        <h2 class="display text-xl mt-8 mb-3">on the bench</h2>
+        <p class="body-dim text-sm mb-4 max-w-md">
+          topics being worked through — planned, not written yet. an entry only
+          shows up here once the evidence behind it exists.
+        </p>
+        <div class="flex flex-col gap-3">
+          {planned.map((topic) => (
+            <div class="card reveal">
+              <div class="flex items-center gap-3 mb-2 flex-wrap">
+                <span class="sticker sticker-sky">PLANNED</span>
+              </div>
+              <h3 class="display text-xl mb-1">{topic.title}</h3>
+              <p class="body-dim text-sm">{topic.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <p class="reveal body-faint text-sm" style="font-size: 12px;">
+        the research notes behind these entries live in{' '}
+        <a href="/lab/" class="underline">the trading lab</a>. journal entries
+        carry the same rule as the lab: a status is earned from the records, never
+        assumed — and "validated" means the results met predefined criteria in the
+        data tested, not a claim about future profitability.
+      </p>
+    </div>
+  </main>
+
+  <Footer />
+
+  <style>
+    /* Journal cards: same technical treatment as lab cards. */
+    .lab-card {
+      position: relative;
+    }
+    .lab-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 18px;
+      bottom: 18px;
+      width: 3px;
+      border-radius: 2px;
+      background: linear-gradient(to bottom, var(--amber), transparent);
+      opacity: 0.7;
+    }
+  </style>
+</Layout>
