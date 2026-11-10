@@ -213,29 +213,17 @@ Making $100 shouldn't be the requirement for having a successful trading day.
 
 But I'm not going to pretend I've fixed anything yet. This is a rule I want to test, not a conclusion I've already proven.
 
-## Where I stand
+## What the records show
 
-I honestly don't know if I want to keep doing this.
+I've put a lot of time into trading, and these records give me a much clearer picture of what's actually happening.
 
-I've spent a lot of time learning about ICT, liquidity, order blocks, fair value gaps, opening range breakouts, and all kinds of other market mechanics.
+I can point to the profitable runs, but I also have to acknowledge how many times I've given those profits back.
 
-I've spent money, time, and countless hours staring at charts.
+The deposits, the trades, the wins, the losses. It's all there.
 
-And sometimes I sit back and wonder what the hell I've been doing all this for.
+**Fifty-two runs. Nothing kept.**
 
-I thought I was getting better. I thought I was getting closer.
-
-Then I look at the deposits, the withdrawals, and the actual results.
-
-It's humbling.
-
-I don't want to keep depositing money just to see if I can flip another small account. I've already demonstrated that I can grow one. That's not the part I need to prove anymore.
-
-The question is whether I can trade without giving everything back.
-
-For now, I'm documenting what happened. I'm not promising a comeback, and I'm not declaring trading dead either.
-
-I just want to be honest about where I actually stand.
+That's the pattern I'm trying to understand.
 
 ---
 
