@@ -427,6 +427,80 @@ img {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
+   TWEET CARDS — pinned receipts from X, in the room's own language.
+   Raw HTML in a post body (<div class="x-card">…); no JS, no tracking.
+   Longer posts show the key lines with an ellipsis + link to the full post.
+   ═══════════════════════════════════════════════════════════════════ */
+.prose-room .x-kicker {
+  margin: 2em 0 0;
+}
+
+.prose-room .x-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 1em 0 1.6em;
+}
+
+.prose-room .x-card {
+  background: rgba(15, 11, 7, 0.55);
+  border: 1px solid var(--card-border);
+  border-left: 3px solid var(--sky);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+
+.prose-room .x-card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.prose-room .x-card-name {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+
+.prose-room .x-card-handle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.prose-room .x-card-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 4px;
+}
+
+.prose-room .x-card-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 10px 0;
+}
+
+.prose-room .x-card-foot {
+  margin: 0;
+}
+
+.prose-room .x-card-link {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
    MARKER HIGHLIGHT — draws in on scroll
    ═══════════════════════════════════════════════════════════════════ */
 .hl,
