@@ -13,6 +13,23 @@ I saw a conversation about millennials having a different level of cultural lite
 
 Somebody pointed out that classic Looney Tunes would play right after whatever modern cartoon was on. They were born in '92 and didn't even realize those cartoons, movies, and stories were sometimes older than their parents.
 
+<p class="label x-kicker">The discussion this came from</p>
+
+<div class="x-stack">
+  <div class="x-card">
+    <div class="x-card-head"><span class="x-card-name">Boze Herrington ✓</span> <span class="x-card-handle">@SketchesbyBoze</span></div>
+    <p class="x-card-meta">Nov 13, 2026 · 2:19 AM</p>
+    <p class="x-card-text">Millennials acquired a level of cultural literacy that seems unthinkable today because we grew up being relentlessly exposed to films, cartoons, songs from the 1930s and ‘40s. We had media that wasn’t afraid to reference old books &amp; cinema, that respected our intelligence.</p>
+    <p class="x-card-foot"><a class="x-card-link" href="https://x.com/SketchesbyBoze/status/2121140987695398924">Read the full post on X ↗</a></p>
+  </div>
+  <div class="x-card">
+    <div class="x-card-head"><span class="x-card-name">lotteoddities ✓</span> <span class="x-card-handle">@lottemunsterttv</span></div>
+    <p class="x-card-meta">Nov 13, 2026 · 4:12 AM</p>
+    <p class="x-card-text">It also wasn't introduced to us as old media. Classic Looney Toons would play right after whatever modern cartoon was on. I was born in '92 and I had no awareness at all that those shows and movies and stories in general were often older than my parents 🤭</p>
+    <p class="x-card-foot"><a class="x-card-link" href="https://x.com/lottemunsterttv/status/2121169325901992111">Read the full post on X ↗</a></p>
+  </div>
+</div>
+
 I felt that.
 
 Because that's really how it was. We weren't sitting around looking for vintage entertainment. We weren't researching the history of animation or trying to educate ourselves on classic Hollywood.
