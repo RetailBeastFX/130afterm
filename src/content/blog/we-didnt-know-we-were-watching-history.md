@@ -23,10 +23,22 @@ Somebody pointed out that classic Looney Tunes would play right after whatever m
     <p class="x-card-foot"><a class="x-card-link" href="https://x.com/SketchesbyBoze/status/2121140987695398924">Read the full post on X ↗</a></p>
   </div>
   <div class="x-card">
+    <div class="x-card-head"><span class="x-card-name">Nguyễn Chí Trọng Nghĩa ✓</span> <span class="x-card-handle">@hoatanhoano</span></div>
+    <p class="x-card-meta">Nov 13, 2026 · 3:48 AM</p>
+    <p class="x-card-text">The part that sticks: old cartoons assuming you'd catch a reference to a '40s film and not need it explained. That kind of trust is rarer now, and I wonder if it's the media or us that changed first.</p>
+    <p class="x-card-foot"><a class="x-card-link" href="https://x.com/hoatanhoano/status/2121163311110844772">Read the full post on X ↗</a></p>
+  </div>
+  <div class="x-card">
     <div class="x-card-head"><span class="x-card-name">lotteoddities ✓</span> <span class="x-card-handle">@lottemunsterttv</span></div>
     <p class="x-card-meta">Nov 13, 2026 · 4:12 AM</p>
     <p class="x-card-text">It also wasn't introduced to us as old media. Classic Looney Toons would play right after whatever modern cartoon was on. I was born in '92 and I had no awareness at all that those shows and movies and stories in general were often older than my parents 🤭</p>
     <p class="x-card-foot"><a class="x-card-link" href="https://x.com/lottemunsterttv/status/2121169325901992111">Read the full post on X ↗</a></p>
+  </div>
+  <div class="x-card">
+    <div class="x-card-head"><span class="x-card-name">GoldenKaos</span> <span class="x-card-handle">@GoldenKaos</span></div>
+    <p class="x-card-meta">Nov 13, 2026 · 4:21 AM</p>
+    <p class="x-card-text">Like, the amount of movies from the 50s and 60s I ended up watching because it &#42;happened to be on TV that day&#42; are sort of unthinkable for someone who is mainly on the internet where the algorithm picks from categories of media they already like</p>
+    <p class="x-card-foot"><a class="x-card-link" href="https://x.com/GoldenKaos/status/2121171486283305042">Read the full post on X ↗</a></p>
   </div>
 </div>
 
