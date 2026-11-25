@@ -32,7 +32,7 @@ export const GET: APIRoute = async () => {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>130 AM // the rant room</title>
+    <title>RetailBo // the rant room</title>
     <link>${SITE}/blog/</link>
     <description>Bo's personal blog — thoughts, rants, and whatever's on his mind.</description>
     <language>en-us</language>

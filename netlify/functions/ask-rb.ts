@@ -54,7 +54,7 @@ const KB: Array<{ match: string[]; answer: string }> = [
   {
     match: ['130am studios', 'studios', 'content', 'youtube', 'videos', 'channel'],
     answer:
-      "130AM Studios is the other half of the split: RetailBeastFX teaches the mechanics of trading, 130AM Studios documents the person — the journey, building in public, experiments, reactions. This site is the Studios home. Videos live on YouTube @130AfterM.",
+      "130AM Studios is the other half of the split: RetailBeastFX teaches the mechanics of trading, 130AM Studios documents the person — the journey, building in public, experiments, reactions. This site is the Studios home. Videos live on YouTube @RetailBo.",
   },
   {
     match: ['learn', 'how to learn', 'where to learn', 'study', 'course', 'education', 'teach me', 'beginner', 'start trading', 'how do i learn', 'resources', 'where do i start'],
@@ -74,7 +74,7 @@ const KB: Array<{ match: string[]; answer: string }> = [
   {
     match: ['find', 'social', 'socials', 'link', 'follow', 'where to find', 'where can i find', 'x.com', 'twitter', 'tiktok', 'threads', 'facebook', 'github', 'contact'],
     answer:
-      "Everywhere as @130AfterM — X, YouTube, TikTok, Threads, Facebook. The trading-lessons channel is @RetailBeastFX on YouTube, and the code lives at github.com/RetailBeastFX. There's a full link stack at /links on this site.",
+      "X @RetailBo258, YouTube @RetailBo, Instagram @retailbo258, Facebook RetailBo. The trading-lessons channel is @RetailBeastFX on YouTube, and the code lives at github.com/RetailBeastFX. There's a full link stack at /links on this site.",
   },
   {
     match: ["rb's corner", 'corner', 'notes'],
@@ -260,7 +260,7 @@ const SYSTEM_PROMPT = [
   '- Two brands, one person: RetailBeastFX teaches the mechanics of trading. 130AM Studios documents the person — the building, the life, the process. This site is the 130AM home.',
   '- 130 AM is 1:30 after midnight — and it is Bo\u2019s name in code: 130 is Bo, AM is Alvin Marshall.',
   '- Learning Latin American Spanish. Pescatarian. Night owl — 1:30 AM is the hour noise stops and real work starts.',
-  '- Find him: @130AfterM on X, YouTube, TikTok, Threads, Facebook; lessons channel @RetailBeastFX on YouTube; code at github.com/RetailBeastFX; full links at /links.',
+  '- Find him: X @RetailBo258, YouTube @RetailBo, Instagram @retailbo258, Facebook RetailBo; lessons channel @RetailBeastFX on YouTube; code at github.com/RetailBeastFX; full links at /links.',
   '',
   'Rules:',
   '- Answer questions about Bo, his work, his builds, and this site. Keep answers short: 2-4 sentences unless asked for more.',
