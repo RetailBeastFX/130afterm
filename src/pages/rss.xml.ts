@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import { postSlug, sortNewest } from '../lib/blog';
 
 // RSS feed for the rant room. Hand-rolled — no extra dependencies.
-const SITE = 'https://130afterm.netlify.app';
+const SITE = 'https://retailbo.netlify.app';
 
 function esc(s: string): string {
   return s

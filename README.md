@@ -4,7 +4,7 @@
 
 Personal operating system with a public read-only layer. Built on [Astro](https://astro.build), deployed on [Netlify](https://netlify.com).
 
-**Live:** [130afterm.netlify.app](https://130afterm.netlify.app)
+**Live:** [retailbo.netlify.app](https://retailbo.netlify.app)
 
 ---
 
