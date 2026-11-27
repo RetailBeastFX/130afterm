@@ -174,6 +174,54 @@ img {
    them ghosts through, dimmed behind text, stronger in the gutters. */
 .band-navy { background: rgba(5, 11, 26, 0.8); }
 .band-deep { background: rgba(2, 6, 15, 0.82); }
+
+/* Section boundary gradients (sampler): a soft electric-blue fade at
+   the top of every band, a fainter one at the bottom. Content sits
+   above them via .band > .wrap-wide. */
+.band::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 130px;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(43, 127, 255, 0.16), rgba(43, 127, 255, 0));
+}
+.band::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  pointer-events: none;
+  background: linear-gradient(0deg, rgba(43, 127, 255, 0.08), rgba(43, 127, 255, 0));
+}
+.band > .wrap-wide { position: relative; z-index: 1; }
+
+/* Background deco motifs (sampler, RetailBo's own version): whisper-
+   opacity currency symbols mapped to the market opens, and stars on
+   the Man/Media side. aria-hidden, pointer-events none, never
+   competing with text. */
+.b-deco {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  font-weight: 900;
+  line-height: 1;
+  user-select: none;
+}
+.b-deco-a { font-size: clamp(150px, 20vw, 240px); top: 10px; right: 1.5%; transform: rotate(10deg); }
+.b-deco-b { font-size: clamp(84px, 11vw, 130px); bottom: 14px; left: 1%; transform: rotate(-12deg); }
+.b-deco-usd { color: rgba(46, 224, 111, 0.09); }
+.b-deco-yen { color: rgba(45, 212, 191, 0.10); }
+.b-deco-eur { color: rgba(110, 168, 255, 0.12); }
+.b-deco-star { color: rgba(188, 214, 255, 0.15); text-shadow: 0 0 26px rgba(110, 168, 255, 0.4); }
+@media (max-width: 719px) {
+  .b-deco-a { font-size: 120px; right: 0; }
+  .b-deco-b { font-size: 72px; left: 0; }
+}
 .band-panel {
   background:
     linear-gradient(rgba(43, 127, 255, 0.05), rgba(43, 127, 255, 0.05)),
@@ -1172,6 +1220,82 @@ textarea.input {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
+   SCROLL BEAR CANDLE — single tall red candle in the right gutter,
+   printing top to bottom in sync with scroll progress (sampler).
+   Rail is position:fixed here, like the branch's existing candle
+   gutter — the sampler's absolute rail works because #blueSite is one
+   page-height positioned container; the branch has no equivalent, and
+   the behavior is identical: the candle stays in the right gutter for
+   the whole scroll and prints with scroll progress.
+   ═══════════════════════════════════════════════════════════════════ */
+.b-bear-rail {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 10px;
+  width: 30px;
+  z-index: 3;
+  pointer-events: none;
+  transition: filter 0.6s ease, opacity 0.6s ease;
+}
+.b-bear-sticky {
+  position: sticky;
+  top: 12vh;
+  height: 76vh;
+  min-height: 300px;
+  --bear-p: 0;
+  --bear-tip-o: 0;
+}
+.b-bear-ghost, .b-bear-print { position: absolute; inset: 0; }
+.b-bear-ghost { opacity: 0.13; }
+.b-bear-print { clip-path: inset(0 0 100% 0); }
+.b-bear-wick {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  transform: translateX(-50%);
+  background: var(--b-bear, #ff4040);
+  border-radius: 2px;
+}
+.b-bear-body {
+  position: absolute;
+  left: 50%;
+  top: 4.5%;
+  height: 91%;
+  width: 22px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #ff5252, var(--b-bear, #ff4040) 55%, #e03333);
+  border-radius: 3px;
+  box-shadow: 0 0 16px rgba(255, 64, 64, 0.28);
+}
+.b-bear-ghost .b-bear-body { background: #ff4040; box-shadow: none; }
+.b-bear-tip {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--bear-p) * 100%);
+  width: 30px;
+  height: 2px;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 120, 120, 0.95);
+  box-shadow: 0 0 10px 2px rgba(255, 64, 64, 0.55);
+  opacity: var(--bear-tip-o);
+}
+@media (max-width: 719px) {
+  .b-bear-rail { right: 5px; width: 16px; }
+  .b-bear-sticky { top: 15vh; height: 68vh; min-height: 240px; }
+  .b-bear-body { width: 11px; border-radius: 2px; box-shadow: 0 0 10px rgba(255, 64, 64, 0.25); }
+  .b-bear-wick { width: 2px; }
+  .b-bear-tip { width: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .b-bear-print { clip-path: inset(0 0 0% 0) !important; }
+  .b-bear-tip { display: none; }
+  .b-bear-rail { transition: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
    HERO — dual-world, full-bleed
    ═══════════════════════════════════════════════════════════════════ */
 .hero {
@@ -1218,6 +1342,9 @@ body[data-mood="moon"] .marquee-track { animation-duration: 110s; }
 body[data-mood="moon"] .candle-gutter svg { filter: saturate(0.5) brightness(0.82); }
 body[data-mood="moon"] .widget-grid { filter: saturate(0.82) brightness(0.95); }
 body[data-mood="moon"] .chart-bg { opacity: 0.55; filter: saturate(0.6) brightness(0.85); }
+body[data-mood="moon"] .band::before { background: linear-gradient(180deg, rgba(110, 168, 255, 0.09), rgba(110, 168, 255, 0)); }
+body[data-mood="moon"] .b-bear-rail { filter: saturate(0.55) brightness(0.82); opacity: 0.78; }
+body[data-mood="moon"] .b-deco-star { color: rgba(188, 214, 255, 0.24); }
 body[data-mood="moon"] .marquee-band,
 body[data-mood="moon"] .candle-gutter svg,
 body[data-mood="moon"] .widget-grid,
@@ -1287,13 +1414,14 @@ body[data-mood="moon"] .chart-bg {
   gap: 14px;
   margin-top: 18px;
 }
+/* Sampler hero avatar: full standing RB GIF with a drop shadow —
+   no circle crop, no border, no white disc (the transparent GIF
+   fixes the old baked-white-background avatar). */
 .hero-rb {
-  width: 62px;
-  height: 62px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--blue);
-  background: #fff;
+  width: 92px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 10px 22px rgba(43, 127, 255, 0.35));
   flex-shrink: 0;
 }
 .hero-tag {
@@ -1518,6 +1646,33 @@ body[data-mood="moon"] .chart-bg {
   transition: opacity 0.45s ease, transform 0.45s ease;
 }
 .loader-candles .lc-candle.on { opacity: 1; transform: translateY(0); }
+/* Candle-loading GIF — the loader's centerpiece (sampler values).
+   Normal motion: the GIF is the candle layer, the SVG candle groups
+   hide, RB's eyes still illuminate at 950ms. Reduced motion: the GIF
+   hides and the SVG candle row stands in, fully printed and static. */
+.loader-gif {
+  position: relative;
+  z-index: 2;
+  width: min(460px, 88vw);
+  height: auto;
+  display: block;
+  border: 2px solid #33507f;
+  border-radius: 12px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .loader-gif { animation: loader-gif-rise 0.5s ease 0.3s both; }
+  .loader-candles .lc-candle { display: none; }
+}
+@keyframes loader-gif-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loader-gif { display: none; }
+  .loader-candles .lc-candle { opacity: 1; transform: none; transition: none; }
+  .loader-candles .lc-eyes { opacity: 1; }
+}
 .loader-logo {
   position: relative;
   z-index: 2;
@@ -1615,12 +1770,6 @@ body[data-mood="moon"] .chart-bg {
 .widget-mono .up { color: var(--green); font-weight: 700; }
 .widget-mono .down { color: var(--red); font-weight: 700; }
 .widget-mono .open { color: var(--yellow); font-weight: 700; }
-.widget-img {
-  width: 100%;
-  border-radius: 8px;
-  border: 1px solid rgba(234, 242, 255, 0.12);
-  object-fit: cover;
-}
 .widget-rb {
   display: flex;
   gap: 12px;

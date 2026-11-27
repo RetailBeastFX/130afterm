@@ -115,11 +115,14 @@ for (let r = 0; r < ROWS; r++) {
     z-index: -1;
     pointer-events: none;
     overflow: hidden;
-    /* Deep navy graph-paper grid, sampler rhythm (28px). */
+    /* Two-scale navy graph-paper grid (sampler values): fine 28px at
+       0.05 alpha + major 140px lines at 0.11, electric blue. */
     background-image:
-      linear-gradient(rgba(110, 168, 255, 0.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(110, 168, 255, 0.07) 1px, transparent 1px);
-    background-size: 28px 28px;
+      linear-gradient(rgba(110, 168, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(110, 168, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(rgba(110, 168, 255, 0.11) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(110, 168, 255, 0.11) 1px, transparent 1px);
+    background-size: 28px 28px, 28px 28px, 140px 140px, 140px 140px;
     transition: opacity 0.6s ease, filter 0.6s ease;
   }
   .chart-bg svg {

@@ -27,14 +27,15 @@
       bulls vs bears
     </div>
     <div class="widget-body">
-      <img
-        class="widget-img"
-        src="/assets/bull-bear.webp"
-        alt="Green bull versus red bear over Chart City"
-        width="1170"
-        height="658"
-        loading="lazy"
-      />
+      <figure class="widget-art">
+        <img
+          src="/assets/bull-bear.gif"
+          alt="Animated bull and bear: a neon-green bull and a crimson-red bear surging toward each other and clashing over the candlestick chart."
+          width="440"
+          height="248"
+          loading="lazy"
+        />
+      </figure>
       <p class="widget-mono">
         <span class="up">▲ BULLS BUY</span> &nbsp;·&nbsp; <span class="down">BEARS SELL ▼</span>
       </p>
@@ -49,38 +50,18 @@
       chart — live render
     </div>
     <div class="widget-body">
-      <svg viewBox="0 0 300 120" class="chart-anim" role="img" aria-label="Animated candlestick chart">
-        <line x1="0" y1="100" x2="300" y2="100" stroke="rgba(234,242,255,0.2)" stroke-width="1" />
-        {[
-          { x: 18, y: 62, h: 34, up: true },
-          { x: 52, y: 48, h: 30, up: false },
-          { x: 86, y: 56, h: 28, up: true },
-          { x: 120, y: 40, h: 26, up: true },
-          { x: 154, y: 52, h: 24, up: false },
-          { x: 188, y: 34, h: 26, up: true },
-          { x: 222, y: 26, h: 24, up: true },
-          { x: 256, y: 18, h: 26, up: true },
-        ].map((c, i) => {
-          const color = c.up ? '#2ee06f' : '#ff4040';
-          return (
-            <g class="ca-candle" style={`animation-delay: ${i * 0.35}s`}>
-              <line x1={c.x + 8} y1={c.y - 10} x2={c.x + 8} y2={c.y + c.h + 10} stroke={color} stroke-width="2" />
-              <rect x={c.x} y={c.y} width="16" height={c.h} fill={color} />
-            </g>
-          );
-        })}
-        <polyline
-          points="26,79 60,63 94,70 128,53 162,64 196,47 230,38 264,31"
-          fill="none"
-          stroke="#2b7fff"
-          stroke-width="2"
-          class="ca-line"
-        />
-      </svg>
+      <img
+        class="chart-gif"
+        src="/assets/chart-loop.gif"
+        alt="Animated candlestick chart loop: green and red candles printing one by one, left to right, on a dark navy grid."
+        width="640"
+        height="360"
+        loading="lazy"
+      />
       <p class="widget-mono">
         SPY 15M · ORB 09:30–09:45 ET · <span class="up">+2.96R MFE</span> gated median
       </p>
-      <p class="widget-note">Drawn live in SVG — the same candles that track your scroll in the gutter.</p>
+      <p class="widget-note">Candles print left to right on a loop — the same chart that tracks your scroll in the gutter.</p>
     </div>
   </div>
 
@@ -93,10 +74,11 @@
     <div class="widget-body">
       <div class="widget-rb">
         <img
-          src="/assets/rb-pointing.webp"
-          alt="RB, the Retail Beast, pointing at you"
-          width="1170"
-          height="1069"
+          class="callout-img"
+          src="/assets/rb-pointing.gif"
+          alt="RB pointing straight at you — neon-green horns and glowing eyes, green wrench in his other hand, bobbing gently."
+          width="88"
+          height="132"
           loading="lazy"
         />
         <blockquote>“The 15-minute ORB is the strategy. The 1-minute will lie to you.”</blockquote>
@@ -201,25 +183,23 @@
 </script>
 
 <style>
-  .chart-anim { width: 100%; height: auto; display: block; }
-  .ca-candle {
-    opacity: 0;
-    animation: ca-rise 0.6s ease forwards;
-  }
-  .ca-line {
-    stroke-dasharray: 400;
-    stroke-dashoffset: 400;
-    animation: ca-draw 2.4s ease 0.8s forwards;
-  }
-  @keyframes ca-rise {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes ca-draw {
-    to { stroke-dashoffset: 0; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .ca-candle { opacity: 1; animation: none; }
-    .ca-line { stroke-dashoffset: 0; animation: none; }
+  /* Bull/bear GIF — plain figure, sampler values (no border). */
+  .widget-art { margin: 0; }
+  .widget-art img { display: block; width: 100%; height: auto; }
+  /* Chart-loop GIF — sampler values. */
+  .chart-gif { display: block; width: 100%; height: auto; border-radius: 10px; }
+  /* RB callout GIF — transparent, 88px, no crop/border (sampler values).
+     Overrides the old .widget-rb img crop, which was built for the
+     white-background webp. */
+  .widget-rb { align-items: center; }
+  .widget-rb img.callout-img {
+    width: 88px;
+    height: auto;
+    flex: none;
+    display: block;
+    object-fit: contain;
+    border: none;
+    border-radius: 0;
+    background: transparent;
   }
 </style>

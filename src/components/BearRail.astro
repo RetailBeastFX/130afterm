@@ -1,0 +1,48 @@
+---
+// Scroll bear candle — a single tall red candle in the right gutter,
+// printing top to bottom in sync with scroll progress, completing
+// exactly at the bottom of the page. Ghost = faint full outline,
+// print = clipped reveal, tip = glowing frontier. Never autoplay,
+// pointer-events none, edge-bound so it never covers text. Dims under
+// Moon mood; fully printed and static under reduced motion. Narrow on
+// mobile. Sampler markup/CSS/JS, adapted: the rail is position:fixed
+// (like the branch's candle gutter) instead of the sampler's absolute
+// rail inside #blueSite, because the branch has no single page-height
+// positioned container. Behavior is identical.
+---
+<div class="b-bear-rail" aria-hidden="true">
+  <div class="b-bear-sticky" id="bBearSticky">
+    <div class="b-bear-ghost"><span class="b-bear-wick"></span><span class="b-bear-body"></span></div>
+    <div class="b-bear-print" id="bBearPrint"><span class="b-bear-wick"></span><span class="b-bear-body"></span></div>
+    <span class="b-bear-tip"></span>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var print = document.getElementById('bBearPrint');
+    var sticky = document.getElementById('bBearSticky');
+    if (!print || !sticky) return;
+
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      // Overall page progress: 0 at the top, 1 exactly at the bottom.
+      var p = reduced ? 1 : (max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 1);
+      print.style.clipPath = 'inset(0 0 ' + ((1 - p) * 100).toFixed(2) + '% 0)';
+      sticky.style.setProperty('--bear-p', p.toFixed(4));
+      sticky.style.setProperty('--bear-tip-o', p > 0.001 && p < 0.999 ? '1' : '0');
+    }
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  })();
+</script>

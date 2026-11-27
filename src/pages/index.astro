@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar.astro';
 import Loader from '../components/Loader.astro';
 import Hero from '../components/Hero.astro';
 import CandleGutter from '../components/CandleGutter.astro';
+import BearRail from '../components/BearRail.astro';
 import Marquee from '../components/Marquee.astro';
 import SectionHead from '../components/SectionHead.astro';
 import OrbCard from '../components/OrbCard.astro';
@@ -65,6 +66,7 @@ const statusLabel: Record<string, string> = {
 <Layout title="RetailBo — the market and the man." active="home">
   <SiteGlow />
   <CandleGutter />
+  <BearRail />
   <Loader />
   <Navbar active="home" />
   <AskRb />
@@ -74,7 +76,9 @@ const statusLabel: Record<string, string> = {
 
   <main>
     <!-- ═══ THE MARKET ═══ -->
-    <section class="band band-navy graph-paper" id="market" aria-label="The Market">
+    <section class="band band-navy" id="market" aria-label="The Market">
+      <span class="b-deco b-deco-usd b-deco-a" aria-hidden="true">$</span>
+      <span class="b-deco b-deco-usd b-deco-b" aria-hidden="true">$</span>
       <div class="wrap-wide">
         <div class="stack">
           <SectionHead
@@ -89,9 +93,11 @@ const statusLabel: Record<string, string> = {
           </p>
 
           <div
-            style="display: grid; grid-template-columns: 1fr; gap: 16px;"
+            style="display: grid; grid-template-columns: 1fr; gap: 16px; position: relative;"
             class="market-grid"
           >
+            <span class="b-deco b-deco-yen b-deco-a" aria-hidden="true">¥</span>
+            <span class="b-deco b-deco-yen b-deco-b" aria-hidden="true">¥</span>
             <OrbCard />
             {featuredNotes.map((note) => (
               <a href={`/lab/${note.id.replace(/\.md$/, '')}/`} class="card block reveal lab-card">
@@ -134,6 +140,8 @@ const statusLabel: Record<string, string> = {
 
     <!-- ═══ LIVE WIDGETS ═══ -->
     <section class="band band-deep" aria-label="Live widgets">
+      <span class="b-deco b-deco-eur b-deco-a" aria-hidden="true">€</span>
+      <span class="b-deco b-deco-eur b-deco-b" aria-hidden="true">€</span>
       <div class="wrap-wide">
         <div class="stack">
           <SectionHead
@@ -147,7 +155,9 @@ const statusLabel: Record<string, string> = {
     </section>
 
     <!-- ═══ THE MAN ═══ -->
-    <section class="band band-navy graph-paper" id="man" aria-label="The Man">
+    <section class="band band-navy" id="man" aria-label="The Man">
+      <span class="b-deco b-deco-star b-deco-a" aria-hidden="true">★</span>
+      <span class="b-deco b-deco-star b-deco-b" aria-hidden="true">★</span>
       <div class="wrap-wide">
         <div class="stack">
           <SectionHead
@@ -176,6 +186,7 @@ const statusLabel: Record<string, string> = {
 
     <!-- ═══ THE MEDIA ═══ -->
     <section class="band band-deep" id="media" aria-label="The Media">
+      <span class="b-deco b-deco-star b-deco-b" aria-hidden="true">★</span>
       <div class="wrap-wide">
         <div class="stack">
           <SectionHead
@@ -189,7 +200,7 @@ const statusLabel: Record<string, string> = {
     </section>
 
     <!-- ═══ SPONSORED ═══ -->
-    <section class="band band-navy graph-paper" id="sponsored" aria-label="Sponsored">
+    <section class="band band-navy" id="sponsored" aria-label="Sponsored">
       <div class="wrap-wide">
         <div class="stack">
           <SectionHead
