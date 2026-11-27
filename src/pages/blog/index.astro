@@ -38,12 +38,27 @@ const accents = ['sticker-amber', 'sticker-rose', 'sticker-sky', 'sticker-mint',
         </p>
       </header>
 
+      <!-- Category filter — the five shelves, plus Relationships as written -->
+      <div class="reveal flex gap-2 flex-wrap" role="group" aria-label="Filter by category" id="cat-filter">
+        {['All', 'Life', 'Mindset', 'Society', 'Money', 'Trading', 'Relationships'].map((cat) => (
+          <button
+            type="button"
+            class:list={['cat-chip', { active: cat === 'All' }]}
+            data-cat={cat}
+            aria-pressed={cat === 'All' ? 'true' : 'false'}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
       {posts.length > 0 ? (
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4" id="blog-list">
           {posts.map((post, i) => (
             <a
               href={`/blog/${postSlug(post)}/`}
               class={`card block reveal ${i % 2 === 0 ? 'tape' : 'tape tape-sky'}`}
+              data-category={post.data.category}
             >
               <div class="flex items-center gap-3 mb-3 flex-wrap">
                 <span class:list={['sticker', accents[i % accents.length]]}>
@@ -76,13 +91,36 @@ const accents = ['sticker-amber', 'sticker-rose', 'sticker-sky', 'sticker-mint',
         </div>
       ) : (
         <div class="card reveal">
-          <p class="body-faint text-sm">nothing on the desk yet. check back after hours.</p>
+          <p class="body-faint text-sm">nothing on the desk yet. check back at the opens.</p>
         </div>
       )}
     </div>
   </main>
 
   <Footer />
+
+  <script>
+    // Category filter — client-side, no reload. Server renders everything.
+    (function () {
+      var chips = Array.prototype.slice.call(document.querySelectorAll('#cat-filter .cat-chip'));
+      var cards = Array.prototype.slice.call(document.querySelectorAll('#blog-list [data-category]'));
+      if (!chips.length || !cards.length) return;
+      chips.forEach(function (chip) {
+        chip.addEventListener('click', function () {
+          var cat = chip.getAttribute('data-cat');
+          chips.forEach(function (c) {
+            var on = c === chip;
+            c.classList.toggle('active', on);
+            c.setAttribute('aria-pressed', on ? 'true' : 'false');
+          });
+          cards.forEach(function (card) {
+            var show = cat === 'All' || card.getAttribute('data-category') === cat;
+            card.style.display = show ? '' : 'none';
+          });
+        });
+      });
+    })();
+  </script>
 </Layout>
 
 <style>

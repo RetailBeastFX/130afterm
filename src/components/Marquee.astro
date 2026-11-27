@@ -1,0 +1,18 @@
+---
+// Marquee band — diagonal-striped RETAILBO ★ ticker between sections.
+// Decorative; aria-hidden.
+const items = [
+  'RETAILBO', '★', 'THE MARKET', '★', 'THE MAN', '★', 'THE MEDIA', '★',
+  '9:30 RTH', '★', 'ASIA', '★', 'LONDON', '★',
+];
+const track = [...items, ...items, ...items, ...items];
+const loop = [...track, ...track];
+---
+
+<div class="marquee-band" aria-hidden="true">
+  <div class="marquee-track">
+    {loop.map((text) => (
+      <span class="marquee-item">{text}</span>
+    ))}
+  </div>
+</div>

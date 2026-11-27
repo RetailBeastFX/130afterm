@@ -1,0 +1,137 @@
+---
+// Loader — layered intro from the loading-screen blueprint.
+// Sequence: dark blue fade → city lights glow → candles rise → RB's eyes
+// illuminate → candlesticks draw in → logo → loading bar fills → hero.
+// Brief (~2.4s), skippable, once per session, reduced-motion fallback.
+// No heartbeat motif anywhere — cut Nov 27.
+---
+<div class="loader" id="rb-loader" role="status" aria-label="Loading RetailBo">
+  <div class="loader-city" id="loader-city" aria-hidden="true">
+    <img src="/assets/chart-city-skyline.webp" alt="" width="1170" height="658" />
+  </div>
+
+  <div class="loader-candles" aria-hidden="true">
+    <svg viewBox="0 0 420 120" role="presentation">
+      <!-- green + red candles, rising in sequence -->
+      <g class="lc-candle" style="transition-delay: 0.15s">
+        <line x1="30" y1="30" x2="30" y2="95" stroke="#2ee06f" stroke-width="2" />
+        <rect x="22" y="48" width="16" height="34" fill="#2ee06f" />
+      </g>
+      <g class="lc-candle" style="transition-delay: 0.3s">
+        <line x1="80" y1="22" x2="80" y2="88" stroke="#ff3b4e" stroke-width="2" />
+        <rect x="72" y="38" width="16" height="32" fill="#ff3b4e" />
+      </g>
+      <g class="lc-candle" style="transition-delay: 0.45s">
+        <line x1="130" y1="38" x2="130" y2="100" stroke="#2ee06f" stroke-width="2" />
+        <rect x="122" y="52" width="16" height="36" fill="#2ee06f" />
+      </g>
+      <g class="lc-candle" style="transition-delay: 0.6s">
+        <line x1="180" y1="18" x2="180" y2="82" stroke="#2ee06f" stroke-width="2" />
+        <rect x="172" y="34" width="16" height="30" fill="#2ee06f" />
+      </g>
+      <g class="lc-candle" style="transition-delay: 0.75s">
+        <line x1="230" y1="28" x2="230" y2="92" stroke="#ff3b4e" stroke-width="2" />
+        <rect x="222" y="44" width="16" height="34" fill="#ff3b4e" />
+      </g>
+      <g class="lc-candle" style="transition-delay: 0.9s">
+        <line x1="280" y1="14" x2="280" y2="78" stroke="#2ee06f" stroke-width="2" />
+        <rect x="272" y="30" width="16" height="32" fill="#2ee06f" />
+      </g>
+      <g class="lc-candle" style="transition-delay: 1.05s">
+        <line x1="330" y1="24" x2="330" y2="90" stroke="#2ee06f" stroke-width="2" />
+        <rect x="322" y="40" width="16" height="34" fill="#2ee06f" />
+      </g>
+      <g class="lc-candle" style="transition-delay: 1.2s">
+        <line x1="380" y1="34" x2="380" y2="98" stroke="#ff3b4e" stroke-width="2" />
+        <rect x="372" y="50" width="16" height="32" fill="#ff3b4e" />
+      </g>
+      <!-- RB's eyes illuminate: green glow pulse -->
+      <circle id="loader-rb-eyes" cx="210" cy="112" r="5" fill="#2ee06f" opacity="0">
+        <animate attributeName="opacity" values="0;1;0.4;1" dur="1.2s" begin="1.3s" fill="freeze" />
+      </circle>
+    </svg>
+  </div>
+
+  <div class="loader-logo" id="loader-logo">
+    <p class="logo-text">Retail<span class="accent">Bo</span></p>
+    <p class="loader-sub">the market &amp; the man</p>
+  </div>
+
+  <div class="loader-bar-wrap">
+    <div class="loader-bar" aria-hidden="true"><i id="loader-fill"></i></div>
+    <p class="loader-pct"><span id="loader-pct">0</span>% — WELCOME TO RETAILBO</p>
+  </div>
+
+  <button class="loader-skip" id="loader-skip" type="button">skip ↓</button>
+</div>
+
+<script is:inline>
+  (function () {
+    var loader = document.getElementById('rb-loader');
+    if (!loader) return;
+
+    // Never trap the page: CSS failsafe fades the loader out regardless.
+    function dismiss() {
+      if (loader.classList.contains('done')) return;
+      loader.classList.add('done');
+      try { sessionStorage.setItem('rb-loader-shown', '1'); } catch (e) {}
+      setTimeout(function () { if (loader.parentNode) loader.parentNode.removeChild(loader); }, 600);
+    }
+
+    // Once per session — returning visitors go straight to the hero.
+    try {
+      if (sessionStorage.getItem('rb-loader-shown')) { loader.remove(); return; }
+    } catch (e) {}
+
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var fill = document.getElementById('loader-fill');
+    var pct = document.getElementById('loader-pct');
+    var city = document.getElementById('loader-city');
+    var logo = document.getElementById('loader-logo');
+
+    if (reduced) {
+      if (fill) fill.style.width = '100%';
+      if (pct) pct.textContent = '100';
+      setTimeout(dismiss, 250);
+      return;
+    }
+
+    var skip = document.getElementById('loader-skip');
+    if (skip) skip.addEventListener('click', dismiss);
+    loader.addEventListener('click', function (e) {
+      if (e.target === loader) dismiss();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') dismiss();
+    });
+
+    // Layered sequence (~2.4s total)
+    var start = Date.now();
+    var DURATION = 2400;
+    setTimeout(function () { if (city) city.classList.add('on'); }, 150);
+    document.querySelectorAll('#rb-loader .lc-candle').forEach(function (c) {
+      c.classList.add('on');
+    });
+    setTimeout(function () { if (logo) logo.classList.add('on'); }, 1400);
+
+    var timer = setInterval(function () {
+      var p = Math.min(100, Math.round(((Date.now() - start) / DURATION) * 100));
+      if (fill) fill.style.width = p + '%';
+      if (pct) pct.textContent = String(p);
+      if (p >= 100) {
+        clearInterval(timer);
+        setTimeout(dismiss, 250);
+      }
+    }, 60);
+  })();
+</script>
+
+<style>
+  /* Failsafe: if JS never runs, the loader still fades away. */
+  .loader {
+    animation: loader-failsafe 0.6s ease 5s forwards;
+  }
+  @keyframes loader-failsafe {
+    to { opacity: 0; visibility: hidden; }
+  }
+</style>

@@ -17,9 +17,9 @@ export interface Quote {
 
 export const quotes: Quote[] = [
   {
-    text: '1:30 after midnight. The hour noise stops and real work starts.',
-    author: 'the room itself',
-    note: 'the whole site is built on this sentence.',
+    text: 'the 15-minute orb is the strategy.',
+    author: 'Bo',
+    note: 'the 1m gave a fakeout. the 15m gave the real structure.',
   },
   {
     text: 'Your favorite quote goes here.',

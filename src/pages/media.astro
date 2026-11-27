@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteGlow from '../components/SiteGlow.astro';
+import Navbar from '../components/Navbar.astro';
+import SectionHead from '../components/SectionHead.astro';
+import MediaLibrary from '../components/MediaLibrary.astro';
+import AskRb from '../components/AskRb.astro';
+import Footer from '../components/Footer.astro';
+
+// THE MEDIA — the episode library. YouTube home for RetailBo.
+// No videos exist yet: every slot is an honest "Coming soon".
+---
+
+<Layout
+  title="RetailBo — the media"
+  description="The episode library — RetailBo's future YouTube home. Trading tutorials under RetailBeastFX, personal videos under RetailBo."
+  active="media"
+>
+  <SiteGlow />
+  <Navbar active="media" />
+  <AskRb />
+
+  <main class="wrap-wide pt-10 pb-4">
+    <div class="stack">
+      <SectionHead
+        kicker="// the media"
+        title="The Media"
+        note="youtube, tutorials, commentary, projects 📺"
+      />
+      <p class="body-dim text-sm max-w-md reveal">
+        the episode library, not a standard embed page. trading tutorials
+        live under RetailBeastFX, personal videos and commentary under
+        RetailBo — and every video links to its written breakdown.
+      </p>
+
+      <MediaLibrary variant="full" />
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

@@ -1,0 +1,72 @@
+---
+// Candlestick scroll gutter — fixed side strips, candles light in sequence
+// as you scroll. Reading moves you through the market.
+// Green + red candles. Reduced-motion: all lit, static.
+---
+<div class="candle-gutter left" aria-hidden="true">
+  <svg viewBox="0 0 26 700" role="presentation" id="gutter-left">
+    {Array.from({ length: 14 }).map((_, i) => {
+      const up = i % 3 !== 2;
+      const y = 20 + i * 48;
+      const color = up ? '#2ee06f' : '#ff3b4e';
+      const bodyY = up ? y + 8 : y + 14;
+      const bodyH = up ? 22 : 16;
+      return (
+        <g class="cg-candle" data-i={i}>
+          <line x1="13" y1={y} x2="13" y2={y + 40} stroke={color} stroke-width="2" />
+          <rect x="7" y={bodyY} width="12" height={bodyH} fill={color} />
+        </g>
+      );
+    })}
+  </svg>
+</div>
+<div class="candle-gutter right" aria-hidden="true">
+  <svg viewBox="0 0 26 700" role="presentation" id="gutter-right">
+    {Array.from({ length: 14 }).map((_, i) => {
+      const up = i % 3 !== 0;
+      const y = 20 + i * 48;
+      const color = up ? '#2ee06f' : '#ff3b4e';
+      const bodyY = up ? y + 8 : y + 14;
+      const bodyH = up ? 22 : 16;
+      return (
+        <g class="cg-candle" data-i={i}>
+          <line x1="13" y1={y} x2="13" y2={y + 40} stroke={color} stroke-width="2" />
+          <rect x="7" y={bodyY} width="12" height={bodyH} fill={color} />
+        </g>
+      );
+    })}
+  </svg>
+</div>
+
+<script>
+  (function () {
+    var candles = Array.prototype.slice.call(document.querySelectorAll('.cg-candle'));
+    if (!candles.length) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      candles.forEach(function (c) { c.classList.add('lit'); });
+      return;
+    }
+
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      var lit = Math.round(p * candles.length);
+      candles.forEach(function (c, i) {
+        c.classList.toggle('lit', i < lit);
+        c.classList.toggle('leading', i === lit - 1);
+      });
+    }
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  })();
+</script>

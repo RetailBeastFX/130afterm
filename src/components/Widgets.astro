@@ -1,0 +1,225 @@
+---
+// Live widgets band — five retro windows, all live elements.
+// No heartbeat monitor — cut Nov 27. No heartbeat line anywhere.
+---
+<section class="widget-grid" aria-label="Live widgets">
+  <!-- 1 — Market status terminal: session opens -->
+  <div class="os-window widget">
+    <div class="os-titlebar">
+      <span class="os-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      market status — session opens
+    </div>
+    <div class="widget-body">
+      <p class="widget-mono" id="widget-live-now">LIVE NOW: <span class="open">—</span></p>
+      <p class="widget-mono">
+        RTH OPEN — 09:30 ET <span class="up">▲</span><br />
+        ASIA OPEN — 09:00 JST <span class="up">▲</span><br />
+        LONDON OPEN — 08:00 GMT <span class="up">▲</span>
+      </p>
+      <p class="widget-note" id="widget-next-open">next open: 9:30 RTH</p>
+    </div>
+  </div>
+
+  <!-- 2 — Bull vs Bear indicator -->
+  <div class="os-window widget">
+    <div class="os-titlebar">
+      <span class="os-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      bulls vs bears
+    </div>
+    <div class="widget-body">
+      <img
+        class="widget-img"
+        src="/assets/bull-bear.webp"
+        alt="Green bull versus red bear over Chart City"
+        width="1170"
+        height="658"
+        loading="lazy"
+      />
+      <p class="widget-mono">
+        <span class="up">BULLS BUY ↑</span> &nbsp;·&nbsp; <span class="down">BEARS SELL ↓</span>
+      </p>
+      <p class="widget-note">green is the bid. red is the ask. the opens decide which one runs the day.</p>
+    </div>
+  </div>
+
+  <!-- 3 — Animated chart window -->
+  <div class="os-window widget">
+    <div class="os-titlebar">
+      <span class="os-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      chart — live render
+    </div>
+    <div class="widget-body">
+      <svg viewBox="0 0 300 120" class="chart-anim" role="img" aria-label="Animated candlestick chart">
+        <line x1="0" y1="100" x2="300" y2="100" stroke="rgba(234,242,255,0.2)" stroke-width="1" />
+        {[
+          { x: 18, y: 62, h: 34, up: true },
+          { x: 52, y: 48, h: 30, up: false },
+          { x: 86, y: 56, h: 28, up: true },
+          { x: 120, y: 40, h: 26, up: true },
+          { x: 154, y: 52, h: 24, up: false },
+          { x: 188, y: 34, h: 26, up: true },
+          { x: 222, y: 26, h: 24, up: true },
+          { x: 256, y: 18, h: 26, up: true },
+        ].map((c, i) => {
+          const color = c.up ? '#2ee06f' : '#ff3b4e';
+          return (
+            <g class="ca-candle" style={`animation-delay: ${i * 0.35}s`}>
+              <line x1={c.x + 8} y1={c.y - 10} x2={c.x + 8} y2={c.y + c.h + 10} stroke={color} stroke-width="2" />
+              <rect x={c.x} y={c.y} width="16" height={c.h} fill={color} />
+            </g>
+          );
+        })}
+        <polyline
+          points="26,79 60,63 94,70 128,53 162,64 196,47 230,38 264,31"
+          fill="none"
+          stroke="#2b7fff"
+          stroke-width="2"
+          class="ca-line"
+        />
+      </svg>
+      <p class="widget-mono">
+        SPY 15M · ORB 09:30–09:45 ET · <span class="up">+2.96R MFE</span> gated median
+      </p>
+      <p class="widget-note">the chart is a render, not a signal. the levels are the map.</p>
+    </div>
+  </div>
+
+  <!-- 4 — RB mascot callout -->
+  <div class="os-window widget">
+    <div class="os-titlebar">
+      <span class="os-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      RB — from the desk
+    </div>
+    <div class="widget-body">
+      <div class="widget-rb">
+        <img
+          src="/assets/rb-pointing.webp"
+          alt="RB, the Retail Beast, pointing at you"
+          width="1170"
+          height="1069"
+          loading="lazy"
+        />
+        <blockquote>“the 15-minute orb is the strategy.”</blockquote>
+      </div>
+      <p class="widget-note">— Bo, on the 1m fakeout vs the 15m structure. RB points at the level, not the trade.</p>
+    </div>
+  </div>
+
+  <!-- 5 — Article progress display -->
+  <div class="os-window widget">
+    <div class="os-titlebar">
+      <span class="os-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      article progress
+    </div>
+    <div class="widget-body">
+      <p class="widget-big"><span id="widget-pct">0</span>%</p>
+      <div class="widget-progress" aria-hidden="true"><i id="widget-fill"></i></div>
+      <p class="widget-mono">SCROLL TO READ — <span id="widget-pct-2">0</span>% THROUGH THE PAGE</p>
+      <p class="widget-note">the writing is the star. the candles just keep score.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    // ── Session opens: which session is live, what's next ──
+    var liveEl = document.getElementById('widget-live-now');
+    var nextEl = document.getElementById('widget-next-open');
+    function etParts(d) {
+      try {
+        var fmt = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/New_York',
+          hour: 'numeric', minute: 'numeric', hour12: false,
+        });
+        var parts = fmt.formatToParts(d);
+        var h = 0, m = 0;
+        parts.forEach(function (p) {
+          if (p.type === 'hour') h = parseInt(p.value, 10) % 24;
+          if (p.type === 'minute') m = parseInt(p.value, 10);
+        });
+        return { h: h, m: m };
+      } catch (e) {
+        return { h: d.getUTCHours(), m: d.getUTCMinutes() };
+      }
+    }
+    function updateSessions() {
+      var now = new Date();
+      var et = etParts(now);
+      var mins = et.h * 60 + et.m;
+      var live = 'BETWEEN SESSIONS';
+      if (mins >= 570 && mins < 960) live = 'NEW YORK — RTH';
+      else if (mins >= 180 && mins < 570) live = 'LONDON';
+      else if (mins >= 1140 || mins < 180) live = 'ASIA';
+      if (liveEl) liveEl.innerHTML = 'LIVE NOW: <span class="open">' + live + '</span>';
+      // Next 9:30 ET open
+      var target = new Date(now);
+      target.setHours(9, 30, 0, 0);
+      // Convert: this is local-time math; approximate by ET offset via Intl is
+      // overkill for a preview widget — compute in ET by shifting with the
+      // difference between local and ET hours.
+      var etNow = new Date(now.getTime());
+      var localH = now.getHours();
+      var shift = et.h - localH;
+      etNow.setHours(etNow.getHours() + shift, et.m, 0, 0);
+      var next = new Date(etNow);
+      next.setHours(9, 30, 0, 0);
+      if (next <= etNow) next.setDate(next.getDate() + 1);
+      var diffMin = Math.round((next - etNow) / 60000);
+      var hh = Math.floor(diffMin / 60);
+      var mm = diffMin % 60;
+      if (nextEl) nextEl.textContent = 'next open: 9:30 RTH in ' + hh + 'h ' + String(mm).padStart(2, '0') + 'm';
+    }
+    updateSessions();
+    setInterval(updateSessions, 60000);
+
+    // ── Article progress: wired to real scroll position ──
+    var fill = document.getElementById('widget-fill');
+    var pct = document.getElementById('widget-pct');
+    var pct2 = document.getElementById('widget-pct-2');
+    if (!fill) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      fill.style.width = '100%';
+      if (pct) pct.textContent = '100';
+      if (pct2) pct2.textContent = '100';
+      return;
+    }
+    var ticking = false;
+    function updateProgress() {
+      ticking = false;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var p = max > 0 ? Math.round(Math.min(1, Math.max(0, window.scrollY / max)) * 100) : 100;
+      fill.style.width = p + '%';
+      if (pct) pct.textContent = String(p);
+      if (pct2) pct2.textContent = String(p);
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(updateProgress); }
+    }, { passive: true });
+    window.addEventListener('resize', updateProgress);
+    updateProgress();
+  })();
+</script>
+
+<style>
+  .chart-anim { width: 100%; height: auto; display: block; }
+  .ca-candle {
+    opacity: 0;
+    animation: ca-rise 0.6s ease forwards;
+  }
+  .ca-line {
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    animation: ca-draw 2.4s ease 0.8s forwards;
+  }
+  @keyframes ca-rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ca-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ca-candle { opacity: 1; animation: none; }
+    .ca-line { stroke-dashoffset: 0; animation: none; }
+  }
+</style>

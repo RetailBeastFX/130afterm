@@ -1,4 +1,6 @@
 ---
+// Navbar — RetailBo master build.
+// Desktop: full link row. Phone: circular MENU button + slide-in panel.
 interface Props {
   active?: string;
 }
@@ -7,29 +9,33 @@ const { active = 'home' } = Astro.props;
 
 const links = [
   { key: 'home', href: '/', label: 'home', no: '01' },
-  { key: 'now', href: '/now', label: 'now', no: '02' },
-  { key: 'archive', href: '/archive', label: 'archive', no: '03' },
-  { key: 'links', href: '/links', label: 'links', no: '04' },
-  { key: 'blog', href: '/blog', label: 'rants', no: '05' },
-  { key: 'lab', href: '/lab', label: 'lab', no: '06' },
-  { key: 'journal', href: '/journal', label: 'journal', no: '07' },
-  { key: 'terminal', href: '/terminal', label: 'terminal', no: '08' },
+  { key: 'market', href: '/#market', label: 'the market', no: '02' },
+  { key: 'man', href: '/#man', label: 'the man', no: '03' },
+  { key: 'media', href: '/media', label: 'the media', no: '04' },
+  { key: 'sponsored', href: '/#sponsored', label: 'sponsored', no: '05' },
+  { key: 'blog', href: '/blog', label: 'rants', no: '06' },
+  { key: 'lab', href: '/lab', label: 'lab', no: '07' },
+  { key: 'journal', href: '/journal', label: 'journal', no: '08' },
+  { key: 'now', href: '/now', label: 'now', no: '09' },
+  { key: 'links', href: '/links', label: 'links', no: '10' },
+  { key: 'archive', href: '/archive', label: 'archive', no: '11' },
+  { key: 'terminal', href: '/terminal', label: 'terminal', no: '12' },
 ];
 ---
 
 <nav class="site-nav" aria-label="Site navigation">
-  <div class="wrap flex items-center justify-between gap-4 py-2">
+  <div class="wrap-wide flex items-center justify-between gap-4 py-2">
     <a href="/" class="flex items-center gap-3 min-h-[48px]" aria-label="RetailBo home">
       <span
         class="flex items-center justify-center w-9 h-9 rounded-xl text-sm font-bold"
-        style="background: var(--amber); color: #241a05; font-family: var(--font-display);"
+        style="background: var(--green); color: #04140a; font-family: var(--font-display);"
         aria-hidden="true"
       >
-        1:30
+        RB
       </span>
       <span class="leading-tight">
         <span class="display block text-lg">RetailBo</span>
-        <span class="label block" style="font-size: 8px;">// after hours.</span>
+        <span class="label block" style="font-size: 8px;">// 9:30 · asia · london</span>
       </span>
     </a>
 
@@ -67,8 +73,8 @@ const links = [
       </a>
     ))}
   </nav>
-  <p class="note mt-auto text-center body-faint" style="font-size: 1.1rem; color: var(--ink-faint);">
-    1:30 after midnight. the hour noise stops.
+  <p class="note mt-auto text-center" style="font-size: 1.1rem; color: var(--ink-faint);">
+    i'll see you at the opens — 9:30 RTH, asia, london.
   </p>
 </div>
 

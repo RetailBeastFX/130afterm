@@ -48,8 +48,8 @@ export interface NowState {
   building?: string;    // e.g. "RetailBeastFX v7", "130AfterM refactor"
   trading?: string;     // e.g. "Watching SPY", "XAUUSD session open"
   working_on?: string;  // higher-level context, e.g. "130AfterM architecture"
-  mood?: string;        // e.g. "Locked in", "After hours"
-  location?: string;    // e.g. "After Hours", "Market Hours"
+  mood?: string;        // e.g. "Locked in", "The Opens"
+  location?: string;    // e.g. "The Opens", "Market Hours"
 
   // --- Live presence (Lanyard-augmented at runtime) ---
   playing?: string;            // Current game being played

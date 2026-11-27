@@ -8,7 +8,7 @@ import AskRb from '../components/AskRb.astro';
 import Footer from '../components/Footer.astro';
 import { latestActivity } from '../data/activity';
 
-// NOW — the heartbeat page. "What is Bo doing right now?"
+// NOW — the live page. "What is Bo doing right now?"
 // Consumes NowState (live presence + persisted fields). ActivityEvents
 // stay a separate, read-only bridge below.
 const recentEvents = latestActivity(5);
@@ -26,7 +26,7 @@ const recentEvents = latestActivity(5);
   <main class="wrap pt-10 pb-4">
     <div class="stack">
       <header class="reveal">
-        <span class="label">// the heartbeat</span>
+        <span class="label">// live from the room</span>
         <h1 class="display display-lg mt-2">now</h1>
         <p class="note mt-2">what's happening in the room, live-ish 🌙</p>
       </header>

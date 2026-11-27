@@ -2,7 +2,16 @@
 import Layout from '../layouts/Layout.astro';
 import SiteGlow from '../components/SiteGlow.astro';
 import Navbar from '../components/Navbar.astro';
-import ProfileHeader from '../components/ProfileHeader.astro';
+import Loader from '../components/Loader.astro';
+import Hero from '../components/Hero.astro';
+import CandleGutter from '../components/CandleGutter.astro';
+import Marquee from '../components/Marquee.astro';
+import SectionHead from '../components/SectionHead.astro';
+import OrbCard from '../components/OrbCard.astro';
+import Widgets from '../components/Widgets.astro';
+import MediaLibrary from '../components/MediaLibrary.astro';
+import Sponsored from '../components/Sponsored.astro';
+import FooterSurprise from '../components/FooterSurprise.astro';
 import RightNow from '../components/RightNow.astro';
 import RbCorner from '../components/RbCorner.astro';
 import LatestRants from '../components/LatestRants.astro';
@@ -24,28 +33,202 @@ const rantPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
 const tickerLines = rantPosts
   .map((p) => p.data.highlight)
   .filter((h): h is string => !!h);
+
+const labNotes = (await getCollection('lab')).sort((a, b) => a.data.number - b.data.number);
+const featuredNotes = labNotes.filter((n) =>
+  ['15-minute-orb', '1130-chop-rule', 'give-back'].includes(n.id.replace(/\.md$/, ''))
+);
+
+function pad(n: number): string {
+  return String(n).padStart(3, '0');
+}
+
+function fmt(d: Date): string {
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+const statusClass: Record<string, string> = {
+  observation: 'sticker-sky',
+  hypothesis: 'sticker-amber',
+  testing: 'sticker-rose',
+  validated: 'sticker-mint',
+};
+
+const statusLabel: Record<string, string> = {
+  observation: 'OBSERVATION',
+  hypothesis: 'HYPOTHESIS',
+  testing: 'IN TESTING',
+  validated: 'VALIDATED IN TESTING',
+};
 ---
 
-<Layout title="RetailBo // after hours." active="home">
+<Layout title="RetailBo — the market and the man." active="home">
   <SiteGlow />
+  <CandleGutter />
+  <Loader />
   <Navbar active="home" />
   <AskRb />
 
-  <main class="wrap pt-10 pb-4">
-    <div class="stack">
-      <ProfileHeader />
-      <Ticker items={tickerLines} />
-      <RightNow />
-      <RbCorner />
-      <LatestRants posts={rantPosts} />
-      <Pinboard events={recentEvents} />
-      <CurrentlyShelf />
-      <QuoteWall />
-      <Top8 />
-      <Guestbook />
-      <LinkGarden compact />
-    </div>
+  <Hero />
+  <Marquee />
+
+  <main>
+    <!-- ═══ THE MARKET ═══ -->
+    <section class="band band-navy graph-paper" id="market" aria-label="The Market">
+      <div class="wrap-wide">
+        <div class="stack">
+          <SectionHead
+            kicker="// the market"
+            title="The Market"
+            note="trading, market thoughts, strategies, lessons 📈"
+          />
+          <p class="body-dim text-sm max-w-md reveal">
+            the 15-minute ORB is the strategy. the levels are the map, the
+            regime gate is the filter, and the research is public — process,
+            not conclusions, never a signal.
+          </p>
+
+          <div
+            style="display: grid; grid-template-columns: 1fr; gap: 16px;"
+            class="market-grid"
+          >
+            <OrbCard />
+            {featuredNotes.map((note) => (
+              <a href={`/lab/${note.id.replace(/\.md$/, '')}/`} class="card block reveal lab-card">
+                <div class="flex items-center gap-3 mb-2 flex-wrap">
+                  <span
+                    class="mono"
+                    style="font-size: 11px; color: var(--card-ink-faint); letter-spacing: 0.14em;"
+                  >
+                    {pad(note.data.number)}
+                  </span>
+                  <span class:list={['sticker', statusClass[note.data.status]]}>
+                    {statusLabel[note.data.status]}
+                  </span>
+                  {note.data.instruments.map((i) => (
+                    <span class="mono" style="font-size: 10px; color: var(--card-ink-faint);">{i}</span>
+                  ))}
+                </div>
+                <h3 class="display text-xl mb-1">{note.data.title}</h3>
+                <p class="body-dim text-sm">{note.data.description}</p>
+                <div
+                  class="mono mt-3"
+                  style="font-size: 10px; letter-spacing: 0.14em; color: var(--card-ink-faint);"
+                >
+                  UPDATED {fmt(note.data.updated ?? note.data.date)} · READ →
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <Pinboard events={recentEvents} />
+          <p>
+            <a href="/lab" class="btn btn-ghost">open the trading lab →</a>
+            <a href="/journal" class="btn btn-ghost" style="margin-left: 8px;">the journal →</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <Marquee />
+
+    <!-- ═══ LIVE WIDGETS ═══ -->
+    <section class="band band-deep" aria-label="Live widgets">
+      <div class="wrap-wide">
+        <div class="stack">
+          <SectionHead
+            kicker="// the desk"
+            title="Live from the desk"
+            note="five windows, all live elements"
+          />
+          <Widgets />
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ THE MAN ═══ -->
+    <section class="band band-navy graph-paper" id="man" aria-label="The Man">
+      <div class="wrap-wide">
+        <div class="stack">
+          <SectionHead
+            kicker="// the man"
+            title="The Man"
+            note="personal thoughts, life, mindset, experiences 🌙"
+          />
+          <p class="body-dim text-sm max-w-md reveal">
+            the moon side of the site. same person, quieter energy — the
+            thoughts, experiences, and perspective behind the name.
+          </p>
+
+          <LatestRants posts={rantPosts} />
+          <RightNow />
+          <RbCorner />
+          <CurrentlyShelf />
+          <QuoteWall />
+          <Top8 />
+          <Guestbook />
+          <LinkGarden compact />
+        </div>
+      </div>
+    </section>
+
+    <Marquee />
+
+    <!-- ═══ THE MEDIA ═══ -->
+    <section class="band band-deep" id="media" aria-label="The Media">
+      <div class="wrap-wide">
+        <div class="stack">
+          <SectionHead
+            kicker="// the media"
+            title="The Media"
+            note="youtube, tutorials, commentary, projects 📺"
+          />
+          <MediaLibrary variant="home" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SPONSORED ═══ -->
+    <section class="band band-navy graph-paper" id="sponsored" aria-label="Sponsored">
+      <div class="wrap-wide">
+        <div class="stack">
+          <SectionHead
+            kicker="// sponsored"
+            title="Sponsored"
+            note="the promos are the ads — the content stays free"
+          />
+          <Sponsored />
+        </div>
+      </div>
+    </section>
+
+    <Ticker items={tickerLines} />
   </main>
 
+  <FooterSurprise />
   <Footer />
 </Layout>
+
+<style>
+  /* Market grid: ORB card + lab notes side by side on desktop */
+  @media (min-width: 900px) {
+    .market-grid {
+      grid-template-columns: 1fr 1fr !important;
+    }
+  }
+  /* Lab cards: technical, compact, grid-line precision. */
+  .lab-card {
+    position: relative;
+  }
+  .lab-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 18px;
+    bottom: 18px;
+    width: 3px;
+    border-radius: 2px;
+    background: linear-gradient(to bottom, var(--blue), transparent);
+    opacity: 0.7;
+  }
+</style>

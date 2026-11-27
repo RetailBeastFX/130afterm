@@ -55,8 +55,8 @@ export const baseNowState: NowState = {
   building: 'Pine Audit tool + Wealth-OS',
   trading: 'Scalping XAGUSD + XAUUSD, SPY 0DTE',
   working_on: '130AM Studios + RetailBeastFX',
-  mood: 'After hours. Locked in.',
-  location: 'After Hours',
+  mood: 'Locked in at the opens.',
+  location: 'The Opens',
   updatedAt: '2026-11-05T20:25:00-05:00',
 };
 

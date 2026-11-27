@@ -1,0 +1,149 @@
+---
+// Dual-world hero — Chart City (the market) / Moon World (the man).
+// Instant flip, no reload, remembers the mode in the URL hash.
+// Moon mood is quieter and more atmospheric: dimmer, less saturated.
+// Hinge-aware: dual-screen segments get one panel each, with fallback.
+---
+<section class="hero" id="hero" data-mood="market" aria-label="RetailBo — two worlds">
+  <div class="hero-art" aria-hidden="true">
+    <img
+      class="hero-img-market"
+      src="/assets/hero-chart-city.webp"
+      alt=""
+      width="1170"
+      height="658"
+      fetchpriority="high"
+    />
+    <img
+      class="hero-img-moon"
+      src="/assets/hero-moon.webp"
+      alt=""
+      width="1170"
+      height="780"
+      fetchpriority="high"
+      style="position: absolute; inset: 0;"
+    />
+  </div>
+  <div class="hero-scrim" aria-hidden="true"></div>
+
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <p class="hero-eyebrow">RetailBo — a place, not just a brand</p>
+
+      <div class="hero-copy-market">
+        <h1 class="logo-text hero-title">Retail<span class="accent">Bo</span></h1>
+        <p class="hero-tag">my journey into wealth — <b>trade · reflect · grow</b></p>
+        <p class="hero-sub">
+          the market — trading, charts, execution. the 15-minute ORB is the
+          strategy, the levels are the map, and the research is public.
+          no signals, no guru act. just the work, documented.
+        </p>
+      </div>
+
+      <div class="hero-copy-moon" hidden>
+        <h1 class="logo-text hero-title">Retail<span class="accent">Bo</span></h1>
+        <p class="hero-tag">the man behind the charts</p>
+        <p class="hero-sub">
+          the man — thoughts, life, mindset, family. the perspective behind
+          the name. same person, quieter energy. this is the side of the
+          site where the market goes silent and the person talks.
+        </p>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <h2 id="hero-card-title">The market is open.</h2>
+      <p id="hero-card-body">
+        9:30 RTH, Asia, London — the opens are where the day is decided.
+        the blog is where the market and the man meet.
+      </p>
+      <div class="hero-pills" aria-label="Market opens">
+        <span class="hero-pill green">▲ 9:30 RTH</span>
+        <span class="hero-pill">Asia open</span>
+        <span class="hero-pill">London open</span>
+        <span class="hero-pill red">▼ est. 2017</span>
+      </div>
+
+      <div class="hero-switcher" role="group" aria-label="Switch worlds">
+        <button
+          type="button"
+          class="hero-thumb"
+          id="mood-market"
+          aria-pressed="true"
+          data-mood="market"
+        >
+          <img src="/assets/chart-city-skyline.webp" alt="" width="1170" height="658" />
+          <span>
+            <span class="ht-label">The market</span>
+            <span class="ht-sub">chart city · energy</span>
+          </span>
+        </button>
+        <button
+          type="button"
+          class="hero-thumb"
+          id="mood-moon"
+          aria-pressed="false"
+          data-mood="moon"
+        >
+          <img src="/assets/moon-base.webp" alt="" width="1170" height="658" />
+          <span>
+            <span class="ht-label">The moon</span>
+            <span class="ht-sub">moon world · quiet</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <p class="hero-scroll-hint" aria-hidden="true">scroll</p>
+</section>
+
+<script>
+  (function () {
+    var hero = document.getElementById('hero');
+    if (!hero) return;
+    var marketCopy = hero.querySelector('.hero-copy-market');
+    var moonCopy = hero.querySelector('.hero-copy-moon');
+    var cardTitle = document.getElementById('hero-card-title');
+    var cardBody = document.getElementById('hero-card-body');
+    var marketBtn = document.getElementById('mood-market');
+    var moonBtn = document.getElementById('mood-moon');
+
+    var CARD = {
+      market: {
+        title: 'The market is open.',
+        body: '9:30 RTH, Asia, London — the opens are where the day is decided. the blog is where the market and the man meet.',
+      },
+      moon: {
+        title: 'The room goes quiet.',
+        body: 'same site, different energy. the moon is Bo outside the market — the thoughts, experiences, and perspective behind the name.',
+      },
+    };
+
+    function setMood(mood, persist) {
+      if (mood !== 'moon') mood = 'market';
+      hero.setAttribute('data-mood', mood);
+      if (marketCopy) marketCopy.hidden = mood !== 'market';
+      if (moonCopy) moonCopy.hidden = mood !== 'moon';
+      if (marketBtn) marketBtn.setAttribute('aria-pressed', mood === 'market' ? 'true' : 'false');
+      if (moonBtn) moonBtn.setAttribute('aria-pressed', mood === 'moon' ? 'true' : 'false');
+      if (cardTitle) cardTitle.textContent = CARD[mood].title;
+      if (cardBody) cardBody.textContent = CARD[mood].body;
+      if (persist) {
+        try {
+          history.replaceState(null, '', '#mood=' + mood);
+        } catch (e) {}
+      }
+    }
+
+    var initial = 'market';
+    try {
+      var m = (location.hash || '').match(/mood=(moon|market)/);
+      if (m) initial = m[1];
+    } catch (e) {}
+    setMood(initial, false);
+
+    if (marketBtn) marketBtn.addEventListener('click', function () { setMood('market', true); });
+    if (moonBtn) moonBtn.addEventListener('click', function () { setMood('moon', true); });
+  })();
+</script>

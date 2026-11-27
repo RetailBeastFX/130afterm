@@ -1,0 +1,18 @@
+---
+// Section head — graphic live-text heading + handwritten note.
+// kicker: mono label · title: gradient live text · note: handwritten.
+interface Props {
+  kicker: string;
+  title: string;
+  note?: string;
+  id?: string;
+}
+
+const { kicker, title, note, id } = Astro.props;
+---
+
+<header class="reveal" id={id}>
+  <span class="label">{kicker}</span>
+  <h2 class="logo-text mt-2" style="font-size: clamp(1.9rem, 5.5vw, 2.8rem);">{title}</h2>
+  {note && <p class="note mt-2">{note}</p>}
+</header>
