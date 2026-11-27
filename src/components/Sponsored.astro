@@ -5,21 +5,18 @@
 const ads = [
   {
     href: 'https://www.tradingview.com/pricing/?share_your_love=deboincognito&mobileapp=true',
-    icon: '📈',
     title: 'TradingView',
-    desc: 'the charts Bo builds on — the ORB Starter lives here. his referral link, same price for you.',
+    desc: 'The charts I use. Everything on this page starts here.',
   },
   {
     href: 'https://www.webull.com/s/3KhRrvtJjwpsNdIOZ5',
-    icon: '🐂',
     title: 'Webull',
-    desc: 'where Bo trades options. deposit $100+ and get 10 free fractional shares + 1 month Premium. T&Cs apply.',
+    desc: 'Where I trade options. Clean app, no nonsense.',
   },
   {
     href: 'https://www.chime.com/r/alvinmarshall21/?c=s',
-    icon: '💳',
     title: 'Chime',
-    desc: 'the Credit Builder card pays itself off with money already set aside — autopay, no debt trap. $100 after Checking + direct deposit + card activation. terms apply.',
+    desc: 'Credit Builder — the card that pays itself off.',
   },
 ];
 ---
@@ -34,16 +31,12 @@ const ads = [
         class="card ad-card block"
       >
         <span class="ad-label">Ad</span>
-        <span class="pin-icon" style="width: 44px; height: 44px; font-size: 22px; margin-bottom: 12px;" aria-hidden="true">{ad.icon}</span>
         <h3 class="display text-xl mb-2">{ad.title}</h3>
         <p class="body-dim text-sm">{ad.desc}</p>
         <span class="mono mt-3 inline-block" style="font-size: 10px; letter-spacing: 0.18em; color: var(--blue);">
-          OPEN →
+          CHECK IT OUT →
         </span>
       </a>
     ))}
   </div>
-  <p class="body-faint text-sm mt-4" style="font-size: 12px;">
-    the promos are the ads — the content stays free.
-  </p>
 </section>

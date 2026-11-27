@@ -13,44 +13,17 @@ const { variant = 'home' } = Astro.props;
 
 const rbfx = [
   {
-    no: 'EP 01',
-    group: 'RETAILBEASTFX · TRADING TUTORIAL',
-    desc: 'the 15-minute ORB, start to finish — the range, the gate, the levels.',
+    group: 'RETAILBEASTFX · TRADING TUTORIALS',
     pair: { label: 'Pairs with the written breakdown: The 11:30 chop rule', href: '/lab/1130-chop-rule/' },
   },
-  {
-    no: 'EP 02',
-    group: 'RETAILBEASTFX · TRADING TUTORIAL',
-    desc: 'regime alignment — daily EMA, intraday stack, price vs VWAP.',
-    pair: null,
-  },
-  {
-    no: 'EP 03',
-    group: 'RETAILBEASTFX · TRADING TUTORIAL',
-    desc: 'give-back — why winners reverse, and what the records actually say.',
-    pair: null,
-  },
+  { group: 'RETAILBEASTFX · TRADING TUTORIALS', pair: null },
+  { group: 'RETAILBEASTFX · TRADING TUTORIALS', pair: null },
 ];
 
 const retailbo = [
-  {
-    no: 'EP 01',
-    group: 'RETAILBO · PERSONAL',
-    desc: 'the journey into wealth — documenting the struggle to success.',
-    pair: null,
-  },
-  {
-    no: 'EP 02',
-    group: 'RETAILBO · COMMENTARY',
-    desc: 'thoughts out loud — markets, money, and the world around them.',
-    pair: null,
-  },
-  {
-    no: 'EP 03',
-    group: 'RETAILBO · PERSONAL',
-    desc: 'life outside the charts — father, builder, the man behind the name.',
-    pair: null,
-  },
+  { group: 'RETAILBO · PERSONAL VIDEOS & COMMENTARY' },
+  { group: 'RETAILBO · PERSONAL VIDEOS & COMMENTARY' },
+  { group: 'RETAILBO · PERSONAL VIDEOS & COMMENTARY' },
 ];
 
 const rbfxShown = variant === 'home' ? rbfx.slice(0, 2) : rbfx;
@@ -62,22 +35,15 @@ const rbShown = variant === 'home' ? retailbo.slice(0, 2) : retailbo;
   <div class="os-window">
     <div class="os-titlebar">
       <span class="os-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-      featured — retailbo.exe
+      RETAILBO.EXE — MEDIA PLAYER
     </div>
     <div style="padding: 20px;">
-      <div class="episode-cover" style="margin-bottom: 14px; min-height: 220px;">
-        <span class="ep-no">FEATURED</span>
-        <span class="ep-soon">THE FIRST VIDEO<br />COMING SOON</span>
+      <div class="episode-cover episode-featured" style="margin-bottom: 14px; min-height: 220px; flex-direction: column; gap: 10px;">
+        <span class="ep-play" aria-hidden="true">▶</span>
+        <span class="ep-coming">Coming soon</span>
       </div>
-      <h3 class="display text-xl mb-1" style="color: var(--ink);">the vlog starts here</h3>
       <p class="body-dim text-sm">
-        everything gets documented here first — then the camera turns on.
-        no fake embeds, no placeholder links that look real. when a video
-        drops, it lives here with its written breakdown next to it.
-      </p>
-      <p class="mono mt-3" style="font-size: 10px; letter-spacing: 0.18em; color: var(--ink-faint);">
-        YOUTUBE — <a href="https://www.youtube.com/@RetailBo" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: underline; text-underline-offset: 3px;">@RetailBo</a>
-        &nbsp;·&nbsp; <a href="https://www.youtube.com/@RetailBeastFX" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: underline; text-underline-offset: 3px;">@RetailBeastFX</a>
+        No videos yet — the first one premieres here.
       </p>
     </div>
   </div>
@@ -86,17 +52,16 @@ const rbShown = variant === 'home' ? retailbo.slice(0, 2) : retailbo;
   <div>
     <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
       <h3 class="display display-md">RetailBeastFX — tutorials</h3>
-      <span class="note">the lessons channel 🎓</span>
+      <span class="note" aria-hidden="true">▮ ▮ ▮</span>
     </div>
     <div class="episode-grid">
       {rbfxShown.map((ep) => (
         <article class="card">
           <div class="episode-cover">
-            <span class="ep-no">{ep.no}</span>
             <span class="ep-soon">COMING SOON</span>
+            <span class="ep-cover-label">Episode cover</span>
           </div>
           <p class="episode-title">{ep.group}</p>
-          <p class="episode-desc">{ep.desc}</p>
           {ep.pair && (
             <p class="episode-pair">
               <a href={ep.pair.href}>{ep.pair.label} →</a>
@@ -111,17 +76,16 @@ const rbShown = variant === 'home' ? retailbo.slice(0, 2) : retailbo;
   <div>
     <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
       <h3 class="display display-md">RetailBo — personal</h3>
-      <span class="note">the person, on camera 📺</span>
+      <span class="note" aria-hidden="true">☾ ★ ☾</span>
     </div>
     <div class="episode-grid">
       {rbShown.map((ep) => (
         <article class="card">
           <div class="episode-cover">
-            <span class="ep-no">{ep.no}</span>
             <span class="ep-soon">COMING SOON</span>
+            <span class="ep-cover-label">Episode cover</span>
           </div>
           <p class="episode-title">{ep.group}</p>
-          <p class="episode-desc">{ep.desc}</p>
         </article>
       ))}
     </div>

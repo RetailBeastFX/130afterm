@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import ChartBackground from '../components/ChartBackground.astro';
 
 interface Props {
   title?: string;
@@ -38,6 +39,7 @@ const {
     />
   </head>
   <body class="antialiased">
+    <ChartBackground />
     <slot />
 
     <script is:inline>

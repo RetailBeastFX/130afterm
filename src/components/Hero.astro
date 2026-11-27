@@ -31,13 +31,25 @@
       <p class="hero-eyebrow">RetailBo — a place, not just a brand</p>
 
       <div class="hero-copy-market">
+        <p class="hero-bubble">my journey into wealth</p>
+        <p class="hero-pill-line"><span class="hero-pill teal">★ Personal, but trading ★</span></p>
         <h1 class="logo-text hero-title">Retail<span class="accent">Bo</span></h1>
-        <p class="hero-tag">my journey into wealth — <b>trade · reflect · grow</b></p>
+        <p class="hero-headline">Documenting my struggle to success</p>
         <p class="hero-sub">
-          the market — trading, charts, execution. the 15-minute ORB is the
-          strategy, the levels are the map, and the research is public.
-          no signals, no guru act. just the work, documented.
+          My research and everything you find here — all of it in one place,
+          before I start vlogging about it.
         </p>
+        <div class="hero-meta">
+          <span class="hero-pill yellow">★ EST. 2017</span>
+          <img
+            class="hero-rb"
+            src="/assets/rb-pointing.webp"
+            alt="RB, the Retail Beast"
+            width="62"
+            height="62"
+            loading="lazy"
+          />
+        </div>
       </div>
 
       <div class="hero-copy-moon" hidden>
@@ -61,9 +73,9 @@
         <span class="hero-pill green">▲ 9:30 RTH</span>
         <span class="hero-pill">Asia open</span>
         <span class="hero-pill">London open</span>
-        <span class="hero-pill red">▼ est. 2017</span>
       </div>
 
+      <p class="hero-switch-label">Two moods</p>
       <div class="hero-switcher" role="group" aria-label="Switch worlds">
         <button
           type="button"
@@ -123,6 +135,8 @@
     function setMood(mood, persist) {
       if (mood !== 'moon') mood = 'market';
       hero.setAttribute('data-mood', mood);
+      // Site-wide moon dimming (marquee, gutter, widgets) keys off the body.
+      try { document.body.setAttribute('data-mood', mood); } catch (e) {}
       if (marketCopy) marketCopy.hidden = mood !== 'market';
       if (moonCopy) moonCopy.hidden = mood !== 'moon';
       if (marketBtn) marketBtn.setAttribute('aria-pressed', mood === 'market' ? 'true' : 'false');
