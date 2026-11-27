@@ -228,14 +228,6 @@ img {
     rgba(5, 11, 26, 0.8);
 }
 
-/* Graph-paper grid, subtle, for section bands */
-.graph-paper {
-  background-image:
-    linear-gradient(rgba(188, 216, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(188, 216, 255, 0.05) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
-
 /* ═══════════════════════════════════════════════════════════════════
    CARDS — white content cards on deep navy
    ═══════════════════════════════════════════════════════════════════ */
