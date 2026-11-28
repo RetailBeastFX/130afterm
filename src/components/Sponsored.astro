@@ -2,6 +2,7 @@
 // Sponsored — Bo's affiliate links act as the ads.
 // Content stays free; the promos are the monetization.
 // Links verified Nov 26 — byte-identical, do not change.
+// Ads sit in a retro OS window, sampler frame ("SPONSORED — THE ADS").
 const ads = [
   {
     href: 'https://www.tradingview.com/pricing/?share_your_love=deboincognito&mobileapp=true',
@@ -21,22 +22,29 @@ const ads = [
 ];
 ---
 
-<section aria-label="Sponsored">
-  <div class="ad-grid">
-    {ads.map((ad) => (
-      <a
-        href={ad.href}
-        target="_blank"
-        rel="noopener sponsored"
-        class="card ad-card block"
-      >
-        <span class="ad-label">Ad</span>
-        <h3 class="display text-xl mb-2">{ad.title}</h3>
-        <p class="body-dim text-sm">{ad.desc}</p>
-        <span class="mono mt-3 inline-block" style="font-size: 10px; letter-spacing: 0.18em; color: var(--blue);">
-          CHECK IT OUT →
-        </span>
-      </a>
-    ))}
+<div class="b-oswin light off-b">
+  <div class="b-win-bar">
+    <span class="wdot a"></span><span class="wdot b"></span><span class="wdot c"></span>
+    <span class="b-win-title">SPONSORED — THE ADS</span>
+    <span class="b-win-ctl" aria-hidden="true"><i>–</i><i>□</i><i>×</i></span>
   </div>
-</section>
+  <div class="b-oswin-body">
+    <div class="ad-grid">
+      {ads.map((ad) => (
+        <a
+          href={ad.href}
+          target="_blank"
+          rel="noopener sponsored"
+          class="card ad-card block"
+        >
+          <span class="ad-label">Ad</span>
+          <h3 class="display text-xl mb-2">{ad.title}</h3>
+          <p class="body-dim text-sm">{ad.desc}</p>
+          <span class="mono mt-3 inline-block" style="font-size: 10px; letter-spacing: 0.18em; color: var(--blue);">
+            Check it out →
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</div>

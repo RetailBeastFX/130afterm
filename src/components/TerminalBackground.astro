@@ -1,0 +1,83 @@
+---
+// Desktop frame, outer layer: the animated terminal background.
+// Two edge columns of monospace schedule/status lines (NEVER prices)
+// print in sequence on a 27s loop; JS clones each authored block down
+// its column until it covers the page height. Dimmed behind content,
+// static under reduced motion. Sampler lines, verbatim.
+---
+
+<div class="b-term-bg" id="bTermBg" aria-hidden="true">
+  <div class="b-term-col left">
+    <div class="b-term-block">
+      <p class="bl" style="--i:0">&gt; BOOT: RETAILBO DESKTOP</p>
+      <p style="--i:1">&gt; CHART CITY ......... <span class="g">LOADED</span></p>
+      <p style="--i:2">&gt; RB MODULE .......... <span class="g">ONLINE</span></p>
+      <p class="g" style="--i:3">RTH 09:30 NEW YORK</p>
+      <p class="bl" style="--i:4">ASIA 09:00 TOKYO</p>
+      <p class="bl" style="--i:5">LONDON 08:00 OPEN</p>
+      <p style="--i:6">ORB WINDOW 09:30–09:45 ET</p>
+      <p class="g" style="--i:7">ORB: LEVELS DRAWN</p>
+      <p style="--i:8">ORB: MIDLINE BIAS SET</p>
+      <p class="g" style="--i:9">REGIME GATE: ARMED</p>
+      <p style="--i:10">CHOP WATCH: 11:30 RULE</p>
+      <p class="g" style="--i:11">BULLS: BUY SIDE</p>
+      <p class="r" style="--i:12">BEARS: SELL SIDE</p>
+      <p style="--i:13">PAPER TRADE FIRST</p>
+      <p class="cur" style="--i:14">&gt; <span>▮</span></p>
+    </div>
+  </div>
+  <div class="b-term-col right">
+    <div class="b-term-block">
+      <p class="g" style="--i:0">&gt; MARKET STATUS: ONLINE</p>
+      <p style="--i:1">&gt; WIDGETS ............ <span class="g">SYNCED</span></p>
+      <p class="bl" style="--i:2">TOKYO 09:00 — ASIA OPEN</p>
+      <p class="bl" style="--i:3">LONDON 08:00 — OPEN</p>
+      <p class="g" style="--i:4">NEW YORK 09:30 — RTH</p>
+      <p class="g" style="--i:5">ORB STARTER: LIVE ON TV</p>
+      <p style="--i:6">PAST ORBS: DRAWN AS LEVELS</p>
+      <p class="r" style="--i:7">NO SIGNALS — PAPER FIRST</p>
+      <p style="--i:8">SCROLL: CANDLES PRINTING</p>
+      <p class="bl" style="--i:9">MOON WORLD: STANDBY</p>
+      <p style="--i:10">THE MAN: OFF THE CLOCK</p>
+      <p style="--i:11">MEDIA: EPISODE LIBRARY</p>
+      <p class="g" style="--i:12">STATUS: WAITING FOR THE OPEN</p>
+      <p class="bl" style="--i:13">&gt; SEE YOU AT THE OPENS</p>
+      <p class="cur" style="--i:14">&gt; <span>▮</span></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Clone each authored terminal block down its edge column until it
+  // covers the page height (cap 90 blocks per column; only ever adds).
+  // Phase shift per clone staggers the 27s print loop per column.
+  (function () {
+    function fillTermBg() {
+      var termBg = document.getElementById('bTermBg');
+      if (!termBg) return;
+      var wrap = document.querySelector('.rb-contentsWrapper');
+      var H = wrap ? wrap.scrollHeight : document.documentElement.scrollHeight;
+      if (!H) return;
+      Array.prototype.forEach.call(termBg.querySelectorAll('.b-term-col'), function (col) {
+        var blocks = col.querySelectorAll('.b-term-block');
+        if (!blocks.length) return;
+        var step = blocks[0].offsetHeight + 64;
+        if (step <= 0) return;
+        var base = col.classList.contains('right') ? 0.7 : 0;
+        var n = blocks.length;
+        while (n * step < H && n < 90) {
+          var clone = blocks[0].cloneNode(true);
+          clone.style.setProperty('--bd', (base + (n % 3) * 1.35).toFixed(2) + 's');
+          col.appendChild(clone);
+          n++;
+        }
+      });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fillTermBg);
+    } else {
+      fillTermBg();
+    }
+    window.addEventListener('resize', fillTermBg);
+  })();
+</script>

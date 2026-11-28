@@ -1,18 +1,19 @@
 ---
 // Marquee band — diagonal-striped RETAILBO ★ ticker between sections.
-// Decorative; aria-hidden.
-const items = [
-  'RETAILBO', '★', 'THE MARKET', '★', 'THE MAN', '★', 'THE MEDIA', '★',
-  '9:30 RTH', '★', 'ASIA', '★', 'LONDON', '★',
-];
-const track = [...items, ...items, ...items, ...items];
-const loop = [...track, ...track];
+// Sampler content: twelve "RETAILBO ★" spans, doubled in markup so the
+// 26s translateX(-50%) loop is seamless. Decorative; aria-hidden.
+const items = Array.from({ length: 12 }, () => 'RETAILBO');
+const track = [...items, ...items];
 ---
 
-<div class="marquee-band" aria-hidden="true">
-  <div class="marquee-track">
-    {loop.map((text) => (
-      <span class="marquee-item">{text}</span>
-    ))}
+<div class="b-marquee" aria-hidden="true">
+  <div class="b-marquee-track">
+    {
+      track.map(() => (
+        <span>
+          RETAILBO <i>★</i>
+        </span>
+      ))
+    }
   </div>
 </div>

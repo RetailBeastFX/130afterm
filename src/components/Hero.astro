@@ -3,8 +3,18 @@
 // Instant flip, no reload, remembers the mode in the URL hash.
 // Moon mood is quieter and more atmospheric: dimmer, less saturated.
 // Hinge-aware: dual-screen segments get one panel each, with fallback.
+// Sampler frame: retro OS-window title bar on the card + Kurumi-style
+// SCROLL cue at the bottom of the hero.
+import ChartRow from './ChartRow.astro';
 ---
-<section class="hero" id="hero" data-mood="market" aria-label="RetailBo — two worlds">
+<section class="hero rb-content rb-content--hero" id="b-hero" data-section="hero" data-mood="market" aria-label="RetailBo — two worlds">
+  <div class="hero_grad rb-grad" aria-hidden="true"></div>
+  <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
+  <ChartRow row="hero" />
+  <div class="hero__decoWrapper rb-decoWrapper" aria-hidden="true">
+    <span class="b-deco b-deco-star b-deco-a">★</span>
+    <span class="b-deco b-deco-star b-deco-b">★</span>
+  </div>
   <div class="hero-art" aria-hidden="true">
     <img
       class="hero-img-market"
@@ -64,6 +74,11 @@
     </div>
 
     <div class="hero-card">
+      <div class="b-hero-winbar">
+        <span class="wdot a"></span><span class="wdot b"></span><span class="wdot c"></span>
+        <span class="b-hero-winbar-title">RETAILBO — HOME</span>
+        <span class="b-win-ctl" aria-hidden="true"><i>–</i><i>□</i><i>×</i></span>
+      </div>
       <h2 id="hero-card-title">The market is open.</h2>
       <p id="hero-card-body">
         9:30 RTH, Asia, London — the opens are where the day is decided.
@@ -107,12 +122,15 @@
     </div>
   </div>
 
-  <p class="hero-scroll-hint" aria-hidden="true">scroll</p>
+  <a class="b-scroll-cue" href="#b-now" aria-label="Scroll down to the next section">
+    <span class="b-scroll-cue-label">SCROLL</span>
+    <svg class="b-scroll-cue-arrow" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l8 8 8-8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" /></svg>
+  </a>
 </section>
 
 <script>
   (function () {
-    var hero = document.getElementById('hero');
+    var hero = document.getElementById('b-hero');
     if (!hero) return;
     var marketCopy = hero.querySelector('.hero-copy-market');
     var moonCopy = hero.querySelector('.hero-copy-moon');

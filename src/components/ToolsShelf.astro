@@ -1,0 +1,82 @@
+---
+// Tools shelf — cover-style volume cards for the three tools. The ORB
+// Starter links out to its published TradingView page; HUD and Sessions
+// are not published, so they stay "in the lab" and anchor to #b-lab.
+// Staircase-up parallax row, caption "the whole shelf".
+// Sampler copy, verbatim.
+import ChartRow from './ChartRow.astro';
+---
+
+<section class="b-band rb-content rb-content--shelf" data-section="shelf" id="b-shelf">
+  <div class="shelf_grad rb-grad" aria-hidden="true"></div>
+  <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
+  <ChartRow row="shelf" />
+  <div class="shelf__decoWrapper rb-decoWrapper" aria-hidden="true">
+    <span class="b-deco b-deco-usd b-deco-a">$</span>
+    <span class="b-deco b-deco-star b-deco-b">★</span>
+  </div>
+  <div class="rb-content-container shelf-container">
+    <div>
+      <hgroup class="rb-content_title">
+        <p class="b-kicker">
+          <span class="b-chip">Tools</span>
+          <span class="b-date">The shelf</span>
+        </p>
+        <h2 class="b-h">Shelf</h2>
+        <p class="rb-content_title--txt"><span>RetailBo</span></p>
+      </hgroup>
+      <div class="b-oswin light off-c">
+        <div class="b-win-bar">
+          <span class="wdot a"></span><span class="wdot b"></span><span class="wdot c"></span>
+          <span class="b-win-title">SHELF — THE TOOLS</span>
+          <span class="b-win-ctl" aria-hidden="true"><i>–</i><i>□</i><i>×</i></span>
+        </div>
+        <div class="b-oswin-body">
+          <div class="b-shelf-grid">
+            <article class="b-vol">
+              <div class="b-vol-cover">
+                <span class="b-vol-candles" aria-hidden="true">▮ ▮ ▮</span>
+                <div class="b-vol-mark">RB<br />FX</div>
+                <span class="b-vol-ver">v18</span>
+              </div>
+              <div class="b-vol-body">
+                <h4>RBFX ORB Starter v18</h4>
+                <p>15m ORB, regime-gated — paper trade first</p>
+                <a
+                  class="b-vol-link"
+                  href="https://www.tradingview.com/script/q45bjtxS-RetailBeastFX-ORB-Starter/"
+                >
+                  View on TradingView →
+                </a>
+              </div>
+            </article>
+            <article class="b-vol">
+              <div class="b-vol-cover b-vol-cover--green">
+                <span class="b-vol-candles" aria-hidden="true">▮ ▮ ▮</span>
+                <div class="b-vol-mark">RB<br />FX</div>
+                <span class="b-vol-ver">v7.21</span>
+              </div>
+              <div class="b-vol-body">
+                <h4>RBFX HUD v7.21</h4>
+                <p>trade management, not entry signals</p>
+                <a class="b-vol-lab" href="#b-lab">In the lab</a>
+              </div>
+            </article>
+            <article class="b-vol">
+              <div class="b-vol-cover b-vol-cover--teal">
+                <span class="b-vol-candles" aria-hidden="true">▮ ▮ ▮</span>
+                <div class="b-vol-mark">RB<br />FX</div>
+                <span class="b-vol-ver">v4.1</span>
+              </div>
+              <div class="b-vol-body">
+                <h4>RBFX Sessions v4.1</h4>
+                <p>session boxes + 15m ORB</p>
+                <a class="b-vol-lab" href="#b-lab">In the lab</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

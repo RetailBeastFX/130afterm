@@ -4,6 +4,8 @@
 // slots, split RetailBeastFX tutorials / RetailBo personal.
 // No videos exist yet: every slot is an honest "Coming soon" —
 // no invented titles, no fake embeds, no fake view counts.
+// Sampler frame: outer dark OS window ("MEDIA — EPISODE LIBRARY"),
+// white player window, sampler group headings + covers, verbatim.
 interface Props {
   /** 'home' = featured + 2 per side + link to /media. 'full' = everything. */
   variant?: 'home' | 'full';
@@ -11,89 +13,86 @@ interface Props {
 
 const { variant = 'home' } = Astro.props;
 
+// Three slots per side in the full library; the first RBFX slot pairs
+// with the written breakdown of the 11:30 chop rule.
 const rbfx = [
-  {
-    group: 'RETAILBEASTFX · TRADING TUTORIALS',
-    pair: { label: 'Pairs with the written breakdown: The 11:30 chop rule', href: '/lab/1130-chop-rule/' },
-  },
-  { group: 'RETAILBEASTFX · TRADING TUTORIALS', pair: null },
-  { group: 'RETAILBEASTFX · TRADING TUTORIALS', pair: null },
+  { pair: { href: '/lab/1130-chop-rule/' } },
+  { pair: null },
+  { pair: null },
 ];
 
-const retailbo = [
-  { group: 'RETAILBO · PERSONAL VIDEOS & COMMENTARY' },
-  { group: 'RETAILBO · PERSONAL VIDEOS & COMMENTARY' },
-  { group: 'RETAILBO · PERSONAL VIDEOS & COMMENTARY' },
-];
+const retailbo = [{}, {}, {}];
 
 const rbfxShown = variant === 'home' ? rbfx.slice(0, 2) : rbfx;
 const rbShown = variant === 'home' ? retailbo.slice(0, 2) : retailbo;
 ---
 
-<div class="stack">
-  <!-- Featured video — retro computer window -->
-  <div class="os-window">
-    <div class="os-titlebar">
-      <span class="os-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-      RETAILBO.EXE — MEDIA PLAYER
-    </div>
-    <div style="padding: 20px;">
-      <div class="episode-cover episode-featured" style="margin-bottom: 14px; min-height: 220px; flex-direction: column; gap: 10px;">
-        <span class="ep-play" aria-hidden="true">▶</span>
-        <span class="ep-coming">Coming soon</span>
+<div class="b-oswin dark">
+  <div class="b-win-bar">
+    <span class="wdot a"></span><span class="wdot b"></span><span class="wdot c"></span>
+    <span class="b-win-title">MEDIA — EPISODE LIBRARY</span>
+    <span class="b-win-ctl" aria-hidden="true"><i>–</i><i>□</i><i>×</i></span>
+  </div>
+  <div class="b-oswin-body">
+    <div class="stack">
+      <!-- Featured video — retro computer window -->
+      <p class="b-sub-label">★ Featured video</p>
+      <div class="b-win">
+        <div class="b-win-bar">
+          <span class="wdot a"></span><span class="wdot b"></span><span class="wdot c"></span>
+          <span class="b-win-title">RETAILBO.EXE — MEDIA PLAYER</span>
+          <span class="b-win-x" aria-hidden="true">×</span>
+        </div>
+        <div class="b-featured-slot">
+          <span class="b-play-ring" aria-hidden="true">▶</span>
+          <span class="b-soon">Coming soon</span>
+          <p>No videos yet — the first one premieres here.</p>
+        </div>
       </div>
-      <p class="body-dim text-sm">
-        No videos yet — the first one premieres here.
-      </p>
+
+      <!-- RetailBeastFX — trading tutorials -->
+      <div class="b-media-group">
+        <h3><span>Trading tutorials</span>RetailBeastFX — trading tutorials</h3>
+        <div class="b-ep-grid">
+          {rbfxShown.map((ep) => (
+            <div class="b-ep">
+              <div class="b-ep-cover">
+                <span class="b-ep-candles" aria-hidden="true">▮ ▮ ▮</span>
+                <span class="b-soon">Coming soon</span>
+                <p>Episode cover</p>
+              </div>
+              {ep.pair && (
+                <p class="b-pair-line">
+                  Pairs with the written breakdown:{' '}
+                  <a href={ep.pair.href}><strong>The 11:30 chop rule</strong></a>
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- RetailBo — personal videos & commentary -->
+      <div class="b-media-group">
+        <h3><span>Personal</span>RetailBo — personal videos &amp; commentary</h3>
+        <div class="b-ep-grid">
+          {rbShown.map(() => (
+            <div class="b-ep">
+              <div class="b-ep-cover">
+                <span class="b-ep-candles" aria-hidden="true">☾ ★ ☾</span>
+                <span class="b-soon">Coming soon</span>
+                <p>Episode cover</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {variant === 'home' && (
+        <p>
+          <a href="/media" class="btn btn-ghost">open the full episode library →</a>
+        </p>
+      )}
     </div>
   </div>
-
-  <!-- RetailBeastFX — trading tutorials -->
-  <div>
-    <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
-      <h3 class="display display-md">RetailBeastFX — tutorials</h3>
-      <span class="note" aria-hidden="true">▮ ▮ ▮</span>
-    </div>
-    <div class="episode-grid">
-      {rbfxShown.map((ep) => (
-        <article class="card">
-          <div class="episode-cover">
-            <span class="ep-soon">COMING SOON</span>
-            <span class="ep-cover-label">Episode cover</span>
-          </div>
-          <p class="episode-title">{ep.group}</p>
-          {ep.pair && (
-            <p class="episode-pair">
-              <a href={ep.pair.href}>{ep.pair.label} →</a>
-            </p>
-          )}
-        </article>
-      ))}
-    </div>
-  </div>
-
-  <!-- RetailBo — personal videos & commentary -->
-  <div>
-    <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
-      <h3 class="display display-md">RetailBo — personal</h3>
-      <span class="note" aria-hidden="true">☾ ★ ☾</span>
-    </div>
-    <div class="episode-grid">
-      {rbShown.map((ep) => (
-        <article class="card">
-          <div class="episode-cover">
-            <span class="ep-soon">COMING SOON</span>
-            <span class="ep-cover-label">Episode cover</span>
-          </div>
-          <p class="episode-title">{ep.group}</p>
-        </article>
-      ))}
-    </div>
-  </div>
-
-  {variant === 'home' && (
-    <p>
-      <a href="/media" class="btn btn-ghost">open the full episode library →</a>
-    </p>
-  )}
 </div>

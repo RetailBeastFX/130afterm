@@ -1,106 +1,112 @@
 ---
 // Live widgets band — five retro windows, all live elements.
-// No heartbeat monitor — cut Nov 27. No heartbeat line anywhere.
+// Sampler copy + titlebars, verbatim. Widget 1 keeps the branch's LIVE
+// session-opens body (a deliberate deviation from the sampler's static
+// 7-market list — a live element beats a static one); the other four
+// match the sampler. No heartbeat monitor — cut Nov 27.
 ---
-<section class="widget-grid" aria-label="Live widgets">
-  <!-- 1 — Market status terminal: session opens -->
-  <div class="os-window widget">
-    <div class="os-titlebar">
-      <span class="os-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-      market status — session opens
-    </div>
-    <div class="widget-body">
-      <p class="widget-mono" id="widget-live-now">LIVE NOW: <span class="open">—</span></p>
-      <p class="widget-mono">
-        RTH OPEN — 09:30 ET <span class="up">▲</span><br />
-        ASIA OPEN — 09:00 JST <span class="up">▲</span><br />
-        LONDON OPEN — 08:00 GMT <span class="up">▲</span>
-      </p>
-      <p class="widget-note" id="widget-next-open">next open: 9:30 RTH</p>
-    </div>
-  </div>
-
-  <!-- 2 — Bull vs Bear indicator -->
-  <div class="os-window widget">
-    <div class="os-titlebar">
-      <span class="os-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-      bulls vs bears
-    </div>
-    <div class="widget-body">
-      <figure class="widget-art">
-        <img
-          src="/assets/bull-bear.gif"
-          alt="Animated bull and bear: a neon-green bull and a crimson-red bear surging toward each other and clashing over the candlestick chart."
-          width="440"
-          height="248"
-          loading="lazy"
-        />
-      </figure>
-      <p class="widget-mono">
-        <span class="up">▲ BULLS BUY</span> &nbsp;·&nbsp; <span class="down">BEARS SELL ▼</span>
-      </p>
-      <p class="widget-note">Green is the buy side. Red is the sell side. The city runs on the fight between them.</p>
-    </div>
-  </div>
-
-  <!-- 3 — Animated chart window -->
-  <div class="os-window widget">
-    <div class="os-titlebar">
-      <span class="os-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-      chart — live render
-    </div>
-    <div class="widget-body">
-      <img
-        class="chart-gif"
-        src="/assets/chart-loop.gif"
-        alt="Animated candlestick chart loop: green and red candles printing one by one, left to right, on a dark navy grid."
-        width="640"
-        height="360"
-        loading="lazy"
-      />
-      <p class="widget-mono">
-        SPY 15M · ORB 09:30–09:45 ET · <span class="up">+2.96R MFE</span> gated median
-      </p>
-      <p class="widget-note">Candles print left to right on a loop — the same chart that tracks your scroll in the gutter.</p>
-    </div>
-  </div>
-
-  <!-- 4 — RB mascot callout -->
-  <div class="os-window widget">
-    <div class="os-titlebar">
-      <span class="os-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-      RB — from the desk
-    </div>
-    <div class="widget-body">
-      <div class="widget-rb">
-        <img
-          class="callout-img"
-          src="/assets/rb-pointing.gif"
-          alt="RB pointing straight at you — neon-green horns and glowing eyes, green wrench in his other hand, bobbing gently."
-          width="88"
-          height="132"
-          loading="lazy"
-        />
-        <blockquote>“The 15-minute ORB is the strategy. The 1-minute will lie to you.”</blockquote>
+<div class="b-widgets-band b-reveal" id="b-now" aria-label="Live widgets">
+  <div class="b-widgets">
+    <!-- 1 — Market status terminal: session opens, live -->
+    <div class="b-win b-widget">
+      <div class="b-win-bar">
+        <span class="wdot a"></span><span class="wdot b"></span><span class="wdot c"></span>
+        <span class="b-win-title">MARKET_STATUS — TERMINAL</span>
+        <span class="b-win-x" aria-hidden="true">×</span>
       </div>
-      <p class="widget-note">— Bo, on the 1m fakeout vs the 15m structure. RB points at the level, not the trade.</p>
+      <div class="b-widget-body">
+        <p class="b-term-status" id="widget-live-now">LIVE NOW: <b>—</b></p>
+        <div class="b-term-list">
+          <span>RTH 09:30 ET <i>▲</i></span>
+          <span>ASIA 09:00 JST <i>▲</i></span>
+          <span>LONDON 08:00 GMT <i>▲</i></span>
+        </div>
+        <p class="b-widget-note" id="widget-next-open">next open: 9:30 RTH</p>
+      </div>
     </div>
-  </div>
 
-  <!-- 5 — Article progress display -->
-  <div class="os-window widget">
-    <div class="os-titlebar">
-      <span class="os-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-      article progress
+    <!-- 2 — Bull vs Bear indicator -->
+    <div class="b-win b-widget">
+      <div class="b-win-bar">
+        <span class="wdot a"></span><span class="wdot b"></span><span class="wdot c"></span>
+        <span class="b-win-title">BULL_VS_BEAR — THE FIGHT</span>
+        <span class="b-win-x" aria-hidden="true">×</span>
+      </div>
+      <div class="b-widget-body">
+        <figure class="b-widget-art">
+          <img
+            src="/assets/bull-bear.gif"
+            alt="Animated bull and bear: a neon-green bull and a crimson-red bear surging toward each other and clashing over the candlestick chart."
+            width="440"
+            height="248"
+            loading="lazy"
+          />
+        </figure>
+        <div class="b-bb">
+          <span class="b-bb-bull">▲ BULLS BUY</span>
+          <span class="b-bb-bear">BEARS SELL ▼</span>
+        </div>
+        <p class="b-widget-note">Green is the buy side. Red is the sell side. The city runs on the fight between them.</p>
+      </div>
     </div>
-    <div class="widget-body">
-      <p class="widget-big"><span id="widget-pct">0</span>%</p>
-      <div class="widget-progress" aria-hidden="true"><i id="widget-fill"></i></div>
-      <p class="widget-mono">SCROLL TO READ — <span id="widget-pct-2">0</span>% THROUGH THE PAGE</p>
-      <p class="widget-note">How far down this page you've read. The gutter candles fill in as you go — there's something at the bottom.</p>
+
+    <!-- 3 — Animated chart window -->
+    <div class="b-win b-widget">
+      <div class="b-win-bar">
+        <span class="wdot a"></span><span class="wdot b"></span><span class="wdot c"></span>
+        <span class="b-win-title">CHART — LIVE RENDER</span>
+        <span class="b-win-x" aria-hidden="true">×</span>
+      </div>
+      <div class="b-widget-body">
+        <img
+          class="b-chart-gif"
+          src="/assets/chart-loop.gif"
+          alt="Animated candlestick chart loop: green and red candles printing one by one, left to right, on a dark navy grid."
+          width="640"
+          height="360"
+          loading="lazy"
+        />
+        <p class="b-widget-note">Candles printing left to right, on loop — the same market that tracks your scroll in the gutter.</p>
+      </div>
+    </div>
+
+    <!-- 4 — RB mascot callout -->
+    <div class="b-win b-widget">
+      <div class="b-win-bar">
+        <span class="wdot a"></span><span class="wdot b"></span><span class="wdot c"></span>
+        <span class="b-win-title">RB — MASCOT CALLOUT</span>
+        <span class="b-win-x" aria-hidden="true">×</span>
+      </div>
+      <div class="b-widget-body">
+        <div class="b-callout-body">
+          <img
+            class="b-callout-img"
+            src="/assets/rb-pointing.gif"
+            alt="RB pointing straight at you — neon-green horns and glowing eyes, green wrench in his other hand, bobbing gently."
+            width="88"
+            height="132"
+            loading="lazy"
+          />
+          <blockquote class="b-callout-bubble">The 15-minute ORB is the strategy. The 1-minute will lie to you.</blockquote>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 — Article progress display -->
+    <div class="b-win b-widget">
+      <div class="b-win-bar">
+        <span class="wdot a"></span><span class="wdot b"></span><span class="wdot c"></span>
+        <span class="b-win-title">ARTICLE_PROGRESS — READER</span>
+        <span class="b-win-x" aria-hidden="true">×</span>
+      </div>
+      <div class="b-widget-body">
+        <p class="b-prog-num"><span id="widget-pct">0</span>%</p>
+        <div class="b-prog-track" aria-hidden="true"><div class="b-prog-fill" id="widget-fill"></div></div>
+        <p class="b-widget-note">How far down this page you've read. The gutter candles fill in as you go — there's something at the bottom.</p>
+      </div>
     </div>
   </div>
-</section>
+</div>
 
 <script>
   (function () {
@@ -132,7 +138,7 @@
       if (mins >= 570 && mins < 960) live = 'NEW YORK — RTH';
       else if (mins >= 180 && mins < 570) live = 'LONDON';
       else if (mins >= 1140 || mins < 180) live = 'ASIA';
-      if (liveEl) liveEl.innerHTML = 'LIVE NOW: <span class="open">' + live + '</span>';
+      if (liveEl) liveEl.innerHTML = 'LIVE NOW: <b>' + live + '</b>';
       // Next 9:30 ET open
       var target = new Date(now);
       target.setHours(9, 30, 0, 0);
@@ -157,12 +163,10 @@
     // ── Article progress: wired to real scroll position ──
     var fill = document.getElementById('widget-fill');
     var pct = document.getElementById('widget-pct');
-    var pct2 = document.getElementById('widget-pct-2');
     if (!fill) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       fill.style.width = '100%';
       if (pct) pct.textContent = '100';
-      if (pct2) pct2.textContent = '100';
       return;
     }
     var ticking = false;
@@ -172,7 +176,6 @@
       var p = max > 0 ? Math.round(Math.min(1, Math.max(0, window.scrollY / max)) * 100) : 100;
       fill.style.width = p + '%';
       if (pct) pct.textContent = String(p);
-      if (pct2) pct2.textContent = String(p);
     }
     window.addEventListener('scroll', function () {
       if (!ticking) { ticking = true; requestAnimationFrame(updateProgress); }
@@ -181,25 +184,3 @@
     updateProgress();
   })();
 </script>
-
-<style>
-  /* Bull/bear GIF — plain figure, sampler values (no border). */
-  .widget-art { margin: 0; }
-  .widget-art img { display: block; width: 100%; height: auto; }
-  /* Chart-loop GIF — sampler values. */
-  .chart-gif { display: block; width: 100%; height: auto; border-radius: 10px; }
-  /* RB callout GIF — transparent, 88px, no crop/border (sampler values).
-     Overrides the old .widget-rb img crop, which was built for the
-     white-background webp. */
-  .widget-rb { align-items: center; }
-  .widget-rb img.callout-img {
-    width: 88px;
-    height: auto;
-    flex: none;
-    display: block;
-    object-fit: contain;
-    border: none;
-    border-radius: 0;
-    background: transparent;
-  }
-</style>

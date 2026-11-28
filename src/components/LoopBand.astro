@@ -1,0 +1,18 @@
+---
+// Loop footer — the bottom restarts from the top, Kurumi-style. The
+// closing band mirrors the hero's opening band: the same RETAILBO
+// marquee over a bar framed like the top header (wordmark left,
+// "BACK TO THE TOP ↑" pill where MENU sits at the top), smooth-scrolling
+// back to the hero. The end feeds into the beginning.
+import Marquee from './Marquee.astro';
+---
+
+<div class="b-loop-band">
+  <Marquee />
+  <div class="b-loop-head">
+    <a class="b-wordmark" href="#b-top">Retail<span>Bo</span></a>
+    <a class="b-restart" href="#b-top">
+      BACK TO THE TOP <span class="b-restart-arrow" aria-hidden="true">↑</span>
+    </a>
+  </div>
+</div>

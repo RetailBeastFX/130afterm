@@ -4,10 +4,8 @@ import SiteGlow from '../components/SiteGlow.astro';
 import Navbar from '../components/Navbar.astro';
 import Loader from '../components/Loader.astro';
 import Hero from '../components/Hero.astro';
-import CandleGutter from '../components/CandleGutter.astro';
 import BearRail from '../components/BearRail.astro';
 import Marquee from '../components/Marquee.astro';
-import SectionHead from '../components/SectionHead.astro';
 import OrbCard from '../components/OrbCard.astro';
 import Widgets from '../components/Widgets.astro';
 import MediaLibrary from '../components/MediaLibrary.astro';
@@ -23,8 +21,16 @@ import CurrentlyShelf from '../components/CurrentlyShelf.astro';
 import Guestbook from '../components/Guestbook.astro';
 import LinkGarden from '../components/LinkGarden.astro';
 import AskRb from '../components/AskRb.astro';
-import Footer from '../components/Footer.astro';
 import Ticker from '../components/Ticker.astro';
+import TerminalBackground from '../components/TerminalBackground.astro';
+import LatestTeaser from '../components/LatestTeaser.astro';
+import JourneyEntry from '../components/JourneyEntry.astro';
+import ToolsShelf from '../components/ToolsShelf.astro';
+import LoopBand from '../components/LoopBand.astro';
+import SignoffFooter from '../components/SignoffFooter.astro';
+import LossCut from '../components/LossCut.astro';
+import HomeScripts from '../components/HomeScripts.astro';
+import ChartRow from '../components/ChartRow.astro';
 import { latestActivity } from '../data/activity';
 import { getCollection } from 'astro:content';
 import { sortNewest } from '../lib/blog';
@@ -65,181 +71,241 @@ const statusLabel: Record<string, string> = {
 
 <Layout title="RetailBo — the market and the man." active="home">
   <SiteGlow />
-  <CandleGutter />
-  <BearRail />
   <Loader />
   <Navbar active="home" />
   <AskRb />
 
-  <Hero />
-  <Marquee />
+  <div class="rb-contentsWrapper">
+    <TerminalBackground />
+    <BearRail />
 
-  <main>
-    <!-- ═══ THE MARKET ═══ -->
-    <section class="band band-navy" id="market" aria-label="The Market">
-      <span class="b-deco b-deco-usd b-deco-a" aria-hidden="true">$</span>
-      <span class="b-deco b-deco-usd b-deco-b" aria-hidden="true">$</span>
-      <div class="wrap-wide">
-        <div class="stack">
-          <SectionHead
-            kicker="// the market"
-            title="The Market"
-            note="trading, market thoughts, strategies, lessons 📈"
-          />
-          <p class="body-dim text-sm max-w-md reveal">
-            the 15-minute ORB is the strategy. the levels are the map, the
-            regime gate is the filter, and the research is public — process,
-            not conclusions, never a signal.
-          </p>
+    <Hero />
+    <LatestTeaser />
+    <Widgets />
+    <Marquee />
 
-          <div
-            style="display: grid; grid-template-columns: 1fr; gap: 16px; position: relative;"
-            class="market-grid"
-          >
-            <span class="b-deco b-deco-yen b-deco-a" aria-hidden="true">¥</span>
-            <span class="b-deco b-deco-yen b-deco-b" aria-hidden="true">¥</span>
-            <OrbCard />
-            {featuredNotes.map((note) => (
-              <a href={`/lab/${note.id.replace(/\.md$/, '')}/`} class="card block reveal lab-card">
-                <div class="flex items-center gap-3 mb-2 flex-wrap">
-                  <span
-                    class="mono"
-                    style="font-size: 11px; color: var(--card-ink-faint); letter-spacing: 0.14em;"
-                  >
-                    {pad(note.data.number)}
-                  </span>
-                  <span class:list={['sticker', statusClass[note.data.status]]}>
-                    {statusLabel[note.data.status]}
-                  </span>
-                  {note.data.instruments.map((i) => (
-                    <span class="mono" style="font-size: 10px; color: var(--card-ink-faint);">{i}</span>
-                  ))}
-                </div>
-                <h3 class="display text-xl mb-1">{note.data.title}</h3>
-                <p class="body-dim text-sm">{note.data.description}</p>
-                <div
-                  class="mono mt-3"
-                  style="font-size: 10px; letter-spacing: 0.14em; color: var(--card-ink-faint);"
-                >
-                  UPDATED {fmt(note.data.updated ?? note.data.date)} · READ →
-                </div>
-              </a>
-            ))}
+    <!-- ═══ THE MARKET — side head ═══ -->
+    <div class="band b-side-head" id="b-market">
+      <div class="b-wrap">
+        <hgroup class="rb-content_title">
+          <p class="b-side-num">Side 01 / 03</p>
+          <h2 class="b-side-title">The <span>Market</span></h2>
+          <p class="b-side-desc">Trading, market thoughts, strategies, lessons. The journey entry, the lab notes, and the tools — all in one place.</p>
+          <p class="rb-content_title--txt"><span>RetailBo</span></p>
+        </hgroup>
+      </div>
+    </div>
+
+    <JourneyEntry />
+    <Marquee />
+
+    <!-- ═══ THE LAB ═══ -->
+    <section class="band rb-content rb-content--lab" data-section="lab" id="b-lab">
+      <div class="lab_grad rb-grad" aria-hidden="true"></div>
+      <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
+      <ChartRow row="lab" />
+      <div class="lab__decoWrapper rb-decoWrapper" aria-hidden="true">
+        <span class="b-deco b-deco-yen b-deco-a">¥</span>
+        <span class="b-deco b-deco-yen b-deco-b">¥</span>
+      </div>
+      <div class="b-wrap rb-content-container lab-container">
+        <div>
+          <hgroup class="rb-content_title">
+            <p class="b-kicker">
+              <span class="b-chip">Lab</span>
+              <span class="b-date">Research note</span>
+              <span class="b-cat trading">Trading</span>
+            </p>
+            <h2 class="b-h">The Lab</h2>
+            <p class="rb-content_title--txt"><span>RetailBo</span></p>
+          </hgroup>
+          <div class="b-oswin light off-b">
+            <div class="b-win-bar">
+              <span class="wdot a"></span><span class="wdot b"></span><span class="wdot c"></span>
+              <span class="b-win-title">LAB — RESEARCH NOTE</span>
+              <span class="b-win-ctl" aria-hidden="true"><i>–</i><i>□</i><i>×</i></span>
+            </div>
+            <div class="b-oswin-body">
+              <div class="stack">
+                {featuredNotes.map((note) => (
+                  <a href={`/lab/${note.id.replace(/\.md$/, '')}/`} class="card block reveal lab-card">
+                    <div class="flex items-center gap-3 mb-2 flex-wrap">
+                      <span
+                        class="mono"
+                        style="font-size: 11px; color: var(--card-ink-faint); letter-spacing: 0.14em;"
+                      >
+                        {pad(note.data.number)}
+                      </span>
+                      <span class:list={['sticker', statusClass[note.data.status]]}>
+                        {statusLabel[note.data.status]}
+                      </span>
+                      {note.data.instruments.map((i) => (
+                        <span class="mono" style="font-size: 10px; color: var(--card-ink-faint);">{i}</span>
+                      ))}
+                    </div>
+                    <h3 class="display text-xl mb-1">{note.data.title}</h3>
+                    <p class="body-dim text-sm">{note.data.description}</p>
+                    <div
+                      class="mono mt-3"
+                      style="font-size: 10px; letter-spacing: 0.14em; color: var(--card-ink-faint);"
+                    >
+                      UPDATED {fmt(note.data.updated ?? note.data.date)} · READ →
+                    </div>
+                  </a>
+                ))}
+                <p>
+                  <a href="/lab" class="btn btn-ghost">open the trading lab →</a>
+                  <a href="/journal" class="btn btn-ghost" style="margin-left: 8px;">the journal →</a>
+                </p>
+              </div>
+            </div>
           </div>
-
-          <Pinboard events={recentEvents} />
-          <p>
-            <a href="/lab" class="btn btn-ghost">open the trading lab →</a>
-            <a href="/journal" class="btn btn-ghost" style="margin-left: 8px;">the journal →</a>
-          </p>
         </div>
       </div>
     </section>
 
-    <Marquee />
-
-    <!-- ═══ LIVE WIDGETS ═══ -->
-    <section class="band band-deep" aria-label="Live widgets">
-      <span class="b-deco b-deco-eur b-deco-a" aria-hidden="true">€</span>
-      <span class="b-deco b-deco-eur b-deco-b" aria-hidden="true">€</span>
-      <div class="wrap-wide">
-        <div class="stack">
-          <SectionHead
-            kicker="// the desk"
-            title="Live from the desk"
-            note="five windows, all live elements"
-          />
-          <Widgets />
+    <!-- ═══ INDICATOR ═══ -->
+    <section class="band rb-content rb-content--indicator" data-section="indicator" id="b-indicator">
+      <div class="indicator_grad rb-grad" aria-hidden="true"></div>
+      <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
+      <ChartRow row="indicator" />
+      <div class="indicator__decoWrapper rb-decoWrapper" aria-hidden="true">
+        <span class="b-deco b-deco-eur b-deco-a">€</span>
+        <span class="b-deco b-deco-eur b-deco-b">€</span>
+      </div>
+      <div class="b-wrap rb-content-container indicator-container">
+        <div>
+          <hgroup class="rb-content_title">
+            <p class="b-kicker">
+              <span class="b-chip">Indicator</span>
+              <span class="b-date">TradingView</span>
+              <span class="b-cat money">Money</span>
+            </p>
+            <h2 class="b-h">Indicator</h2>
+            <p class="rb-content_title--txt"><span>RetailBo</span></p>
+          </hgroup>
+          <OrbCard />
         </div>
       </div>
     </section>
 
     <!-- ═══ THE MAN ═══ -->
-    <section class="band band-navy" id="man" aria-label="The Man">
-      <span class="b-deco b-deco-star b-deco-a" aria-hidden="true">★</span>
-      <span class="b-deco b-deco-star b-deco-b" aria-hidden="true">★</span>
-      <div class="wrap-wide">
-        <div class="stack">
-          <SectionHead
-            kicker="// the man"
-            title="The Man"
-            note="personal thoughts, life, mindset, experiences 🌙"
-          />
-          <p class="body-dim text-sm max-w-md reveal">
-            the moon side of the site. same person, quieter energy — the
-            thoughts, experiences, and perspective behind the name.
-          </p>
-
-          <LatestRants posts={rantPosts} />
-          <RightNow />
-          <RbCorner />
-          <CurrentlyShelf />
-          <QuoteWall />
-          <Top8 />
-          <Guestbook />
-          <LinkGarden compact />
+    <section class="band rb-content rb-content--man b-side-head" data-section="man" id="b-man">
+      <div class="man_grad rb-grad" aria-hidden="true"></div>
+      <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
+      <ChartRow row="man" />
+      <div class="man__decoWrapper rb-decoWrapper" aria-hidden="true">
+        <span class="b-deco b-deco-star b-deco-a">★</span>
+        <span class="b-deco b-deco-star b-deco-b">★</span>
+      </div>
+      <div class="b-wrap rb-content-container man-container">
+        <div>
+          <hgroup class="rb-content_title">
+            <p class="b-side-num">Side 02 / 03</p>
+            <h2 class="b-side-title">The <span>Man</span></h2>
+            <p class="b-side-desc">Personal thoughts, life, mindset, experiences — the side of the site outside the market.</p>
+            <p class="rb-content_title--txt"><span>RetailBo</span></p>
+          </hgroup>
+          <div class="stack">
+            <LatestRants posts={rantPosts} />
+            <RightNow />
+            <RbCorner />
+            <CurrentlyShelf />
+            <QuoteWall />
+            <Top8 />
+            <Guestbook />
+            <LinkGarden compact />
+            <Pinboard events={recentEvents} />
+            <figure class="b-man-art b-reveal">
+              <img
+                src="/assets/moon-base.webp"
+                alt="Moon World: a green-lit lunar base with a satellite dish and a landed ship under a huge full moon, Earth hanging in the starry sky."
+                width="1170"
+                height="658"
+                loading="lazy"
+              />
+              <figcaption>MOON WORLD · THE QUIET SIDE OF THE SAME PLACE</figcaption>
+            </figure>
+          </div>
         </div>
       </div>
     </section>
 
-    <Marquee />
-
     <!-- ═══ THE MEDIA ═══ -->
-    <section class="band band-deep" id="media" aria-label="The Media">
-      <span class="b-deco b-deco-star b-deco-b" aria-hidden="true">★</span>
-      <div class="wrap-wide">
-        <div class="stack">
-          <SectionHead
-            kicker="// the media"
-            title="The Media"
-            note="youtube, tutorials, commentary, projects 📺"
-          />
+    <section class="band rb-content rb-content--media b-side-head" data-section="media" id="b-media">
+      <div class="media_grad rb-grad" aria-hidden="true"></div>
+      <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
+      <ChartRow row="media" />
+      <div class="media__decoWrapper rb-decoWrapper" aria-hidden="true">
+        <span class="b-deco b-deco-star b-deco-a">★</span>
+        <span class="b-deco b-deco-star b-deco-b">★</span>
+      </div>
+      <div class="b-wrap rb-content-container media-container">
+        <div>
+          <hgroup class="rb-content_title">
+            <p class="b-side-num">Side 03 / 03</p>
+            <h2 class="b-side-title">The <span>Media</span></h2>
+            <p class="b-side-desc">YouTube videos, tutorials, commentary, projects — an episode library, not an embed page. The videos land here when the vlog starts.</p>
+            <p class="rb-content_title--txt"><span>RetailBo</span></p>
+          </hgroup>
           <MediaLibrary variant="home" />
         </div>
       </div>
     </section>
+    <Marquee />
+
+    <ToolsShelf />
 
     <!-- ═══ SPONSORED ═══ -->
-    <section class="band band-navy" id="sponsored" aria-label="Sponsored">
-      <div class="wrap-wide">
-        <div class="stack">
-          <SectionHead
-            kicker="// sponsored"
-            title="Sponsored"
-            note="the promos are the ads — the content stays free"
-          />
+    <section class="band rb-content rb-content--sponsored" data-section="sponsored" id="b-sponsored">
+      <div class="sponsored_grad rb-grad" aria-hidden="true"></div>
+      <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
+      <ChartRow row="sponsored" />
+      <div class="sponsored__decoWrapper rb-decoWrapper" aria-hidden="true">
+        <span class="b-deco b-deco-usd b-deco-a">$</span>
+        <span class="b-deco b-deco-star b-deco-b">★</span>
+      </div>
+      <div class="b-wrap rb-content-container sponsored-container">
+        <div>
+          <hgroup class="rb-content_title">
+            <p class="b-kicker">
+              <span class="b-chip">Sponsored</span>
+              <span class="b-date">Ads</span>
+            </p>
+            <h2 class="b-h">Sponsored</h2>
+            <p class="rb-content_title--txt"><span>RetailBo</span></p>
+          </hgroup>
+          <p class="b-lede">The promos are the ads — the content stays free.</p>
           <Sponsored />
         </div>
       </div>
     </section>
 
     <Ticker items={tickerLines} />
-  </main>
 
-  <FooterSurprise />
-  <Footer />
+    <!-- ═══ SIGN-OFF ═══ -->
+    <section class="band rb-content rb-content--signoff" data-section="signoff" id="b-signoff">
+      <div class="signoff_grad rb-grad" aria-hidden="true"></div>
+      <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
+      <ChartRow row="signoff" />
+      <div class="signoff__decoWrapper rb-decoWrapper" aria-hidden="true">
+        <span class="b-deco b-deco-star b-deco-a">★</span>
+        <span class="b-deco b-deco-star b-deco-b">★</span>
+      </div>
+      <div class="b-wrap rb-content-container signoff-container">
+        <div>
+          <hgroup class="rb-content_title signoff_title">
+            <h2 class="rb-signoff-h">Chart City → Moon World</h2>
+            <p class="rb-content_title--txt"><span>RetailBo</span></p>
+          </hgroup>
+          <FooterSurprise />
+        </div>
+      </div>
+      <SignoffFooter />
+      <LoopBand />
+      <LossCut />
+    </section>
+  </div>
+
+  <HomeScripts />
 </Layout>
-
-<style>
-  /* Market grid: ORB card + lab notes side by side on desktop */
-  @media (min-width: 900px) {
-    .market-grid {
-      grid-template-columns: 1fr 1fr !important;
-    }
-  }
-  /* Lab cards: technical, compact, grid-line precision. */
-  .lab-card {
-    position: relative;
-  }
-  .lab-card::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 18px;
-    bottom: 18px;
-    width: 3px;
-    border-radius: 2px;
-    background: linear-gradient(to bottom, var(--blue), transparent);
-    opacity: 0.7;
-  }
-</style>

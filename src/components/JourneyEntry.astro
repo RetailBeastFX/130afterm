@@ -1,0 +1,86 @@
+---
+// Journey entry — Nov 27, 2026: the day the 15-minute ORB clicked.
+// Sampler copy + schematic, verbatim. Sweep-down-then-breakout
+// parallax row, caption "swept the lows… then broke out".
+import ChartRow from './ChartRow.astro';
+---
+
+<section class="b-band rb-content rb-content--journey" data-section="journey" id="b-journey">
+  <div class="journey_grad rb-grad" aria-hidden="true"></div>
+  <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
+  <ChartRow row="journey" />
+  <div class="journey__decoWrapper rb-decoWrapper" aria-hidden="true">
+    <span class="b-deco b-deco-usd b-deco-a">$</span>
+    <span class="b-deco b-deco-usd b-deco-b">$</span>
+  </div>
+  <div class="rb-content-container journey-container">
+    <div>
+      <hgroup class="rb-content_title">
+        <p class="b-kicker">
+          <span class="b-chip">Journey</span>
+          <span class="b-date">Nov 27, 2026</span>
+          <span class="b-cat trading">Trading</span>
+        </p>
+        <h2 class="b-h">Journey</h2>
+        <p class="rb-content_title--txt"><span>RetailBo</span></p>
+      </hgroup>
+      <div class="b-oswin light off-a">
+        <div class="b-win-bar">
+          <span class="wdot a"></span><span class="wdot b"></span><span class="wdot c"></span>
+          <span class="b-win-title">JOURNEY — THE MARKET</span>
+          <span class="b-win-ctl" aria-hidden="true"><i>–</i><i>□</i><i>×</i></span>
+        </div>
+        <div class="b-oswin-body">
+          <article class="b-card">
+            <span class="cnr tl"></span><span class="cnr tr"></span><span class="cnr bl"></span><span class="cnr br"></span>
+            <h3 class="b-entry-title">The 15-minute ORB is the strategy</h3>
+            <p class="b-body">
+              SPY swept to <span class="mark-loss">695.49</span>, chopped for two hours, broke out at noon and ran to
+              <span class="mark-gain">717</span>. The 1-minute chart gave a fakeout; the 15-minute gave the real structure.
+            </p>
+            <figure class="b-entry-art">
+              <img
+                src="/assets/chart-city-skyline.webp"
+                alt="Chart City at night: candlesticks rising over the skyline, a neon-green bull in the clouds on one side and a bear on the other, the full moon above."
+                loading="lazy"
+              />
+              <figcaption>CHART CITY · BULLS ON ONE SIDE, BEARS ON THE OTHER</figcaption>
+            </figure>
+            <figure class="b-chart">
+              <svg
+                viewBox="0 0 600 190"
+                role="img"
+                aria-label="Schematic of SPY on Nov 27: a sweep down to 695.49, two hours of chop inside the opening range, a noon breakout, and a run to 717."
+              >
+                <line x1="30" y1="40" x2="580" y2="40" stroke="#d7e5fd" />
+                <line x1="30" y1="90" x2="580" y2="90" stroke="#d7e5fd" />
+                <line x1="30" y1="140" x2="580" y2="140" stroke="#d7e5fd" />
+                <rect x="30" y="58" width="330" height="46" fill="#2b7fff" opacity="0.1" />
+                <line x1="30" y1="58" x2="580" y2="58" stroke="#2b7fff" stroke-dasharray="5 4" opacity="0.6" />
+                <line x1="30" y1="104" x2="360" y2="104" stroke="#2b7fff" stroke-dasharray="5 4" opacity="0.6" />
+                <polyline
+                  points="30,74 62,86 88,148 112,96 140,84 168,98 196,80 224,94 252,82 280,96 308,84 336,92 362,78 396,60 440,44 490,30 540,20 578,14"
+                  fill="none"
+                  stroke="#2b7fff"
+                  stroke-width="2.4"
+                  stroke-linejoin="round"
+                  stroke-linecap="round"
+                />
+                <text x="66" y="168" fill="#c81e1e" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">695.49 sweep</text>
+                <text x="180" y="50" fill="#5a6c8f" font-family="'JetBrains Mono', monospace" font-size="11">inside the ORB — chop</text>
+                <text x="352" y="128" fill="#5a6c8f" font-family="'JetBrains Mono', monospace" font-size="11">12:00 break</text>
+                <rect x="530" y="20" width="42" height="17" rx="8.5" fill="#ffd21f" />
+                <text x="551" y="32.5" fill="#131c05" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700" text-anchor="middle">717</text>
+              </svg>
+              <figcaption>
+                <span>SPY · NOV 27 · SCHEMATIC FROM THE SESSION NOTES</span>
+                <span>1M FAKEOUT / 15M STRUCTURE</span>
+              </figcaption>
+            </figure>
+            <p class="b-pull">The 1-minute gave a fakeout. The 15-minute gave the real structure.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

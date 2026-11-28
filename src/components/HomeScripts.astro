@@ -1,0 +1,174 @@
+---
+// Homepage scroll engine — one rAF-throttled handler driving the three
+// scroll-linked mechanisms from the Blue sampler: the parallax archive
+// (each chart row lingers while its section scrolls past, then the next
+// slides in), the directional scroll candle (down prints red down, up
+// prints green up, same candle flips in real time), and the STOPPED OUT
+// loss-cut veil/splash. Plus the .b-reveal IntersectionObserver.
+// Progress for the article-progress widget lives in Widgets.astro.
+---
+
+<script>
+  (function () {
+    var reduceMotion =
+      window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ── Parallax archive (hold-and-release) ──────────────────────────
+    var bgRows = Array.prototype.slice.call(document.querySelectorAll('.b-bgrow'));
+    var bgBubbles = bgRows.map(function (row) {
+      return row.parentNode ? row.parentNode.querySelector('.b-bg-bubble') : null;
+    });
+    function updateBgParallax() {
+      if (!bgRows.length || reduceMotion) return;
+      var vh = window.innerHeight || 800;
+      var holdY = Math.min(vh * 0.14, 150);
+      var rowH = 520;
+      for (var i = 0; i < bgRows.length; i++) {
+        var row = bgRows[i];
+        var sec = row.closest ? row.closest('.rb-content') : null;
+        if (!sec) continue;
+        var sr = sec.getBoundingClientRect();
+        var maxShift = Math.max(sr.height - rowH, 0);
+        var shift = holdY - sr.top;
+        if (shift < 0) shift = 0;
+        if (shift > maxShift) shift = maxShift;
+        var next = shift > 0 ? 'translate3d(0,' + shift.toFixed(1) + 'px,0)' : '';
+        if (row.style.transform !== next) row.style.transform = next;
+        var bubble = bgBubbles[i];
+        if (bubble && bubble.style.transform !== next) bubble.style.transform = next;
+      }
+    }
+
+    // ── Directional scroll candle ────────────────────────────────────
+    var bearPrint = document.getElementById('bBearPrint');
+    var bearSticky = document.getElementById('bBearSticky');
+    var candleDown = true; // initial = bearish / scrolling down
+    var lastScrollY = null;
+    function updateBear() {
+      if (!bearPrint || !bearSticky) return;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 1;
+      if (reduceMotion) {
+        bearPrint.style.clipPath = 'inset(0 0 0% 0)';
+        bearSticky.classList.add('is-bear');
+        bearSticky.classList.remove('is-bull');
+        bearSticky.setAttribute('data-dir', 'down');
+        bearSticky.style.setProperty('--bear-p', '1');
+        bearSticky.style.setProperty('--bear-tip-o', '0');
+        return;
+      }
+      // ±0.5px threshold on scroll delta; at rest the last direction holds.
+      var y = window.scrollY;
+      if (lastScrollY !== null) {
+        if (y > lastScrollY + 0.5) candleDown = true;
+        else if (y < lastScrollY - 0.5) candleDown = false;
+      }
+      lastScrollY = y;
+      if (candleDown) {
+        bearPrint.style.clipPath = 'inset(0 0 ' + ((1 - p) * 100).toFixed(2) + '% 0)';
+        bearSticky.classList.add('is-bear');
+        bearSticky.classList.remove('is-bull');
+        bearSticky.setAttribute('data-dir', 'down');
+      } else {
+        bearPrint.style.clipPath = 'inset(' + (p * 100).toFixed(2) + '% 0 0 0)';
+        bearSticky.classList.add('is-bull');
+        bearSticky.classList.remove('is-bear');
+        bearSticky.setAttribute('data-dir', 'up');
+      }
+      bearSticky.style.setProperty('--bear-p', p.toFixed(4));
+      bearSticky.style.setProperty('--bear-tip-o', p > 0.001 && p < 0.999 ? '1' : '0');
+    }
+
+    // ── STOPPED OUT loss-cut ─────────────────────────────────────────
+    var lossZone = document.getElementById('bLossZone');
+    var lossNavy = document.getElementById('bLossNavy');
+    var lossBlack = document.getElementById('bLossBlack');
+    var lossSplash = document.getElementById('bLossSplash');
+    var lossSplashing = false;
+    var lossArmed = true;
+    function setLossVeil(navyO, blackO) {
+      if (lossNavy) lossNavy.style.opacity = navyO.toFixed(3);
+      if (lossBlack) lossBlack.style.opacity = blackO.toFixed(3);
+    }
+    function fireLossSplash() {
+      lossSplashing = true;
+      lossArmed = false;
+      if (lossSplash) lossSplash.classList.add('on');
+      window.setTimeout(function () {
+        if (lossSplash) lossSplash.classList.remove('on');
+        setLossVeil(0, 0);
+        var topEl = document.getElementById('b-top');
+        var doc = document.documentElement;
+        var prevBehavior = doc.style.scrollBehavior;
+        doc.style.scrollBehavior = 'auto';
+        if (topEl) {
+          window.scrollTo(0, topEl.getBoundingClientRect().top + (window.pageYOffset || 0));
+        } else {
+          window.scrollTo(0, 0);
+        }
+        doc.style.scrollBehavior = prevBehavior;
+        lossSplashing = false;
+      }, 1600);
+    }
+    function updateLossCut() {
+      if (!lossZone || !lossSplash) return;
+      if (lossSplashing) return;
+      if (reduceMotion) {
+        setLossVeil(0, 0);
+        return;
+      }
+      var vh = window.innerHeight || 800;
+      var zr = lossZone.getBoundingClientRect();
+      var zoneH = lossZone.offsetHeight || vh * 1.2;
+      var entered = vh - zr.top;
+      var p = entered / (zoneH * 0.9);
+      if (p < 0) p = 0;
+      if (p > 1) p = 1;
+      if (p < 0.4) lossArmed = true;
+      var navyO = Math.min(p / 0.38, 1);
+      var blackO = Math.min(Math.max((p - 0.42) / 0.33, 0), 1);
+      setLossVeil(navyO, blackO);
+      if (p >= 0.9 && lossArmed) fireLossSplash();
+    }
+
+    // ── One rAF-throttled scroll/resize handler ──────────────────────
+    var ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(function () {
+          ticking = false;
+          updateBgParallax();
+          updateBear();
+          updateLossCut();
+        });
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
+
+    // ── Reveal-on-scroll (.b-reveal) ────────────────────────────────
+    var revealEls = document.querySelectorAll('.b-reveal');
+    if ('IntersectionObserver' in window && !reduceMotion) {
+      var revealIO = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) {
+              en.target.classList.add('in');
+              revealIO.unobserve(en.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+      Array.prototype.forEach.call(revealEls, function (el) {
+        revealIO.observe(el);
+      });
+    } else {
+      Array.prototype.forEach.call(revealEls, function (el) {
+        el.classList.add('in');
+      });
+    }
+  })();
+</script>

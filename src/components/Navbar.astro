@@ -1,6 +1,9 @@
 ---
-// Navbar — RetailBo master build.
-// Desktop: full link row. Phone: circular MENU button + slide-in panel.
+// Minimal nav — the header is just the RetailBo wordmark + one round
+// MENU button (identical desktop and mobile, no horizontal link bar).
+// The slide-in panel lists all fourteen destinations in page order;
+// homepage sections smooth-scroll, real pages navigate. Kurumi-style:
+// the MENU button opens a right-side drawer, like fxkurumi-info.com.
 interface Props {
   active?: string;
 }
@@ -8,97 +11,87 @@ interface Props {
 const { active = 'home' } = Astro.props;
 
 const links = [
-  { key: 'home', href: '/', label: 'home', no: '01' },
-  { key: 'market', href: '/#market', label: 'the market', no: '02' },
-  { key: 'man', href: '/#man', label: 'the man', no: '03' },
-  { key: 'media', href: '/media', label: 'the media', no: '04' },
-  { key: 'sponsored', href: '/#sponsored', label: 'sponsored', no: '05' },
-  { key: 'blog', href: '/blog', label: 'rants', no: '06' },
-  { key: 'lab', href: '/lab', label: 'lab', no: '07' },
-  { key: 'journal', href: '/journal', label: 'journal', no: '08' },
-  { key: 'now', href: '/now', label: 'now', no: '09' },
-  { key: 'links', href: '/links', label: 'links', no: '10' },
-  { key: 'archive', href: '/archive', label: 'archive', no: '11' },
-  { key: 'terminal', href: '/terminal', label: 'terminal', no: '12' },
+  { key: 'home', href: '/#b-top', label: 'Home' },
+  { key: 'latest', href: '/#b-latest', label: 'Latest' },
+  { key: 'market', href: '/#b-market', label: 'The Market' },
+  { key: 'man', href: '/#b-man', label: 'The Man' },
+  { key: 'media', href: '/#b-media', label: 'The Media' },
+  { key: 'shelf', href: '/#b-shelf', label: 'Shelf' },
+  { key: 'sponsored', href: '/#b-sponsored', label: 'Sponsored' },
+  { key: 'blog', href: '/blog', label: 'Rants' },
+  { key: 'lab', href: '/lab', label: 'Lab' },
+  { key: 'journal', href: '/journal', label: 'Journal' },
+  { key: 'now', href: '/now', label: 'Now' },
+  { key: 'links', href: '/links', label: 'Links' },
+  { key: 'archive', href: '/archive', label: 'Archive' },
+  { key: 'terminal', href: '/terminal', label: 'Terminal' },
 ];
 ---
 
-<nav class="site-nav" aria-label="Site navigation">
-  <div class="wrap-wide flex items-center justify-between gap-4 py-2">
-    <a href="/" class="flex items-center gap-3 min-h-[48px]" aria-label="RetailBo home">
-      <span
-        class="flex items-center justify-center w-9 h-9 rounded-xl text-sm font-bold"
-        style="background: var(--green); color: #04140a; font-family: var(--font-display);"
-        aria-hidden="true"
-      >
-        RB
-      </span>
-      <span class="leading-tight">
-        <span class="display block text-lg">RetailBo</span>
-        <span class="label block" style="font-size: 8px;">// 9:30 · asia · london</span>
-      </span>
-    </a>
-
-    <div class="nav-links items-center gap-1" role="list">
-      {links.map((l) => (
-        <a
-          href={l.href}
-          class:list={['nav-link', { active: active === l.key }]}
-          aria-current={active === l.key ? 'page' : undefined}
-        >
-          {l.label}
-        </a>
-      ))}
+<header class="b-head" id="b-top">
+  <a href="/" class="b-wordmark" aria-label="RetailBo home">Retail<span>Bo</span></a>
+  <button
+    class="b-menu-btn"
+    id="bMenuBtn"
+    type="button"
+    aria-label="Open menu"
+    aria-expanded="false"
+    aria-controls="bPanel"
+  >
+    MENU
+  </button>
+  <div class="b-scrim" id="bScrim" aria-hidden="true"></div>
+  <nav class="b-panel" id="bPanel" aria-label="Site menu">
+    <button class="b-panel-close" id="bPanelClose" type="button" aria-label="Close menu">×</button>
+    <p class="b-panel-title">★ MENU</p>
+    <div class="b-panel-nav">
+      {
+        links.map((l) => (
+          <a href={l.href} aria-current={active === l.key ? 'page' : undefined}>
+            {l.label}
+          </a>
+        ))
+      }
     </div>
-
-    <button
-      class="nav-burger"
-      id="nav-burger"
-      aria-label="Open menu"
-      aria-expanded="false"
-      aria-controls="menu-overlay"
-    >
-      ☰
-    </button>
-  </div>
-</nav>
-
-<div class="menu-overlay" id="menu-overlay" role="dialog" aria-modal="true" aria-label="Menu">
-  <button class="menu-close" id="menu-close" aria-label="Close menu">✕</button>
-  <nav class="mt-6" aria-label="Mobile navigation">
-    {links.map((l) => (
-      <a href={l.href} class="menu-link">
-        <span class="menu-no">{l.no}</span>
-        <span>{l.label}</span>
-      </a>
-    ))}
+    <p class="b-panel-note">Personal, but trading.</p>
   </nav>
-  <p class="note mt-auto text-center" style="font-size: 1.1rem; color: var(--ink-faint);">
-    i'll see you at the opens — 9:30 RTH, asia, london.
-  </p>
-</div>
+</header>
 
 <script>
   (function () {
-    var burger = document.getElementById('nav-burger');
-    var overlay = document.getElementById('menu-overlay');
-    var close = document.getElementById('menu-close');
-    if (!burger || !overlay || !close) return;
+    var menuBtn = document.getElementById('bMenuBtn');
+    var panelClose = document.getElementById('bPanelClose');
+    var scrim = document.getElementById('bScrim');
+    if (!menuBtn || !panelClose || !scrim) return;
 
-    function setOpen(open) {
-      overlay.classList.toggle('open', open);
-      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-      document.body.style.overflow = open ? 'hidden' : '';
-      if (open) close.focus();
+    function setNav(open) {
+      document.body.classList.toggle('nav-open', open);
+      menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
 
-    burger.addEventListener('click', function () { setOpen(true); });
-    close.addEventListener('click', function () { setOpen(false); });
-    overlay.addEventListener('click', function (e) {
-      if (e.target === overlay) setOpen(false);
-    });
+    menuBtn.addEventListener('click', function () { setNav(true); });
+    panelClose.addEventListener('click', function () { setNav(false); });
+    scrim.addEventListener('click', function () { setNav(false); });
+    Array.prototype.forEach.call(
+      document.querySelectorAll('.b-panel-nav a'),
+      function (a) {
+        a.addEventListener('click', function (e) {
+          // Homepage sections smooth-scroll without a reload when we
+          // are already on the homepage; from any other page the link
+          // navigates to /#anchor normally.
+          var href = a.getAttribute('href') || '';
+          if (href.indexOf('/#') === 0 && window.location.pathname === '/') {
+            e.preventDefault();
+            var el = document.getElementById(href.slice(2));
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+            else window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+          setNav(false);
+        });
+      }
+    );
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Escape') setNav(false);
     });
   })();
 </script>
