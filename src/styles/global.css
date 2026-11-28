@@ -1061,6 +1061,17 @@ textarea.input {
 .blue-site {
   --b-col: 1150px;
   --b-gutter: clamp(18px, 4vw, 40px);
+  /* Blue design tokens (sampler values). These were referenced by the
+     ported Blue rules but never defined, so 58 var(--b-*) references
+     resolved to nothing on the live site — defining them here restores
+     the intended colours, including the cast panels' card ink.
+     --b-blue-deep is the one value not verifiable from the sampler
+     source; #0b2a5b is the sampler's deep-blue text colour. */
+  --b-blue: #2b7fff;
+  --b-blue-deep: #0b2a5b;
+  --b-card-ink: #101f3a;
+  --b-card-muted: #46587a;
+  --b-green: #2ee06f;
   /* The fixed outer frame: ~30px of navy / electric-blue diagonal
      stripes on every side of the page — no section ever touches
      the edge of the page. The framed page itself is .b-frame. */
@@ -2331,7 +2342,7 @@ textarea.input {
   .b-restart { padding: 10px 18px; letter-spacing: 0.1em; }
 }
 
-/* ── Loss-cut Easter egg: scroll past the loop band, get stopped out ──
+/* ── Loss-cut Easter egg: scroll past the loop band, get liquidated ──
    The Kurumi forced-loss-cut beat, RetailBo version — with Bo's own
    art. Past the loop band sits a tall, empty overscroll zone
    (.b-loss-zone): the room the reader scrolls INTO past the bottom
@@ -2342,7 +2353,7 @@ textarea.input {
    small scroll and the splash cuts in suddenly (no fade, no
    transition): Bo's blue-and-orange black-hole vortex full-bleed,
    Bo himself falling through it in his black Nike Tech tracksuit,
-   the big STOPPED OUT stamp as live outlined text across the lower
+   the big LIQUIDATED stamp as live outlined text across the lower
    half, dark vignettes framing top and bottom. While it holds, Bo
    falls a little — a short ease-in drift down with a slight turn —
    and the vortex turns very slowly behind him. After about a second
@@ -2393,7 +2404,7 @@ textarea.input {
 }
 /* While the splash is up, the vortex turns very slowly behind Bo —
    one full turn over ~60s, so only a few degrees cross during the
-   ~1.6s hold. The layer sits scaled up a touch so its corners never
+   ~3s hold. The layer sits scaled up a touch so its corners never
    pull in while it turns. The animation hangs off the .on state, so
    it starts fresh every time the egg fires. */
 .b-loss-splash.on .b-loss-bg {
@@ -2669,15 +2680,90 @@ body.nav-open .b-panel { transform: translateX(0); }
 }
 .b-hero-winbar .b-hero-winbar-title { margin-left: 6px; }
 
-/* ── Reveal on scroll (motion-safe only) — shortened: text is
-   legible on arrival, never caught at near-zero opacity mid-scroll ── */
+/* ── Reveal on scroll (motion-safe only) — legibility-safe: elements
+   render at full opacity by default and only fade while "armed" by a
+   live IntersectionObserver; the observer completes them to 100% and a
+   4s safety (HomeScripts) forces .in, so text is never left faded ── */
 @media (prefers-reduced-motion: no-preference) {
-  .b-reveal {
+  .b-reveal { opacity: 1; transform: none; }
+  .b-reveal.armed {
     opacity: 0.3;
     transform: translateY(8px);
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
-  .b-reveal.in { opacity: 1; transform: none; }
+  .b-reveal.armed.in { opacity: 1; transform: none; }
+}
+
+/* ── Characters (cast) — Bo + Beast, Kurumi-style OS window with
+   folder tabs. Ported verbatim from the sampler (Blue v33). ── */
+.cast_grad { background: linear-gradient(180deg, rgba(46, 224, 111, 0.10), rgba(46, 224, 111, 0) 60%); }
+.b-cast-tabs { display: flex; gap: 8px; flex-wrap: wrap; padding: 0 6px; }
+.b-cast-tab {
+  appearance: none; cursor: pointer; font-family: inherit;
+  border: 2px solid #8fb4f5; border-bottom: none;
+  border-radius: 14px 14px 0 0;
+  background: #bcd4fc; color: #0b2a5b;
+  font-size: 16px; font-weight: 900; letter-spacing: 0.02em;
+  padding: 11px 26px 13px; min-height: 48px;
+  display: inline-flex; align-items: center; gap: 9px;
+}
+.b-cast-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--b-blue); flex: none; }
+.b-cast-tab[data-cast="beast"] .b-cast-dot { background: var(--b-green, #2ee06f); }
+.b-cast-tab:hover { background: #d7e5fd; }
+.b-cast-tab:focus-visible { outline: 3px solid var(--b-blue-deep); outline-offset: 2px; }
+.b-cast-tab.is-on { background: #fff; color: var(--b-card-ink); }
+.b-cast-panel {
+  background: #fff; color: var(--b-card-ink);
+  border: 2px solid #8fb4f5; border-radius: 4px 18px 18px 18px;
+  padding: clamp(20px, 3.6vw, 32px);
+}
+.b-cast-grid {
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(18px, 3.4vw, 30px); align-items: start;
+}
+.b-cast-art { margin: 0; }
+.b-cast-art img { display: block; width: 100%; height: auto; border-radius: 14px; border: 3px solid #c9dcff; }
+.b-cast-art figcaption {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11.5px; letter-spacing: 0.06em; color: var(--b-card-muted);
+  padding-top: 8px;
+}
+.b-cast-role {
+  display: inline-block; margin: 0 0 10px;
+  font-size: 11px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase;
+  border: 2px solid var(--b-blue); color: var(--b-blue-deep);
+  border-radius: 999px; padding: 4px 12px; line-height: 1.3;
+}
+.b-cast-role.green { border-color: #0a8a3a; color: #0a8a3a; }
+.b-cast-name {
+  margin: 0 0 12px; font-size: clamp(30px, 4.4vw, 42px); font-weight: 900;
+  line-height: 1.05; letter-spacing: -0.01em; color: var(--b-card-ink);
+}
+.b-cast-name .grn { color: #0a8a3a; }
+.b-cast-facts { list-style: none; margin: 0 0 18px; padding: 0; }
+.b-cast-facts li {
+  padding: 10px 0; border-top: 2px solid #e2ebfd;
+  font-size: 15.5px; line-height: 1.5; font-weight: 700; color: #2a3c5e;
+  display: flex; gap: 10px; align-items: baseline;
+}
+.b-cast-facts li::before { content: "▸"; color: var(--b-blue); font-size: 13px; flex: none; }
+.b-cast-facts li:first-child { border-top: none; padding-top: 2px; }
+.b-cast-quote {
+  margin: 0;
+  background: #eef4ff; border: 2px solid #cfdffd; border-radius: 14px;
+  padding: 13px 16px;
+  font-size: 15.5px; font-weight: 700; line-height: 1.5; color: var(--b-card-ink);
+}
+.b-cast-together { margin: 18px 0 0; }
+.b-cast-together img { display: block; width: 100%; height: auto; border-radius: 14px; border: 3px solid #c9dcff; }
+.b-cast-together figcaption {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11.5px; letter-spacing: 0.06em; color: var(--b-card-muted);
+  padding-top: 8px;
+}
+@media (max-width: 719px) {
+  .b-cast-grid { grid-template-columns: 1fr; }
+  .b-cast-tab { padding: 10px 18px 12px; font-size: 15px; }
 }
 
 /* ── Widgets band ── */

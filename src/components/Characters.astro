@@ -1,0 +1,77 @@
+---
+// Characters — Bo + Beast as the cast, Kurumi-style OS window with
+// folder tabs. Ported verbatim from the sampler (Blue v33): copy,
+// structure, and art roles are the sampler's. Bo is the default tab;
+// Beast's panel starts hidden. No extra characters — Bo's call.
+// Art: Bo panel = the moon-crew scene (branch: hero-moon.webp);
+// Beast panel = the RB standalone (rb-standalone.webp);
+// together tile = the chibi duo (cast-chibi.webp).
+---
+
+<section class="b-band rb-content rb-content--cast" data-section="cast" id="b-cast">
+  <div class="cast_grad rb-grad" aria-hidden="true"></div>
+  <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
+  <div class="cast__decoWrapper rb-decoWrapper" aria-hidden="true"><span class="b-deco b-deco-star b-deco-a" aria-hidden="true">★</span><span class="b-deco b-deco-star b-deco-b" aria-hidden="true">★</span></div>
+  <div class="b-wrap rb-content-container cast-container">
+    <div>
+      <hgroup class="rb-content_title"><p class="b-kicker"><span class="b-chip">Cast</span><span class="b-date">The characters</span></p>
+      <h2 class="b-h">Characters</h2>
+      <p class="rb-content_title--txt"><span>RetailBo</span></p></hgroup>
+      <div class="b-oswin light off-a">
+        <div class="b-win-bar">
+          <span class="wdot a"></span><span class="wdot b"></span><span class="wdot c"></span>
+          <span class="b-win-title">CHARACTERS — THE CAST</span>
+          <span class="b-win-ctl" aria-hidden="true"><i>–</i><i>□</i><i>×</i></span>
+        </div>
+        <div class="b-oswin-body">
+          <div class="b-cast-tabs" role="tablist" aria-label="Choose a character">
+            <button type="button" class="b-cast-tab is-on" role="tab" id="bCastTabBo" aria-selected="true" aria-controls="bCastPanelBo" data-cast="bo"><span class="b-cast-dot" aria-hidden="true"></span>Bo</button>
+            <button type="button" class="b-cast-tab" role="tab" id="bCastTabBeast" aria-selected="false" aria-controls="bCastPanelBeast" data-cast="beast"><span class="b-cast-dot" aria-hidden="true"></span>Beast</button>
+          </div>
+          <div class="b-cast-panel" role="tabpanel" id="bCastPanelBo" aria-labelledby="bCastTabBo">
+            <div class="b-cast-grid">
+              <figure class="b-cast-art">
+                <img src="/assets/hero-moon.webp" alt="Bo and RB standing arms-crossed at a green-lit lunar base, a huge full moon and Earth in the starry sky behind them." />
+                <figcaption>BO · MOON WORLD — THE PERSONAL SIDE</figcaption>
+              </figure>
+              <div>
+                <p class="b-cast-role">The man</p>
+                <h3 class="b-cast-name">Bo</h3>
+                <ul class="b-cast-facts">
+                  <li>Father of two</li>
+                  <li>Trader — in the markets since 2017</li>
+                  <li>Builder — he builds his own trading tools</li>
+                  <li>From Arlington, Virginia</li>
+                </ul>
+                <p class="b-cast-quote">“this is the room where i keep everything — the charts, the code, the rants, the late nights. pull up a chair.”</p>
+              </div>
+            </div>
+          </div>
+          <div class="b-cast-panel" role="tabpanel" id="bCastPanelBeast" aria-labelledby="bCastTabBeast" hidden>
+            <div class="b-cast-grid">
+              <figure class="b-cast-art">
+                <img src="/assets/rb-standalone.webp" alt="RB, the Retail Beast, in black and gunmetal armor — neon-green horns, glowing green eyes, green circuit accents, a green wrench in hand." />
+                <figcaption>BEAST · CHART CITY — THE MARKET SIDE</figcaption>
+              </figure>
+              <div>
+                <p class="b-cast-role green">The host</p>
+                <h3 class="b-cast-name">Beast <span class="grn">(RB)</span></h3>
+                <ul class="b-cast-facts">
+                  <li>The Retail Beast — this site’s host and mascot</li>
+                  <li>Black and gunmetal armor, neon-green horns, glowing green eyes</li>
+                  <li>Carries a green wrench</li>
+                  <li>Trade management, not entry signals</li>
+                </ul>
+                <p class="b-cast-quote">“Trading education for people who weren’t raised around markets.”</p>
+              </div>
+            </div>
+          </div>
+          <figure class="b-cast-together">
+            <img src="/assets/cast-chibi.webp" alt="Chibi Bo and chibi RB side by side — the cast in miniature." />
+            <figcaption>BO + BEAST · THE WHOLE CAST — SO FAR</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section><!-- /#b-cast -->

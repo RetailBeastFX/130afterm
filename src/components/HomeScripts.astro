@@ -3,7 +3,7 @@
 // chart (right rail — 24 small candles, parallax-slow, filling as you
 // scroll; red printing down, green printing up, flipping in real time
 // with scroll direction; the one caption bubble rides the frontier
-// and speaks for the section in view) and the STOPPED OUT loss-cut
+// and speaks for the section in view) and the LIQUIDATED loss-cut
 // veil/splash. Plus the .b-reveal IntersectionObserver. (The
 // full-page background chart rows are CUT — v32 — so there is no
 // bg-parallax here anymore; the chart lives only in the rail.)
@@ -120,7 +120,7 @@
       updateRailCaption(vh);
     }
 
-    // ── STOPPED OUT loss-cut ─────────────────────────────────────────
+    // ── LIQUIDATED loss-cut ─────────────────────────────────────────
     var lossZone = document.getElementById('bLossZone');
     var lossNavy = document.getElementById('bLossNavy');
     var lossBlack = document.getElementById('bLossBlack');
@@ -149,7 +149,7 @@
         }
         doc.style.scrollBehavior = prevBehavior;
         lossSplashing = false;
-      }, 1600);
+      }, 3000);
     }
     function updateLossCut() {
       if (!lossZone || !lossSplash) return;
@@ -188,9 +188,14 @@
     window.addEventListener('resize', onScroll);
     onScroll();
 
-    // ── Reveal-on-scroll (.b-reveal) ────────────────────────────────
+    // ── Reveal-on-scroll (.b-reveal) — legibility-safe: elements sit
+    // at full opacity by default; only "armed" ones fade, the observer
+    // completes them to 100%, and a 4s safety forces .in ──────────
     var revealEls = document.querySelectorAll('.b-reveal');
     if ('IntersectionObserver' in window && !reduceMotion) {
+      Array.prototype.forEach.call(revealEls, function (el) {
+        el.classList.add('armed');
+      });
       var revealIO = new IntersectionObserver(
         function (entries) {
           entries.forEach(function (en) {
@@ -200,15 +205,40 @@
             }
           });
         },
-        { threshold: 0.12, rootMargin: '0px 0px 20% 0px' }
+        { threshold: 0.05, rootMargin: '0px 0px 30% 0px' }
       );
       Array.prototype.forEach.call(revealEls, function (el) {
         revealIO.observe(el);
       });
+      window.setTimeout(function () {
+        Array.prototype.forEach.call(revealEls, function (el) {
+          el.classList.add('in');
+        });
+      }, 4000);
     } else {
       Array.prototype.forEach.call(revealEls, function (el) {
         el.classList.add('in');
       });
     }
+
+    // ── Characters — folder tabs (Bo / Beast) ───────────────────────
+    var castTabs = document.querySelectorAll('.b-cast-tab');
+    var castPanels = document.querySelectorAll('.b-cast-panel');
+    Array.prototype.forEach.call(castTabs, function (tab) {
+      tab.addEventListener('click', function () {
+        Array.prototype.forEach.call(castTabs, function (t) {
+          var on = t === tab;
+          t.classList.toggle('is-on', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        Array.prototype.forEach.call(castPanels, function (p) {
+          if (p.getAttribute('aria-labelledby') === tab.id) {
+            p.removeAttribute('hidden');
+          } else {
+            p.setAttribute('hidden', '');
+          }
+        });
+      });
+    });
   })();
 </script>
