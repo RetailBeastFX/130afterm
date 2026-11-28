@@ -4,7 +4,7 @@ import SiteGlow from '../components/SiteGlow.astro';
 import Navbar from '../components/Navbar.astro';
 import Loader from '../components/Loader.astro';
 import Hero from '../components/Hero.astro';
-import BearRail from '../components/BearRail.astro';
+import RailChart from '../components/RailChart.astro';
 import Marquee from '../components/Marquee.astro';
 import OrbCard from '../components/OrbCard.astro';
 import Widgets from '../components/Widgets.astro';
@@ -30,7 +30,6 @@ import LoopBand from '../components/LoopBand.astro';
 import SignoffFooter from '../components/SignoffFooter.astro';
 import LossCut from '../components/LossCut.astro';
 import HomeScripts from '../components/HomeScripts.astro';
-import ChartRow from '../components/ChartRow.astro';
 import { latestActivity } from '../data/activity';
 import { getCollection } from 'astro:content';
 import { sortNewest } from '../lib/blog';
@@ -70,16 +69,18 @@ const statusLabel: Record<string, string> = {
 ---
 
 <Layout title="RetailBo — the market and the man." active="home">
-  <SiteGlow />
-  <Loader />
-  <Navbar active="home" />
-  <AskRb />
+  <div class="blue-site">
+    <div class="b-frame">
+      <SiteGlow />
+      <Loader />
+      <Navbar active="home" />
+      <AskRb />
 
-  <div class="rb-contentsWrapper">
-    <TerminalBackground />
-    <BearRail />
-
-    <Hero />
+      <div class="b-grid">
+        <TerminalBackground />
+        <div class="b-main">
+          <div class="rb-contentsWrapper">
+            <Hero />
     <LatestTeaser />
     <Widgets />
     <Marquee />
@@ -103,7 +104,6 @@ const statusLabel: Record<string, string> = {
     <section class="band rb-content rb-content--lab" data-section="lab" id="b-lab">
       <div class="lab_grad rb-grad" aria-hidden="true"></div>
       <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
-      <ChartRow row="lab" />
       <div class="lab__decoWrapper rb-decoWrapper" aria-hidden="true">
         <span class="b-deco b-deco-yen b-deco-a">¥</span>
         <span class="b-deco b-deco-yen b-deco-b">¥</span>
@@ -168,7 +168,6 @@ const statusLabel: Record<string, string> = {
     <section class="band rb-content rb-content--indicator" data-section="indicator" id="b-indicator">
       <div class="indicator_grad rb-grad" aria-hidden="true"></div>
       <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
-      <ChartRow row="indicator" />
       <div class="indicator__decoWrapper rb-decoWrapper" aria-hidden="true">
         <span class="b-deco b-deco-eur b-deco-a">€</span>
         <span class="b-deco b-deco-eur b-deco-b">€</span>
@@ -193,7 +192,6 @@ const statusLabel: Record<string, string> = {
     <section class="band rb-content rb-content--man b-side-head" data-section="man" id="b-man">
       <div class="man_grad rb-grad" aria-hidden="true"></div>
       <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
-      <ChartRow row="man" />
       <div class="man__decoWrapper rb-decoWrapper" aria-hidden="true">
         <span class="b-deco b-deco-star b-deco-a">★</span>
         <span class="b-deco b-deco-star b-deco-b">★</span>
@@ -235,7 +233,6 @@ const statusLabel: Record<string, string> = {
     <section class="band rb-content rb-content--media b-side-head" data-section="media" id="b-media">
       <div class="media_grad rb-grad" aria-hidden="true"></div>
       <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
-      <ChartRow row="media" />
       <div class="media__decoWrapper rb-decoWrapper" aria-hidden="true">
         <span class="b-deco b-deco-star b-deco-a">★</span>
         <span class="b-deco b-deco-star b-deco-b">★</span>
@@ -260,7 +257,6 @@ const statusLabel: Record<string, string> = {
     <section class="band rb-content rb-content--sponsored" data-section="sponsored" id="b-sponsored">
       <div class="sponsored_grad rb-grad" aria-hidden="true"></div>
       <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
-      <ChartRow row="sponsored" />
       <div class="sponsored__decoWrapper rb-decoWrapper" aria-hidden="true">
         <span class="b-deco b-deco-usd b-deco-a">$</span>
         <span class="b-deco b-deco-star b-deco-b">★</span>
@@ -287,7 +283,6 @@ const statusLabel: Record<string, string> = {
     <section class="band rb-content rb-content--signoff" data-section="signoff" id="b-signoff">
       <div class="signoff_grad rb-grad" aria-hidden="true"></div>
       <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
-      <ChartRow row="signoff" />
       <div class="signoff__decoWrapper rb-decoWrapper" aria-hidden="true">
         <span class="b-deco b-deco-star b-deco-a">★</span>
         <span class="b-deco b-deco-star b-deco-b">★</span>
@@ -305,7 +300,12 @@ const statusLabel: Record<string, string> = {
       <LoopBand />
       <LossCut />
     </section>
-  </div>
+          </div>
+        </div>
+        <RailChart />
+      </div>
 
-  <HomeScripts />
+      <HomeScripts />
+    </div>
+  </div>
 </Layout>

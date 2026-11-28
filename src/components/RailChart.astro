@@ -1,0 +1,48 @@
+// Discrete rail chart — Kurumi's rail chart in the right rail
+// (fidelity pass, sampler v28+; rows cut in v32, so the chart lives
+// ONLY here now). 24 small spaced candles with wicks, parallax-slow,
+// filling as you scroll. Directional flip kept from the old scroll
+// candle: red printing down, green printing up, glowing frontier.
+// The one caption bubble rides the frontier and speaks for the
+// section in view — same words the sections used to float. Ghost =
+// faint authored candles (yang green / yin red); JS clones them
+// into the print layer, clipped to scroll progress. Decorative.
+// Logic lives in HomeScripts.astro.
+---
+<aside class="b-rail b-rail-right" aria-hidden="true">
+  <div class="b-rail-sticky is-bear" id="bRailSticky" data-dir="down">
+    <div class="b-railchart">
+      <div class="b-railchart-move">
+        <div class="b-rc-layer ghost" id="bRailGhost">
+<span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 42.0%; height: 54.0%;"></span><span class="b-rc-body" style="top: 51.0%; height: 41.0%;"></span></span>
+                <span class="b-rc" data-result="yin"><span class="b-rc-wick" style="top: 52.0%; height: 45.0%;"></span><span class="b-rc-body" style="top: 57.0%; height: 35.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 53.0%; height: 44.0%;"></span><span class="b-rc-body" style="top: 59.0%; height: 28.0%;"></span></span>
+                <span class="b-rc" data-result="yin"><span class="b-rc-wick" style="top: 50.0%; height: 47.0%;"></span><span class="b-rc-body" style="top: 56.0%; height: 36.0%;"></span></span>
+                <span class="b-rc" data-result="yin"><span class="b-rc-wick" style="top: 49.0%; height: 48.0%;"></span><span class="b-rc-body" style="top: 54.0%; height: 38.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 52.0%; height: 43.0%;"></span><span class="b-rc-body" style="top: 59.0%; height: 33.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 39.0%; height: 54.0%;"></span><span class="b-rc-body" style="top: 48.0%; height: 44.0%;"></span></span>
+                <span class="b-rc" data-result="yin"><span class="b-rc-wick" style="top: 46.0%; height: 48.0%;"></span><span class="b-rc-body" style="top: 53.0%; height: 39.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 46.0%; height: 49.0%;"></span><span class="b-rc-body" style="top: 52.0%; height: 40.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 44.0%; height: 52.0%;"></span><span class="b-rc-body" style="top: 50.0%; height: 41.0%;"></span></span>
+                <span class="b-rc" data-result="yin"><span class="b-rc-wick" style="top: 44.0%; height: 48.0%;"></span><span class="b-rc-body" style="top: 52.0%; height: 36.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 43.0%; height: 52.0%;"></span><span class="b-rc-body" style="top: 48.0%; height: 42.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 38.0%; height: 47.0%;"></span><span class="b-rc-body" style="top: 44.0%; height: 38.0%;"></span></span>
+                <span class="b-rc" data-result="yin"><span class="b-rc-wick" style="top: 42.0%; height: 53.0%;"></span><span class="b-rc-body" style="top: 46.0%; height: 42.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 32.0%; height: 51.0%;"></span><span class="b-rc-body" style="top: 41.0%; height: 40.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 29.0%; height: 43.0%;"></span><span class="b-rc-body" style="top: 37.0%; height: 34.0%;"></span></span>
+                <span class="b-rc" data-result="yin"><span class="b-rc-wick" style="top: 30.0%; height: 40.0%;"></span><span class="b-rc-body" style="top: 39.0%; height: 31.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 29.0%; height: 54.0%;"></span><span class="b-rc-body" style="top: 34.0%; height: 40.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 22.0%; height: 59.0%;"></span><span class="b-rc-body" style="top: 30.0%; height: 44.0%;"></span></span>
+                <span class="b-rc" data-result="yin"><span class="b-rc-wick" style="top: 26.0%; height: 44.0%;"></span><span class="b-rc-body" style="top: 32.0%; height: 28.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 21.0%; height: 49.0%;"></span><span class="b-rc-body" style="top: 27.0%; height: 40.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 18.0%; height: 50.0%;"></span><span class="b-rc-body" style="top: 23.0%; height: 37.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 13.0%; height: 45.0%;"></span><span class="b-rc-body" style="top: 20.0%; height: 31.0%;"></span></span>
+                <span class="b-rc" data-result="yang"><span class="b-rc-wick" style="top: 12.0%; height: 59.0%;"></span><span class="b-rc-body" style="top: 16.0%; height: 42.0%;"></span></span>
+        </div>
+        <div class="b-rc-layer print" id="bRailPrint"></div>
+        <span class="b-rail-frontier"></span>
+      </div>
+    </div>
+    <p class="b-rail-bubble" id="bRailBubble">there&rsquo;s the move &uarr;</p>
+  </div>
+</aside>

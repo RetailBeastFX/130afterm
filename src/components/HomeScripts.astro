@@ -1,10 +1,12 @@
----
-// Homepage scroll engine — one rAF-throttled handler driving the three
-// scroll-linked mechanisms from the Blue sampler: the parallax archive
-// (each chart row lingers while its section scrolls past, then the next
-// slides in), the directional scroll candle (down prints red down, up
-// prints green up, same candle flips in real time), and the STOPPED OUT
-// loss-cut veil/splash. Plus the .b-reveal IntersectionObserver.
+// Homepage scroll engine — one rAF-throttled handler driving the two
+// scroll-linked mechanisms from the Blue sampler: the discrete rail
+// chart (right rail — 24 small candles, parallax-slow, filling as you
+// scroll; red printing down, green printing up, flipping in real time
+// with scroll direction; the one caption bubble rides the frontier
+// and speaks for the section in view) and the STOPPED OUT loss-cut
+// veil/splash. Plus the .b-reveal IntersectionObserver. (The
+// full-page background chart rows are CUT — v32 — so there is no
+// bg-parallax here anymore; the chart lives only in the rail.)
 // Progress for the article-progress widget lives in Widgets.astro.
 ---
 
@@ -12,71 +14,110 @@
   (function () {
     var reduceMotion =
       window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var blueSite = document.querySelector('.blue-site');
 
-    // ── Parallax archive (hold-and-release) ──────────────────────────
-    var bgRows = Array.prototype.slice.call(document.querySelectorAll('.b-bgrow'));
-    var bgBubbles = bgRows.map(function (row) {
-      return row.parentNode ? row.parentNode.querySelector('.b-bg-bubble') : null;
-    });
-    function updateBgParallax() {
-      if (!bgRows.length || reduceMotion) return;
-      var vh = window.innerHeight || 800;
-      var holdY = Math.min(vh * 0.14, 150);
-      var rowH = 520;
-      for (var i = 0; i < bgRows.length; i++) {
-        var row = bgRows[i];
-        var sec = row.closest ? row.closest('.rb-content') : null;
-        if (!sec) continue;
-        var sr = sec.getBoundingClientRect();
-        var maxShift = Math.max(sr.height - rowH, 0);
-        var shift = holdY - sr.top;
-        if (shift < 0) shift = 0;
-        if (shift > maxShift) shift = maxShift;
-        var next = shift > 0 ? 'translate3d(0,' + shift.toFixed(1) + 'px,0)' : '';
-        if (row.style.transform !== next) row.style.transform = next;
-        var bubble = bgBubbles[i];
-        if (bubble && bubble.style.transform !== next) bubble.style.transform = next;
+    // ── Discrete rail chart (right rail) ───────────────────────────
+    // The rail chart's print layer is a clone of the authored ghost
+    // candles — same candles, recoloured by the scroll direction's
+    // colour family in CSS and clipped to progress.
+    var railGhost = document.getElementById('bRailGhost');
+    var railPrintEl = document.getElementById('bRailPrint');
+    if (railGhost && railPrintEl) { railPrintEl.innerHTML = railGhost.innerHTML; }
+    // The per-section captions — the same words the sections used to
+    // float in their own chart layers, now spoken one at a time by
+    // the rail bubble, anchored to the frontier.
+    var railCaptions = {
+      hero: 'there\u2019s the move \u2191',
+      latest: 'just dropped',
+      journey: 'swept the lows\u2026 then broke out',
+      lab: 'slow grind',
+      indicator: 'uh-oh\u2026',
+      man: 'back from the dead',
+      media: 'flipped it',
+      shelf: 'the whole shelf',
+      sponsored: 'step by step',
+      signoff: 'run it up \u2191',
+    };
+    var railBubble = document.getElementById('bRailBubble');
+    var railCaptionNow = '';
+    function updateRailCaption(vh) {
+      if (!railBubble || !blueSite) return;
+      var secs = blueSite.querySelectorAll('.rb-content');
+      var mid = vh * 0.45;
+      var key = 'hero';
+      for (var i = 0; i < secs.length; i++) {
+        if (secs[i].getBoundingClientRect().top <= mid) {
+          key = secs[i].getAttribute('data-section') || key;
+        } else {
+          break;
+        }
+      }
+      var txt = railCaptions[key];
+      if (txt && txt !== railCaptionNow) {
+        railCaptionNow = txt;
+        railBubble.textContent = txt;
       }
     }
-
-    // ── Directional scroll candle ────────────────────────────────────
-    var bearPrint = document.getElementById('bBearPrint');
-    var bearSticky = document.getElementById('bBearSticky');
+    var railPrint = document.getElementById('bRailPrint');
+    var railSticky = document.getElementById('bRailSticky');
     var candleDown = true; // initial = bearish / scrolling down
-    var lastScrollY = null;
-    function updateBear() {
-      if (!bearPrint || !bearSticky) return;
-      var max = document.documentElement.scrollHeight - window.innerHeight;
-      var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 1;
+    var lastCandleDone = null;
+    function updateRail() {
+      if (!railPrint || !railSticky || !blueSite) return;
+      var vh = window.innerHeight || 800;
+      // Holder follow: the sticky-in-effect holder is moved 1:1 with
+      // scroll so the chart stays at the edge of view for the whole
+      // trip (positioning, not animation — it runs under reduced
+      // motion too; only the print clip is released there).
+      var railAside = railSticky.parentNode;
+      if (railAside) {
+        var ar = railAside.getBoundingClientRect();
+        var follow = Math.min(Math.max(-ar.top, 0), Math.max(ar.height - vh, 0));
+        var followT = follow > 0 ? 'translate3d(0,' + follow.toFixed(1) + 'px,0)' : '';
+        if (railSticky.style.transform !== followT) { railSticky.style.transform = followT; }
+      }
+      // The glowing frontier sits at overall scroll progress (--rp on
+      // the sticky holder drives the frontier line, the caption bubble
+      // and the column's slow parallax drift in CSS). Which side of
+      // the frontier is printed — and the printed candles' colour —
+      // follows the scroll direction: scrolling down, the print layer
+      // is clipped from the top (bearish red, printing downward);
+      // scrolling up, it is clipped from the bottom so the printed
+      // part grows upward from the foot of the chart (bullish green).
+      // The .is-bull / .is-bear classes swap the --sc colour family
+      // in CSS. Scroll-linked only — this runs on scroll/resize,
+      // never on a timer. Reduced motion pins it fully printed in
+      // its default bearish red (the CSS clip release agrees).
+      var railRect = blueSite.getBoundingClientRect();
+      var railTotal = Math.max(railRect.height - vh, 1);
+      var railDone = Math.min(Math.max(-railRect.top, 0), railTotal);
+      if (lastCandleDone !== null) {
+        if (railDone > lastCandleDone + 0.5) { candleDown = true; }
+        else if (railDone < lastCandleDone - 0.5) { candleDown = false; }
+      }
+      lastCandleDone = railDone;
+      var railP = railDone / railTotal;
+      railSticky.style.setProperty('--rp', railP.toFixed(4));
       if (reduceMotion) {
-        bearPrint.style.clipPath = 'inset(0 0 0% 0)';
-        bearSticky.classList.add('is-bear');
-        bearSticky.classList.remove('is-bull');
-        bearSticky.setAttribute('data-dir', 'down');
-        bearSticky.style.setProperty('--bear-p', '1');
-        bearSticky.style.setProperty('--bear-tip-o', '0');
-        return;
-      }
-      // ±0.5px threshold on scroll delta; at rest the last direction holds.
-      var y = window.scrollY;
-      if (lastScrollY !== null) {
-        if (y > lastScrollY + 0.5) candleDown = true;
-        else if (y < lastScrollY - 0.5) candleDown = false;
-      }
-      lastScrollY = y;
-      if (candleDown) {
-        bearPrint.style.clipPath = 'inset(0 0 ' + ((1 - p) * 100).toFixed(2) + '% 0)';
-        bearSticky.classList.add('is-bear');
-        bearSticky.classList.remove('is-bull');
-        bearSticky.setAttribute('data-dir', 'down');
+        railPrint.style.clipPath = 'inset(0 0 0% 0)';
+        railSticky.classList.remove('is-bull');
+        railSticky.classList.add('is-bear');
+        railSticky.setAttribute('data-dir', 'down');
+        railSticky.style.setProperty('--tip-o', '0');
+      } else if (candleDown) {
+        railPrint.style.clipPath = 'inset(0 0 ' + ((1 - railP) * 100).toFixed(2) + '% 0)';
+        railSticky.classList.remove('is-bull');
+        railSticky.classList.add('is-bear');
+        railSticky.setAttribute('data-dir', 'down');
+        railSticky.style.setProperty('--tip-o', railP > 0.001 && railP < 0.999 ? '1' : '0');
       } else {
-        bearPrint.style.clipPath = 'inset(' + (p * 100).toFixed(2) + '% 0 0 0)';
-        bearSticky.classList.add('is-bull');
-        bearSticky.classList.remove('is-bear');
-        bearSticky.setAttribute('data-dir', 'up');
+        railPrint.style.clipPath = 'inset(' + (railP * 100).toFixed(2) + '% 0 0 0)';
+        railSticky.classList.remove('is-bear');
+        railSticky.classList.add('is-bull');
+        railSticky.setAttribute('data-dir', 'up');
+        railSticky.style.setProperty('--tip-o', railP > 0.001 && railP < 0.999 ? '1' : '0');
       }
-      bearSticky.style.setProperty('--bear-p', p.toFixed(4));
-      bearSticky.style.setProperty('--bear-tip-o', p > 0.001 && p < 0.999 ? '1' : '0');
+      updateRailCaption(vh);
     }
 
     // ── STOPPED OUT loss-cut ─────────────────────────────────────────
@@ -138,8 +179,7 @@
         ticking = true;
         requestAnimationFrame(function () {
           ticking = false;
-          updateBgParallax();
-          updateBear();
+          updateRail();
           updateLossCut();
         });
       }
@@ -160,7 +200,7 @@
             }
           });
         },
-        { threshold: 0.12 }
+        { threshold: 0.12, rootMargin: '0px 0px 20% 0px' }
       );
       Array.prototype.forEach.call(revealEls, function (el) {
         revealIO.observe(el);

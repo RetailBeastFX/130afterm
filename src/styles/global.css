@@ -1038,26 +1038,140 @@ textarea.input {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   MARQUEE BAND — diagonal-striped RETAILBO ★ ticker
+   TEMPLATE FIDELITY PASS (Blue only) — fixed outer frame, one
+   3-column grid, discrete rail chart, calmed motion. From the
+   sampler (v27 container pass + v28 fidelity pass + v32 rows cut).
+   The frame wraps the whole homepage; inside it, one grid that
+   never changes: narrow left rail (terminal feed, contained and
+   static), main panel, right rail (~385px) holding the discrete
+   rail chart. The 1150px readable column stays centred in the
+   panel and every window stays capped at it. Motion is calmed to
+   one thing at a time: marquees and the terminal ticker stand
+   still; the looping chart render, the bull-vs-bear clash and the
+   bobbing mascot are frozen to still frames of themselves (the
+   loader keeps its animated candle-loading.gif). Sections get air:
+   wide empty bands between them, one idea per viewport. The
+   windows' desktop offsets/rotations are retired so every window
+   edge lines up on the column. The background chart rows are CUT
+   (v32): no candles behind the content — the chart lives only in
+   the right rail. Behind the sections is the clean two-scale navy
+   graph paper (on .b-frame), the soft section gradients and the
+   whisper-opacity deco motifs.
    ═══════════════════════════════════════════════════════════════════ */
-.b-bear-rail {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 10px;
-  width: 30px;
-  z-index: 3;
-  pointer-events: none;
+.blue-site {
+  --b-col: 1150px;
+  --b-gutter: clamp(18px, 4vw, 40px);
+  /* The fixed outer frame: ~30px of navy / electric-blue diagonal
+     stripes on every side of the page — no section ever touches
+     the edge of the page. The framed page itself is .b-frame. */
+  padding: clamp(12px, 2.6vw, 30px);
+  background-color: #071a3d;
+  background-image: repeating-linear-gradient(45deg, var(--b-blue-deep) 0 14px, #071a3d 14px 28px);
+  color: #eaf2ff;
+}
+/* The framed page: rounded inner corners over the two-scale navy
+   graph paper. Every overlay (loader, menu panel, scrim) and the
+   3-column grid live inside this frame. */
+.b-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  background-color: #04070e;
+  background-image:
+    linear-gradient(rgba(110, 168, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(110, 168, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(110, 168, 255, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(110, 168, 255, 0.11) 1px, transparent 1px);
+  background-size: 28px 28px, 28px 28px, 140px 140px, 140px 140px;
+  transition: background-color 0.6s ease;
+}
+
+/* Full-bleed bars, column-centred content (container pass). */
+.blue-site .b-head,
+.blue-site .b-foot,
+.blue-site .b-loop-head {
+  padding-inline: max(var(--b-gutter), calc((100% - var(--b-col)) / 2 + var(--b-gutter)));
+}
+
+/* SiteGlow ambience stays visible inside the frame: the frame's
+   opaque graph-paper background would otherwise hide the fixed
+   negative-z glow/vignette layers, so they ride just above the
+   frame background (radials only — the glow's opaque base gradient
+   is dropped here so the graph paper still shows) and below the
+   content wrapper. */
+.blue-site .site-glow {
+  z-index: 0;
+  background:
+    radial-gradient(1100px 520px at 50% -8%, rgba(43, 127, 255, 0.16), transparent 70%),
+    radial-gradient(800px 500px at 88% 42%, rgba(45, 212, 191, 0.07), transparent 70%),
+    radial-gradient(900px 600px at 8% 88%, rgba(46, 224, 111, 0.05), transparent 70%);
+}
+.blue-site .site-vignette { z-index: 0; }
+
+/* --- marquee divider bands (base styles; frozen below) --- */
+.b-marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  border-top: 3px solid var(--b-blue);
+  border-bottom: 3px solid var(--b-blue);
+  background: repeating-linear-gradient(45deg, #0d2c63 0 18px, #081c42 18px 36px);
+  padding: 11px 0;
+}
+.b-marquee-track { display: inline-flex; will-change: transform; }
+.b-marquee-track span {
+  padding: 0 20px;
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: 0.22em;
+  color: #fff;
+}
+.b-marquee-track i { font-style: normal; color: var(--b-yellow); }
+@media (prefers-reduced-motion: no-preference) {
+  .b-marquee-track { animation: bmq 26s linear infinite; }
+}
+@keyframes bmq {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* --- the one 3-column grid --- */
+.b-grid {
+  display: grid;
+  grid-template-columns: minmax(34px, 4.8%) minmax(0, 1fr) minmax(150px, 20.7%);
+  align-items: stretch;
+}
+.b-main { min-width: 0; }
+
+/* --- left rail: the terminal feed, contained --- */
+.b-rail-left {
+  position: relative;
+  border-right: 1px solid rgba(110, 168, 255, 0.14);
+  transition: opacity 0.6s ease;
+}
+
+/* --- right rail: the discrete rail chart --- */
+.b-rail-right {
+  position: relative;
+  border-left: 1px solid rgba(110, 168, 255, 0.14);
   transition: filter 0.6s ease, opacity 0.6s ease;
 }
-.b-bear-sticky {
-  position: sticky;
-  top: 12vh;
-  height: 76vh;
-  min-height: 300px;
-  --bear-p: 0;
-  --bear-tip-o: 0;
-  /* Directional scroll candle: red defaults; .is-bull swaps to green. */
+.b-rail-sticky {
+  /* Absolutely positioned in the rail and moved by JS on scroll
+     (the frame's overflow: hidden would defeat position: sticky)
+     — it follows the viewport down the rail the way the old
+     gutter candle's sticky holder did. */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  height: 100svh;
+  will-change: transform;
+  --rp: 0;
+  --tip-o: 0;
+  /* Rail-chart colour family — bearish red by default; .is-bull
+     swaps the whole family to bullish green (the directional
+     flip, kept from the old scroll candle). */
   --sc: #ff4040;
   --sc-hi: #ff5252;
   --sc-lo: #e03333;
@@ -1065,7 +1179,7 @@ textarea.input {
   --sc-tip: rgba(255, 120, 120, 0.95);
   --sc-tip-glow: rgba(255, 64, 64, 0.55);
 }
-.b-bear-sticky.is-bull {
+.b-rail-sticky.is-bull {
   --sc: #2ee06f;
   --sc-hi: #57f28d;
   --sc-lo: #1db954;
@@ -1073,57 +1187,121 @@ textarea.input {
   --sc-tip: rgba(140, 255, 180, 0.95);
   --sc-tip-glow: rgba(46, 224, 111, 0.55);
 }
-.b-bear-ghost, .b-bear-print { position: absolute; inset: 0; }
-.b-bear-ghost { opacity: 0.13; }
-.b-bear-print { clip-path: inset(0 0 100% 0); }
-.b-bear-wick {
+.b-railchart { position: absolute; top: 26px; bottom: 26px; left: 16px; width: 56px; }
+/* Parallax-slow: the whole candle column drifts a few pixels
+   against the scroll while the frontier tracks progress. */
+.b-railchart-move {
+  position: absolute;
+  inset: 0;
+  transform: translateY(calc((0.5 - var(--rp)) * 34px));
+}
+.b-rc-layer { position: absolute; inset: 0; display: flex; flex-direction: column; }
+.b-rc-layer.print { clip-path: inset(0 0 100% 0); }
+.b-rc { position: relative; flex: 1 1 0; min-height: 18px; --rc: #7288ad; }
+.b-rc[data-result="yang"] { --rc: #2ee06f; }
+.b-rc[data-result="yin"] { --rc: #ff5252; }
+.b-rc-wick {
   position: absolute;
   left: 50%;
-  top: 0;
-  bottom: 0;
+  transform: translateX(-50%);
   width: 3px;
-  transform: translateX(-50%);
-  background: var(--sc);
   border-radius: 2px;
-  transition: background 0.25s ease;
+  background: var(--rc);
 }
-.b-bear-body {
+.b-rc-body {
   position: absolute;
   left: 50%;
-  top: 4.5%;
-  height: 91%;
-  width: 22px;
   transform: translateX(-50%);
-  background: linear-gradient(180deg, var(--sc-hi), var(--sc) 55%, var(--sc-lo));
+  width: 24px;
   border-radius: 3px;
-  box-shadow: 0 0 16px var(--sc-glow);
-  transition: background 0.25s ease, box-shadow 0.25s ease;
+  background: var(--rc);
 }
-.b-bear-ghost .b-bear-body { background: var(--sc); box-shadow: none; }
-.b-bear-tip {
+.b-rc-layer.ghost { opacity: 0.26; }
+.b-rc-layer.print .b-rc { --rc: var(--sc); }
+.b-rc-layer.print .b-rc-body {
+  background: linear-gradient(180deg, var(--sc-hi), var(--sc) 55%, var(--sc-lo));
+  box-shadow: 0 0 12px var(--sc-glow);
+}
+.b-rail-frontier {
   position: absolute;
-  left: 50%;
-  top: calc(var(--bear-p) * 100%);
-  width: 30px;
+  left: 2px;
+  right: -10px;
   height: 2px;
-  transform: translate(-50%, -50%);
+  top: calc(var(--rp) * 100%);
+  transform: translateY(-50%);
   background: var(--sc-tip);
   box-shadow: 0 0 10px 2px var(--sc-tip-glow);
-  opacity: var(--bear-tip-o);
+  opacity: var(--tip-o);
   transition: background 0.25s ease, box-shadow 0.25s ease;
 }
-@media (max-width: 719px) {
-  .b-bear-rail { right: 5px; width: 16px; }
-  .b-bear-sticky { top: 15vh; height: 68vh; min-height: 240px; }
-  .b-bear-body { width: 11px; border-radius: 2px; box-shadow: 0 0 10px var(--sc-glow); }
-  .b-bear-wick { width: 2px; }
-  .b-bear-tip { width: 16px; }
+/* The one caption bubble: anchored to the rail chart, riding the
+   frontier, speaking for the section in view (JS swaps the words
+   — the same captions the sections used to float). */
+.b-rail-bubble {
+  position: absolute;
+  left: 88px;
+  right: 12px;
+  top: calc(26px + var(--rp) * (100% - 52px));
+  transform: translateY(-50%);
+  margin: 0;
+  max-width: 190px;
+  background: #fff;
+  color: var(--b-card-ink);
+  font-weight: 900;
+  font-size: 14.5px;
+  line-height: 1.3;
+  padding: 10px 14px;
+  border-radius: 15px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+}
+.b-rail-bubble::after {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7px 9px 7px 0;
+  border-color: transparent #fff transparent transparent;
 }
 @media (prefers-reduced-motion: reduce) {
-  .b-bear-print { clip-path: inset(0 0 0% 0) !important; }
-  .b-bear-tip { display: none; }
-  .b-bear-rail { transition: none; }
+  /* Static fallback: the rail chart stands fully printed in its
+     default bearish red — no clip, no frontier, no drift. */
+  .b-rc-layer.print { clip-path: inset(0 0 0% 0) !important; }
+  .b-rail-frontier { display: none; }
+  .b-railchart-move { transform: none; }
+  .b-rail-right, .b-rail-left { transition: none; }
 }
+
+/* --- rails collapse away on narrow screens: the panel takes the
+   whole frame and the stacked layout is unchanged --- */
+@media (max-width: 900px) {
+  .b-grid { grid-template-columns: minmax(0, 1fr); }
+  .b-rail-left, .b-rail-right { display: none; }
+}
+
+/* --- frozen motions: marquees and the terminal ticker stand
+   still; only the reveal, the parallax and the badges move --- */
+@media (prefers-reduced-motion: no-preference) {
+  .b-marquee-track { animation: none; }
+  .b-term-block p { animation: none; }
+  .b-term-block .cur span { animation: none; }
+}
+
+/* --- windows sit square on the column: the desktop offsets
+   and rotations from the windows pass are retired --- */
+@media (min-width: 720px) {
+  .off-a, .off-b, .off-c { transform: none; }
+}
+
+/* --- air between sections: ~250–400px of empty space, one
+   idea per viewport --- */
+.blue-site .b-band,
+.blue-site .band { padding: clamp(100px, 12vw, 148px) 0; }
+.blue-site .b-side-head { padding: clamp(88px, 10vw, 124px) 0 8px; }
+.blue-site .b-widgets-band { padding: clamp(88px, 10vw, 124px) 0 clamp(56px, 7vw, 84px); }
 
 /* ═══════════════════════════════════════════════════════════════════
    HERO — dual-world, full-bleed
@@ -1147,16 +1325,6 @@ textarea.input {
   object-position: center 30%;
   transition: opacity 0.5s ease, filter 0.5s ease;
 }
-.hero-art .hero-img-moon { opacity: 0; }
-.hero[data-mood="moon"] .hero-img-market { opacity: 0; }
-.hero[data-mood="moon"] .hero-img-moon { opacity: 1; }
-/* Moon mood: quieter, dimmer, more atmospheric — same identity, less energy */
-.hero[data-mood="moon"] .hero-art img {
-  filter: brightness(0.82) saturate(0.68);
-}
-.hero[data-mood="moon"] .hero-scrim {
-  background: linear-gradient(90deg, rgba(2, 6, 15, 0.82) 0%, rgba(2, 6, 15, 0.45) 55%, rgba(2, 6, 15, 0.15) 100%);
-}
 .hero-scrim {
   position: absolute;
   inset: 0;
@@ -1164,23 +1332,6 @@ textarea.input {
   transition: background 0.5s ease;
 }
 
-/* Moon mood, site-wide: everything dims and slows, text contrast untouched. */
-body[data-mood="moon"] { background: #030509; }
-body[data-mood="moon"] .hero-title .accent { color: #bcd6ff; }
-body[data-mood="moon"] .b-marquee { filter: brightness(0.7) saturate(0.75); }
-body[data-mood="moon"] .b-marquee-track { animation-duration: 110s; }
-body[data-mood="moon"] .b-widgets-band { filter: saturate(0.82) brightness(0.95); }
-body[data-mood="moon"] .rb-chartLayer { filter: saturate(0.55) brightness(0.8); opacity: 0.75; }
-body[data-mood="moon"] .b-term-bg { opacity: 0.3; filter: saturate(0.55) brightness(0.85); }
-body[data-mood="moon"] .band::before { background: linear-gradient(180deg, rgba(110, 168, 255, 0.09), rgba(110, 168, 255, 0)); }
-body[data-mood="moon"] .b-bear-rail { filter: saturate(0.55) brightness(0.82); opacity: 0.78; }
-body[data-mood="moon"] .b-deco-star { color: rgba(188, 214, 255, 0.24); }
-body[data-mood="moon"] .b-marquee,
-body[data-mood="moon"] .b-widgets-band,
-body[data-mood="moon"] .rb-chartLayer,
-body[data-mood="moon"] .b-term-bg {
-  transition: filter 0.6s ease, opacity 0.6s ease;
-}
 .hero-inner {
   position: relative;
   z-index: 2;
@@ -1322,59 +1473,6 @@ body[data-mood="moon"] .b-term-bg {
   background: var(--yellow);
   border-color: var(--yellow);
   color: #131c05;
-}
-.hero-switch-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin: 20px 0 0;
-}
-.hero-switcher {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-.hero-thumb {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 56px;
-  padding: 8px 12px 8px 8px;
-  border-radius: 10px;
-  border: 1.5px solid rgba(234, 242, 255, 0.16);
-  background: rgba(2, 6, 15, 0.55);
-  text-align: left;
-  transition: border-color 0.2s ease, background 0.2s ease;
-}
-.hero-thumb img {
-  width: 44px;
-  height: 44px;
-  object-fit: cover;
-  border-radius: 6px;
-  flex-shrink: 0;
-}
-.hero-thumb .ht-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink);
-  display: block;
-}
-.hero-thumb .ht-sub {
-  font-size: 10px;
-  color: var(--ink-faint);
-  display: block;
-  margin-top: 2px;
-}
-.hero-thumb[aria-pressed="true"] {
-  border-color: var(--blue);
-  background: rgba(43, 127, 255, 0.16);
 }
 /* Phone: hero stacks art over card */
 @media (max-width: 860px) {
@@ -1669,120 +1767,6 @@ body[data-mood="moon"] .b-term-bg {
   opacity: 0.5;
 }
 
-/* ── Chart layer: parallax archive of real candle rows ── */
-.rb-chartLayer {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
-}
-.rb-chartLayer::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(4, 7, 14, 0) 0%, rgba(4, 7, 14, 0.52) 50%, rgba(4, 7, 14, 0) 100%);
-  pointer-events: none;
-}
-.b-bgrow {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 520px;
-  padding: 0 20px;
-  display: flex;
-  gap: 14px;
-  will-change: transform;
-}
-.b-bgrow::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(rgba(110, 168, 255, 0.14), rgba(110, 168, 255, 0.14)) left 17.3% / 100% 1px no-repeat,
-    linear-gradient(rgba(110, 168, 255, 0.14), rgba(110, 168, 255, 0.14)) left 40.4% / 100% 1px no-repeat,
-    linear-gradient(rgba(110, 168, 255, 0.14), rgba(110, 168, 255, 0.14)) left 63.5% / 100% 1px no-repeat,
-    linear-gradient(rgba(110, 168, 255, 0.14), rgba(110, 168, 255, 0.14)) left 86.5% / 100% 1px no-repeat;
-  pointer-events: none;
-}
-/* Kurumi candle construction: flex-shrink: 0, percentage wick/body,
-   bodies anchored around the 68% level with headroom above. */
-.candleStick__archiveWrap {
-  display: flex;
-  flex-direction: row;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-}
-.candleStick__archive {
-  flex-shrink: 0;
-  width: 34px;
-  height: 100%;
-  position: relative;
-  --cc: #2ee06f;
-}
-.candleStick__archive[data-result="yang"] { --cc: #2ee06f; }
-.candleStick__archive[data-result="yin"] { --cc: #ff5252; }
-.candleStick__archiveCont {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-.candleStick__archive--shadow {
-  position: absolute;
-  left: 50%;
-  width: 3px;
-  transform: translateX(-50%);
-  background: var(--cc);
-  border-radius: 2px;
-}
-.candleStick__archive--body {
-  position: absolute;
-  left: 50%;
-  width: 26px;
-  transform: translateX(-50%);
-  background: var(--cc);
-  border-radius: 3px;
-}
-.bg-candle { opacity: var(--co, 0.9); }
-/* One very tall teal candle ends every row, set apart by a wider gap. */
-.bg-candle--tall {
-  --cc: #2dd4bf;
-  --co: 1;
-  margin-left: 34px;
-}
-/* Per-section speech-bubble caption, riding its row's parallax shift. */
-.b-bg-bubble {
-  position: absolute;
-  top: 128px;
-  right: 12.5%;
-  background: #fff;
-  color: var(--b-card-ink);
-  font-weight: 900;
-  font-size: 15px;
-  line-height: 1.3;
-  border-radius: 16px;
-  padding: 10px 16px;
-  max-width: 190px;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
-  pointer-events: none;
-  will-change: transform;
-}
-.b-bg-bubble::after {
-  content: '';
-  position: absolute;
-  right: 26px;
-  bottom: -8px;
-  width: 14px;
-  height: 14px;
-  background: #fff;
-  transform: rotate(45deg);
-}
-@media (max-width: 719px) {
-  .b-bg-bubble { display: none; }
-  .b-bgrow { opacity: 0.72; }
-}
-
 /* ── Deco wrappers: $/¥/€ mapped to the opens, stars on the Man/Media side ── */
 .rb-decoWrapper {
   position: absolute;
@@ -1796,7 +1780,7 @@ body[data-mood="moon"] .b-term-bg {
   z-index: 1;
 }
 .b-wrap {
-  max-width: 1100px;
+  max-width: 1150px;
   margin: 0 auto;
   padding: 0 clamp(18px, 4vw, 40px);
   display: grid;
@@ -1923,9 +1907,9 @@ body[data-mood="moon"] .b-term-bg {
 .b-oswin-body { padding: 14px; }
 .b-oswin.dark .b-oswin-body { padding: 16px; }
 @media (min-width: 720px) {
-  .off-a { transform: translateX(10px) rotate(0.25deg); }
-  .off-b { transform: translateX(-12px) rotate(-0.25deg); }
-  .off-c { transform: translateX(7px) rotate(0.18deg); }
+  /* Windows sit square on the column: the desktop offsets from the
+     windows pass are retired (fidelity pass). */
+  .off-a, .off-b, .off-c { transform: none; }
 }
 
 /* ── Journey / Lab cards ── */
@@ -2347,7 +2331,25 @@ body[data-mood="moon"] .b-term-bg {
   .b-restart { padding: 10px 18px; letter-spacing: 0.1em; }
 }
 
-/* ── Loss-cut Easter egg: scroll past the loop band, get stopped out ── */
+/* ── Loss-cut Easter egg: scroll past the loop band, get stopped out ──
+   The Kurumi forced-loss-cut beat, RetailBo version — with Bo's own
+   art. Past the loop band sits a tall, empty overscroll zone
+   (.b-loss-zone): the room the reader scrolls INTO past the bottom
+   of the page. How far they have travelled into that zone — scroll
+   position, never a timer — drives the fade: first a fixed veil dims
+   the whole page to dark navy with the site's own graph-paper grid,
+   then a second layer takes it to FULL black and holds. One more
+   small scroll and the splash cuts in suddenly (no fade, no
+   transition): Bo's blue-and-orange black-hole vortex full-bleed,
+   Bo himself falling through it in his black Nike Tech tracksuit,
+   the big STOPPED OUT stamp as live outlined text across the lower
+   half, dark vignettes framing top and bottom. While it holds, Bo
+   falls a little — a short ease-in drift down with a slight turn —
+   and the vortex turns very slowly behind him. After about a second
+   and a half the page snaps back to the hero, bright and normal —
+   and scrolling down again replays the whole thing. Reduced motion:
+   the zone collapses and the sequence never runs — no black hold,
+   no splash, no animation. */
 .b-loss-zone { height: 120vh; }
 .b-loss-veil {
   position: fixed;
@@ -2355,24 +2357,17 @@ body[data-mood="moon"] .b-term-bg {
   z-index: 90;
   pointer-events: none;
 }
+.b-loss-navy, .b-loss-black { position: absolute; inset: 0; opacity: 0; }
 .b-loss-navy {
-  position: absolute;
-  inset: 0;
-  background: #050d1f;
+  background-color: #050d1f;
   background-image:
     linear-gradient(rgba(110, 168, 255, 0.16) 1px, transparent 1px),
     linear-gradient(90deg, rgba(110, 168, 255, 0.16) 1px, transparent 1px),
     linear-gradient(rgba(110, 168, 255, 0.28) 1px, transparent 1px),
     linear-gradient(90deg, rgba(110, 168, 255, 0.28) 1px, transparent 1px);
   background-size: 28px 28px, 28px 28px, 140px 140px, 140px 140px;
-  opacity: 0;
 }
-.b-loss-black {
-  position: absolute;
-  inset: 0;
-  background: #000;
-  opacity: 0;
-}
+.b-loss-black { background: #000; }
 .b-loss-splash {
   position: fixed;
   inset: 0;
@@ -2380,118 +2375,137 @@ body[data-mood="moon"] .b-term-bg {
   background: #000;
   color: #fff;
   display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(14px, 3vh, 26px);
-  padding: 28px 20px;
-  text-align: center;
   overflow: hidden;
 }
-.b-loss-splash.on { display: flex; }
-.b-loss-mark {
-  font-weight: 900;
-  letter-spacing: -0.01em;
-  line-height: 1;
-  font-size: clamp(36px, 6.5vw, 58px);
-  color: #fff;
-}
-.b-loss-mark span { color: var(--b-blue); }
-.b-loss-imgs {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: clamp(14px, 3vw, 30px);
-  flex-wrap: wrap;
-}
-.b-loss-img-point {
-  height: min(38vh, 330px);
-  width: auto;
-  filter: drop-shadow(0 14px 30px rgba(43, 127, 255, 0.35));
-}
-.b-loss-img-room {
-  width: min(430px, 78vw);
-  height: auto;
-  border: 3px solid #33507f;
-  border-radius: 14px;
-}
-.b-loss-stamp {
-  margin-top: clamp(-38px, -3vh, -14px);
-  transform: rotate(-7deg);
-  font-weight: 900;
-  text-transform: uppercase;
-  font-size: clamp(42px, 10.5vw, 104px);
-  line-height: 1;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-  color: var(--b-bear, #ff4040);
-  border: 7px solid var(--b-bear, #ff4040);
-  border-radius: 12px;
-  padding: 10px 26px 14px;
-  background: rgba(0, 0, 0, 0.35);
-  box-shadow: inset 0 0 0 3px rgba(255, 64, 64, 0.45), 0 18px 44px rgba(0, 0, 0, 0.6);
-}
-@media (max-width: 560px) {
-  .b-loss-stamp { border-width: 5px; padding: 8px 18px 11px; }
-  .b-loss-img-point { height: min(30vh, 240px); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .b-loss-zone, .b-loss-veil, .b-loss-splash { display: none !important; }
-}
-
-/* ── Animated terminal desktop (outer layer of the desktop frame) ── */
-.b-term-bg {
+.b-loss-splash.on { display: block; }
+/* Layer 1 — Bo's vortex, full-bleed. The crop keeps its black core
+   and glowing ring in the lower half, so Bo falls through the darker
+   blue swirl above it, clear of the brightest part of the ring. */
+.b-loss-bg {
   position: absolute;
   inset: 0;
-  z-index: -1;
-  overflow: hidden;
-  pointer-events: none;
-  opacity: 0.55;
-  transition: opacity 0.6s ease, filter 0.6s ease;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
 }
-.b-term-col {
+/* While the splash is up, the vortex turns very slowly behind Bo —
+   one full turn over ~60s, so only a few degrees cross during the
+   ~1.6s hold. The layer sits scaled up a touch so its corners never
+   pull in while it turns. The animation hangs off the .on state, so
+   it starts fresh every time the egg fires. */
+.b-loss-splash.on .b-loss-bg {
+  animation: b-vortex-spin 60s linear infinite;
+}
+@keyframes b-vortex-spin {
+  from { transform: scale(1.35) rotate(0deg); }
+  to { transform: scale(1.35) rotate(360deg); }
+}
+/* Layer 2 — Bo falling, upper-centre, the whole figure in frame
+   (never cropped). The cutout is Bo's 1024px HD original, so his
+   rendered height is capped at 700px — big enough to fill the
+   splash, still never upscaling past his source, so he stays sharp.
+   A soft dark halo keeps him readable against the swirl. */
+.b-loss-bo {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 264px;
+  z-index: 1;
+  top: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+  height: min(72vh, 700px);
+  width: auto;
+  max-width: 94vw;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 0 22px rgba(0, 0, 0, 0.55));
+}
+/* While the splash is up, Bo actually falls a little: a gentle
+   drift downward with a slight rotation and a subtle scale, easing
+   in — accelerating, like gravity — across the splash's ~1.6s, then
+   holding the end pose until the snap back. The animation hangs off
+   the .on state, so it restarts every time the egg replays. */
+.b-loss-splash.on .b-loss-bo {
+  animation: b-bo-fall 1.6s ease-in forwards;
+}
+@keyframes b-bo-fall {
+  from { transform: translateX(-50%) translateY(0) rotate(-2deg) scale(1); }
+  to { transform: translateX(-50%) translateY(40px) rotate(1deg) scale(1.05); }
+}
+/* Layer 3 — the stamp: live text, not an image. Crimson with a
+   thick white outline, condensed and stretched tall, tilted like
+   it was slammed onto the splash. */
+.b-loss-stamp {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 8%;
+  transform: translateX(-50%) rotate(-6deg) scaleY(1.07);
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: clamp(44px, 11.5vw, 150px);
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+  white-space: nowrap;
+  color: #e8102e;
+  -webkit-text-stroke: 3px #ffffff;
+  text-shadow: 0 12px 34px rgba(0, 0, 0, 0.65);
+}
+@media (min-width: 900px) {
+  .b-loss-stamp { -webkit-text-stroke-width: 5px; }
+}
+@media (max-width: 560px) {
+  .b-loss-stamp { -webkit-text-stroke-width: 2.5px; bottom: 10%; }
+  .b-loss-bo { height: min(46vh, 500px); }
+}
+/* Layer 4 — top and bottom shadow vignettes, framing the splash
+   the way the loss-cut shadow strips frame theirs. */
+.b-loss-vig {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  height: 24%;
+  pointer-events: none;
+}
+.b-loss-vig.t { top: 0; background: linear-gradient(to bottom, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0)); }
+.b-loss-vig.b { bottom: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0)); }
+@media (prefers-reduced-motion: reduce) {
+  .b-loss-zone { display: none; }
+  .b-loss-veil, .b-loss-splash { display: none !important; }
+  .b-loss-bg, .b-loss-bo { animation: none !important; }
+}
+
+/* ── Terminal feed, contained in the left rail (fidelity pass) ──
+   The feed no longer prints behind the windows: it lives inside
+   the grid's left rail — contained, static, never over content.
+   Schedule and status lines only, never prices. */
+.b-term-col {
   font-family: var(--font-mono);
   font-size: 11px;
   line-height: 1.8;
   letter-spacing: 0.03em;
   color: #7288ad;
+  opacity: 0.55;
 }
-.b-term-col--left { left: 12px; -webkit-mask-image: linear-gradient(90deg, #000 52%, transparent 97%); mask-image: linear-gradient(90deg, #000 52%, transparent 97%); }
-.b-term-col--right { right: 12px; -webkit-mask-image: linear-gradient(270deg, #000 52%, transparent 97%); mask-image: linear-gradient(270deg, #000 52%, transparent 97%); }
-.b-term-block { --bd: 0s; margin-bottom: 64px; }
-.b-term-col--right .b-term-block { --bd: 0.7s; }
+.blue-site .b-term-col.rail-term {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  padding: 20px 0 0 10px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, #000 30%, transparent 96%);
+  mask-image: linear-gradient(90deg, #000 30%, transparent 96%);
+}
+.b-term-block { margin-bottom: 64px; }
 .b-term-block p { margin: 0; white-space: nowrap; }
 .b-term-block .g { color: #2ee06f; }
 .b-term-block .bl { color: #6ea8ff; }
 .b-term-block .r { color: #ff6b6b; }
 .b-term-block .cur { color: #2ee06f; }
 .b-term-block .cur span { display: inline-block; }
-@media (prefers-reduced-motion: no-preference) {
-  .b-term-block p {
-    animation: termLine 27s linear infinite;
-    animation-delay: calc(var(--bd) + var(--i, 0) * 0.85s);
-    animation-fill-mode: backwards;
-  }
-  .b-term-block .cur span { animation: termBlink 1.1s linear infinite; }
-}
-@keyframes termLine {
-  0% { opacity: 0; }
-  4% { opacity: 1; }
-  82% { opacity: 1; }
-  93%, 100% { opacity: 0; }
-}
-@keyframes termBlink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-@media (max-width: 900px) {
-  .b-term-col--right { display: none; }
-  .b-term-bg { opacity: 0.42; }
-}
 
 /* ── Minimal nav: wordmark + one round MENU button ── */
 .b-head {
@@ -2655,12 +2669,13 @@ body.nav-open .b-panel { transform: translateX(0); }
 }
 .b-hero-winbar .b-hero-winbar-title { margin-left: 6px; }
 
-/* ── Reveal on scroll (motion-safe only) ── */
+/* ── Reveal on scroll (motion-safe only) — shortened: text is
+   legible on arrival, never caught at near-zero opacity mid-scroll ── */
 @media (prefers-reduced-motion: no-preference) {
   .b-reveal {
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.55s ease, transform 0.55s ease;
+    opacity: 0.3;
+    transform: translateY(8px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
   .b-reveal.in { opacity: 1; transform: none; }
 }
@@ -2668,8 +2683,9 @@ body.nav-open .b-panel { transform: translateX(0); }
 /* ── Widgets band ── */
 .b-widgets-band { padding: clamp(28px, 5vw, 44px) clamp(18px, 4vw, 40px) 4px; }
 .b-widgets {
-  max-width: 1100px;
+  max-width: 1150px;
   margin: 0 auto;
+  padding: 0 clamp(18px, 4vw, 40px);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
@@ -2943,24 +2959,15 @@ body.nav-open .b-panel { transform: translateX(0); }
   margin: 0 0 8px;
 }
 
-/* ── Moon mood additions for the fold-in layers ── */
-body[data-mood="moon"] .b-h {
-  filter: drop-shadow(0 10px 18px rgba(43, 127, 255, 0.16));
-}
-body[data-mood="moon"] .hero-card {
-  background: linear-gradient(165deg, #081631, #040a1a);
-}
-
-/* ── Reduced motion: static chart rows, no marquee/terminal/scroll-cue motion ── */
+/* ── Reduced motion: static rail chart, no marquee/terminal/scroll-cue motion ── */
 @media (prefers-reduced-motion: reduce) {
-  .b-bgrow { transform: none !important; }
-  .b-bg-bubble { transform: none !important; }
-  .b-bear-print { clip-path: inset(0 0 0% 0) !important; }
-  .b-bear-tip { display: none; }
+  .b-rc-layer.print { clip-path: inset(0 0 0% 0) !important; }
+  .b-rail-frontier { display: none; }
+  .b-railchart-move { transform: none; }
+  .b-rail-right, .b-rail-left { transition: none; }
   .b-marquee-track { animation: none !important; }
   .loader-gif { display: none; }
   .loader-candles { display: flex; }
-  .b-term-bg { opacity: 0.35; }
 }
 
 /* ── Focus visibility for the fold-in controls ── */
@@ -2968,9 +2975,7 @@ body[data-mood="moon"] .hero-card {
 .b-more:focus-visible,
 .b-vol-link:focus-visible,
 .b-vol-lab:focus-visible,
-.b-restart:focus-visible,
-.b-foot-nav a:focus-visible,
-.hero-thumb:focus-visible {
+.b-restart:focus-visible {
   outline: 3px solid var(--b-yellow);
   outline-offset: 2px;
 }

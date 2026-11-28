@@ -1,16 +1,15 @@
 ---
-// Dual-world hero — Chart City (the market) / Moon World (the man).
-// Instant flip, no reload, remembers the mode in the URL hash.
-// Moon mood is quieter and more atmospheric: dimmer, less saturated.
+// Hero — Chart City, the market. One hero: the Market only (the
+// Market/Moon switcher was cut Nov 27 — no toggle, no #mood hash,
+// no moon-mood dimming, no moon hero swap). The Man section stays
+// as content, including its Moon World base scene.
 // Hinge-aware: dual-screen segments get one panel each, with fallback.
 // Sampler frame: retro OS-window title bar on the card + Kurumi-style
 // SCROLL cue at the bottom of the hero.
-import ChartRow from './ChartRow.astro';
 ---
-<section class="hero rb-content rb-content--hero" id="b-hero" data-section="hero" data-mood="market" aria-label="RetailBo — two worlds">
+<section class="hero rb-content rb-content--hero" id="b-hero" data-section="hero" aria-label="RetailBo — the market">
   <div class="hero_grad rb-grad" aria-hidden="true"></div>
   <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
-  <ChartRow row="hero" />
   <div class="hero__decoWrapper rb-decoWrapper" aria-hidden="true">
     <span class="b-deco b-deco-star b-deco-a">★</span>
     <span class="b-deco b-deco-star b-deco-b">★</span>
@@ -23,15 +22,6 @@ import ChartRow from './ChartRow.astro';
       width="1170"
       height="658"
       fetchpriority="high"
-    />
-    <img
-      class="hero-img-moon"
-      src="/assets/hero-moon.webp"
-      alt=""
-      width="1170"
-      height="780"
-      fetchpriority="high"
-      style="position: absolute; inset: 0;"
     />
   </div>
   <div class="hero-scrim" aria-hidden="true"></div>
@@ -53,23 +43,13 @@ import ChartRow from './ChartRow.astro';
           <span class="hero-pill yellow">★ EST. 2017</span>
           <img
             class="hero-rb"
-            src="/assets/rb-pointing.gif"
-            alt="RB, the Retail Beast — compact black and gunmetal armor, neon-green horns, glowing green eyes, green circuit accents — animated: bobbing gently, eyes pulsing, pointing at you with a green wrench in his other hand."
+            src="/assets/rb-point-still.webp"
+            alt="RB, the Retail Beast — compact black and gunmetal armor, neon-green horns, glowing green eyes, green circuit accents — pointing at you with a green wrench in his other hand."
             width="92"
             height="138"
             loading="lazy"
           />
         </div>
-      </div>
-
-      <div class="hero-copy-moon" hidden>
-        <h1 class="logo-text hero-title">Retail<span class="accent">Bo</span></h1>
-        <p class="hero-tag">the man behind the charts</p>
-        <p class="hero-sub">
-          the man — thoughts, life, mindset, family. the perspective behind
-          the name. same person, quieter energy. this is the side of the
-          site where the market goes silent and the person talks.
-        </p>
       </div>
     </div>
 
@@ -89,36 +69,6 @@ import ChartRow from './ChartRow.astro';
         <span class="hero-pill">9:00 ASIA OPEN · TOKYO</span>
         <span class="hero-pill">8:00 LONDON OPEN</span>
       </div>
-
-      <p class="hero-switch-label">Two moods</p>
-      <div class="hero-switcher" role="group" aria-label="Switch worlds">
-        <button
-          type="button"
-          class="hero-thumb"
-          id="mood-market"
-          aria-pressed="true"
-          data-mood="market"
-        >
-          <img src="/assets/chart-city-skyline.webp" alt="" width="1170" height="658" />
-          <span>
-            <span class="ht-label">The market</span>
-            <span class="ht-sub">chart city · energy</span>
-          </span>
-        </button>
-        <button
-          type="button"
-          class="hero-thumb"
-          id="mood-moon"
-          aria-pressed="false"
-          data-mood="moon"
-        >
-          <img src="/assets/moon-base.webp" alt="" width="1170" height="658" />
-          <span>
-            <span class="ht-label">The moon</span>
-            <span class="ht-sub">moon world · quiet</span>
-          </span>
-        </button>
-      </div>
     </div>
   </div>
 
@@ -128,54 +78,3 @@ import ChartRow from './ChartRow.astro';
   </a>
 </section>
 
-<script>
-  (function () {
-    var hero = document.getElementById('b-hero');
-    if (!hero) return;
-    var marketCopy = hero.querySelector('.hero-copy-market');
-    var moonCopy = hero.querySelector('.hero-copy-moon');
-    var cardTitle = document.getElementById('hero-card-title');
-    var cardBody = document.getElementById('hero-card-body');
-    var marketBtn = document.getElementById('mood-market');
-    var moonBtn = document.getElementById('mood-moon');
-
-    var CARD = {
-      market: {
-        title: 'The market is open.',
-        body: '9:30 RTH, Asia, London — the opens are where the day is decided. the blog is where the market and the man meet.',
-      },
-      moon: {
-        title: 'The room goes quiet.',
-        body: 'same site, different energy. the moon is Bo outside the market — the thoughts, experiences, and perspective behind the name.',
-      },
-    };
-
-    function setMood(mood, persist) {
-      if (mood !== 'moon') mood = 'market';
-      hero.setAttribute('data-mood', mood);
-      // Site-wide moon dimming (marquee, gutter, widgets) keys off the body.
-      try { document.body.setAttribute('data-mood', mood); } catch (e) {}
-      if (marketCopy) marketCopy.hidden = mood !== 'market';
-      if (moonCopy) moonCopy.hidden = mood !== 'moon';
-      if (marketBtn) marketBtn.setAttribute('aria-pressed', mood === 'market' ? 'true' : 'false');
-      if (moonBtn) moonBtn.setAttribute('aria-pressed', mood === 'moon' ? 'true' : 'false');
-      if (cardTitle) cardTitle.textContent = CARD[mood].title;
-      if (cardBody) cardBody.textContent = CARD[mood].body;
-      if (persist) {
-        try {
-          history.replaceState(null, '', '#mood=' + mood);
-        } catch (e) {}
-      }
-    }
-
-    var initial = 'market';
-    try {
-      var m = (location.hash || '').match(/mood=(moon|market)/);
-      if (m) initial = m[1];
-    } catch (e) {}
-    setMood(initial, false);
-
-    if (marketBtn) marketBtn.addEventListener('click', function () { setMood('market', true); });
-    if (moonBtn) moonBtn.addEventListener('click', function () { setMood('moon', true); });
-  })();
-</script>

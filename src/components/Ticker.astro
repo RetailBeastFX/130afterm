@@ -1,6 +1,8 @@
 ---
 // Ticker — a slow market-style marquee of Bo's own highlight lines.
-// Ambient, not interactive: pure CSS motion, pauses on hover.
+// Ambient, not interactive: static since the fidelity pass (marquees
+// stand still — the loop is kept in markup so it can move again, but
+// the animation is frozen).
 interface Props {
   items: string[];
 }
@@ -31,7 +33,8 @@ const loop = [...items, ...items];
   .ticker-track {
     display: flex;
     width: max-content;
-    animation: ticker-scroll 70s linear infinite;
+    /* Frozen: marquees stand still (fidelity pass). */
+    animation: none;
   }
   .ticker-item {
     font-family: var(--font-mono);

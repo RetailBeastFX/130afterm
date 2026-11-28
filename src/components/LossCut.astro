@@ -1,13 +1,17 @@
----
 // STOPPED OUT loss-cut Easter egg (Kurumi's forced-loss-cut beat, RB
-// version). A 120vh overscroll zone past the loop band drives a
-// scroll-depth fade — dark navy + grid, then full black that holds —
-// and one more scroll cuts in a ~1.6s splash (RetailBo wordmark, the
-// pointing armored RB + the trading-room scene, big crimson STOPPED
-// OUT stamp), then the page snaps back to the hero. Replays every
-// time. Fade depth is driven by scroll distance, never a timer.
-// Skipped entirely under reduced motion (see HomeScripts).
-// Splash art: the sampler's existing pointing-RB + room-scene images.
+// version — with Bo's OWN art, animated). A 120vh overscroll zone past
+// the loop band drives a scroll-depth fade — dark navy + grid, then
+// full black that holds — and one more scroll cuts in a ~1.6s splash:
+// Bo's blue-and-orange black-hole vortex full-bleed, Bo himself
+// falling through it in his black Nike Tech tracksuit, the big
+// STOPPED OUT stamp as live outlined text across the lower half, dark
+// vignettes framing top and bottom. While the splash holds, Bo falls
+// a little (ease-in drift down, slight turn, subtle scale) and the
+// vortex turns very slowly behind him. Then the page snaps back to
+// the hero. Replays every time. Fade depth is driven by scroll
+// distance, never a timer. Skipped entirely under reduced motion
+// (see HomeScripts). Art: Bo's own bo-vortex.jpg + the 1024px HD
+// falling-Bo cutout, as WebP.
 ---
 
 <div class="b-loss-zone" id="bLossZone" aria-hidden="true"></div>
@@ -19,12 +23,11 @@
   class="b-loss-splash"
   id="bLossSplash"
   role="img"
-  aria-label="RetailBo — stopped out. RB pointing at you beside the trading room scene, under a large STOPPED OUT stamp."
+  aria-label="RetailBo — stopped out. Bo falling through a blue and orange black-hole vortex in a black tracksuit, phones and candlestick chart screens floating around him, over a large STOPPED OUT stamp."
 >
-  <div class="b-loss-mark">Retail<span>Bo</span></div>
-  <div class="b-loss-imgs">
-    <img class="b-loss-img-point" src="/assets/bo-rb-pointing.webp" alt="" />
-    <img class="b-loss-img-room" src="/assets/bo-rb-trading-room.webp" alt="" />
-  </div>
-  <div class="b-loss-stamp">Stopped Out</div>
+  <img class="b-loss-bg" src="/assets/bo-vortex.webp" alt="" aria-hidden="true" />
+  <img class="b-loss-bo" src="/assets/bo-falling.webp" alt="" aria-hidden="true" />
+  <div class="b-loss-stamp" aria-hidden="true">Stopped Out</div>
+  <div class="b-loss-vig t" aria-hidden="true"></div>
+  <div class="b-loss-vig b" aria-hidden="true"></div>
 </div>

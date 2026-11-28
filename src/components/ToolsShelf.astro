@@ -2,15 +2,13 @@
 // Tools shelf — cover-style volume cards for the three tools. The ORB
 // Starter links out to its published TradingView page; HUD and Sessions
 // are not published, so they stay "in the lab" and anchor to #b-lab.
-// Staircase-up parallax row, caption "the whole shelf".
-// Sampler copy, verbatim.
-import ChartRow from './ChartRow.astro';
+// Sampler copy, verbatim. (The caption "the whole shelf" now lives in
+// the rail chart's bubble.)
 ---
 
 <section class="b-band rb-content rb-content--shelf" data-section="shelf" id="b-shelf">
   <div class="shelf_grad rb-grad" aria-hidden="true"></div>
   <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
-  <ChartRow row="shelf" />
   <div class="shelf__decoWrapper rb-decoWrapper" aria-hidden="true">
     <span class="b-deco b-deco-usd b-deco-a">$</span>
     <span class="b-deco b-deco-star b-deco-b">★</span>
