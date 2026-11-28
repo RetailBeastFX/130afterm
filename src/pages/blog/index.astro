@@ -53,8 +53,9 @@ const accents = ['sticker-amber', 'sticker-rose', 'sticker-sky', 'sticker-mint',
       </div>
 
       {posts.length > 0 ? (
-        <div class="flex flex-col gap-4" id="blog-list">
-          {posts.map((post, i) => (
+        <>
+          <div class="flex flex-col gap-4" id="blog-list">
+            {posts.map((post, i) => (
             <a
               href={`/blog/${postSlug(post)}/`}
               class={`card block reveal ${i % 2 === 0 ? 'tape' : 'tape tape-sky'}`}
@@ -87,8 +88,23 @@ const accents = ['sticker-amber', 'sticker-rose', 'sticker-sky', 'sticker-mint',
                 READ →
               </span>
             </a>
-          ))}
-        </div>
+            ))}
+          </div>
+
+          <!-- Pagination — 10 per page, client-side so the category
+               filter keeps working across the whole list. -->
+          <nav
+            class="reveal flex items-center justify-between gap-3 mt-2"
+            id="blog-pager"
+            aria-label="Blog pages"
+          >
+            <button type="button" class="btn btn-ghost" id="blog-prev">← Prev</button>
+            <span class="mono" id="blog-page-label" style="font-size: 11px; letter-spacing: 0.16em; color: var(--ink-faint);">
+              PAGE 1 OF 3
+            </span>
+            <button type="button" class="btn btn-ghost" id="blog-next">Next →</button>
+          </nav>
+        </>
       ) : (
         <div class="card reveal">
           <p class="body-faint text-sm">nothing on the desk yet. check back at the opens.</p>
@@ -100,25 +116,62 @@ const accents = ['sticker-amber', 'sticker-rose', 'sticker-sky', 'sticker-mint',
   <Footer />
 
   <script>
-    // Category filter — client-side, no reload. Server renders everything.
+    // Category filter + pagination — client-side, no reload.
+    // Server renders everything; the pager shows 10 at a time and the
+    // filter re-pages the filtered set from page 1.
     (function () {
+      var PAGE_SIZE = 10;
+      var page = 1;
+      var currentCat = 'All';
       var chips = Array.prototype.slice.call(document.querySelectorAll('#cat-filter .cat-chip'));
       var cards = Array.prototype.slice.call(document.querySelectorAll('#blog-list [data-category]'));
+      var pager = document.getElementById('blog-pager');
+      var prevBtn = document.getElementById('blog-prev');
+      var nextBtn = document.getElementById('blog-next');
+      var label = document.getElementById('blog-page-label');
       if (!chips.length || !cards.length) return;
+
+      function visibleCards() {
+        return cards.filter(function (card) {
+          return currentCat === 'All' || card.getAttribute('data-category') === currentCat;
+        });
+      }
+
+      function applyPage() {
+        var visible = visibleCards();
+        var pages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+        if (page > pages) page = pages;
+        if (page < 1) page = 1;
+        var start = (page - 1) * PAGE_SIZE;
+        var end = start + PAGE_SIZE;
+        cards.forEach(function (card) {
+          var inSet = visible.indexOf(card) !== -1;
+          var inPage = inSet && visible.indexOf(card) >= start && visible.indexOf(card) < end;
+          card.style.display = inPage ? '' : 'none';
+        });
+        if (label) label.textContent = 'PAGE ' + page + ' OF ' + pages;
+        if (prevBtn) prevBtn.disabled = page <= 1;
+        if (nextBtn) nextBtn.disabled = page >= pages;
+        if (pager) pager.style.display = pages <= 1 ? 'none' : '';
+      }
+
       chips.forEach(function (chip) {
         chip.addEventListener('click', function () {
-          var cat = chip.getAttribute('data-cat');
+          currentCat = chip.getAttribute('data-cat');
+          page = 1;
           chips.forEach(function (c) {
             var on = c === chip;
             c.classList.toggle('active', on);
             c.setAttribute('aria-pressed', on ? 'true' : 'false');
           });
-          cards.forEach(function (card) {
-            var show = cat === 'All' || card.getAttribute('data-category') === cat;
-            card.style.display = show ? '' : 'none';
-          });
+          applyPage();
         });
       });
+
+      if (prevBtn) prevBtn.addEventListener('click', function () { page -= 1; applyPage(); });
+      if (nextBtn) nextBtn.addEventListener('click', function () { page += 1; applyPage(); });
+
+      applyPage();
     })();
   </script>
 </Layout>

@@ -112,9 +112,24 @@
       });
     }
 
+    // The wall is a Netlify Function (/api/guestbook, Netlify Blobs).
+    // On hosts that don't run it (the Vercel preview, localhost) the
+    // endpoint 404s — that is a deployment difference, not a broken
+    // wall, and no refresh will fix it: point at the main site, where
+    // the wall is live. Any other failure gets the retry wording.
+    var MAIN_SITE = 'https://retailbo.netlify.app/#guestbook';
+
+    function wallUnavailable() {
+      if (!list) return;
+      list.innerHTML =
+        '<p class="body-faint text-sm">the wall lives on the main site — ' +
+        '<a href="' + MAIN_SITE + '">sign it over there</a>.</p>';
+    }
+
     async function load() {
       try {
         var res = await fetch('/api/guestbook');
+        if (res.status === 404) { wallUnavailable(); return; }
         if (!res.ok) throw new Error('bad status');
         var entries = await res.json();
         renderEntries(entries);
@@ -151,6 +166,10 @@
               website: honeypot.value || '', // honeypot — server rejects if filled
             }),
           });
+          if (res.status === 404) {
+            showError('the wall lives on the main site — sign it at retailbo.netlify.app.');
+            return;
+          }
           if (!res.ok) {
             var err = await res.json().catch(function () { return {}; });
             throw new Error(err.error || 'the pin didn\u2019t stick. try again.');

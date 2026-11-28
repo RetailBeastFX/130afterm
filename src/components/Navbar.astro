@@ -1,9 +1,11 @@
 ---
 // Minimal nav — the header is just the RetailBo wordmark + one round
 // MENU button (identical desktop and mobile, no horizontal link bar).
-// The slide-in panel lists all fourteen destinations in page order;
+// The slide-in panel lists all thirteen destinations in page order;
 // homepage sections smooth-scroll, real pages navigate. Kurumi-style:
 // the MENU button opens a right-side drawer, like fxkurumi-info.com.
+// (The Media entry was removed Nov 27 — the episode library is out
+// until Bo starts uploading; restore it with the Media section.)
 interface Props {
   active?: string;
 }
@@ -15,7 +17,6 @@ const links = [
   { key: 'latest', href: '/#b-latest', label: 'Latest' },
   { key: 'market', href: '/#b-market', label: 'The Market' },
   { key: 'man', href: '/#b-man', label: 'The Man' },
-  { key: 'media', href: '/#b-media', label: 'The Media' },
   { key: 'shelf', href: '/#b-shelf', label: 'Shelf' },
   { key: 'sponsored', href: '/#b-sponsored', label: 'Sponsored' },
   { key: 'blog', href: '/blog', label: 'Rants' },

@@ -13,9 +13,9 @@ const accents = ['sticker-rose', 'sticker-sky', 'sticker-mint', 'sticker-violet'
   </div>
 
   <div class="grid gap-3" style="grid-template-columns: repeat(2, 1fr);">
-    {top8.map((entry, i) => (
+    {top8.filter((entry) => !entry.placeholder).map((entry, i) => (
       <div
-        class:list={['card', 'card-flat', entry.placeholder && 'opacity-60']}
+        class:list={['card', 'card-flat']}
         style="padding: 16px; display: flex; flex-direction: column; gap: 8px; min-height: 120px;"
       >
         <div class="flex items-center justify-between gap-2">
@@ -25,7 +25,7 @@ const accents = ['sticker-rose', 'sticker-sky', 'sticker-mint', 'sticker-violet'
           <span aria-hidden="true" style="font-size: 1.3rem;">{entry.icon}</span>
         </div>
         <p class="display text-lg leading-tight" style="overflow-wrap: break-word;">
-          {entry.placeholder ? '—' : entry.pick}
+          {entry.pick}
         </p>
         {entry.note && (
           <span class:list={['sticker', accents[i % accents.length]]} style="align-self: flex-start; margin-top: auto;">

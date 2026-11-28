@@ -41,13 +41,16 @@ const { showLink = true } = Astro.props;
     </div>
   </div>
 
-  <!-- Persisted fields from /api/now -->
+  <!-- Persisted fields from /api/now. Rows with no value yet
+       (playing / listening until Lanyard or /api/now fills them)
+       stay hidden instead of showing an empty dash. -->
   <div id="rn-rows">
     {NOW_ROWS.map((row) => {
       const value = (baseNowState as Record<string, unknown>)[row.key];
       const display = typeof value === 'string' && value ? value : '—';
+      const empty = display === '—';
       return (
-        <div class="now-row" data-key={row.key}>
+        <div class="now-row" data-key={row.key} hidden={empty}>
           <span class="now-icon" aria-hidden="true">{row.icon}</span>
           <span class="now-key">{row.label}</span>
           <span class="now-val" data-val>{display}</span>
@@ -114,7 +117,10 @@ const { showLink = true } = Astro.props;
       card.querySelectorAll('#rn-rows .now-row').forEach(function (row) {
         var key = row.getAttribute('data-key');
         var valEl = row.querySelector('[data-val]');
-        if (key && valEl && fields[key]) valEl.textContent = fields[key];
+        if (key && valEl && fields[key]) {
+          valEl.textContent = fields[key];
+          row.removeAttribute('hidden');
+        }
       });
     }
 

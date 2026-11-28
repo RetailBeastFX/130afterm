@@ -1153,6 +1153,13 @@ textarea.input {
 }
 .b-main { min-width: 0; }
 
+/* Grid items must not let stray content force a track wider than its
+   share — the min-content of a grid item can otherwise blow out the
+   rail tracks (Nov 27: leaked frontmatter comments did exactly that).
+   The rails' content is absolutely positioned, so min-width: 0 costs
+   nothing visible and hardens the 3-column grid. */
+.b-rail-left, .b-rail-right { min-width: 0; }
+
 /* --- left rail: the terminal feed, contained --- */
 .b-rail-left {
   position: relative;
@@ -1969,6 +1976,25 @@ textarea.input {
   color: var(--b-blue-deep);
   max-width: 46ch;
   margin: 18px 0 0;
+}
+/* Introduction facts row — the verified facts as mono pills. */
+.b-intro-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0 0;
+}
+.b-intro-facts span {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--b-blue-deep);
+  border: 1.5px solid rgba(43, 127, 255, 0.5);
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: rgba(43, 127, 255, 0.08);
+  white-space: nowrap;
 }
 .cnr {
   position: absolute;

@@ -8,7 +8,6 @@ import RailChart from '../components/RailChart.astro';
 import Marquee from '../components/Marquee.astro';
 import OrbCard from '../components/OrbCard.astro';
 import Widgets from '../components/Widgets.astro';
-import MediaLibrary from '../components/MediaLibrary.astro';
 import Sponsored from '../components/Sponsored.astro';
 import FooterSurprise from '../components/FooterSurprise.astro';
 import RightNow from '../components/RightNow.astro';
@@ -24,6 +23,7 @@ import AskRb from '../components/AskRb.astro';
 import Ticker from '../components/Ticker.astro';
 import TerminalBackground from '../components/TerminalBackground.astro';
 import LatestTeaser from '../components/LatestTeaser.astro';
+import Introduction from '../components/Introduction.astro';
 import Characters from '../components/Characters.astro';
 import JourneyEntry from '../components/JourneyEntry.astro';
 import ToolsShelf from '../components/ToolsShelf.astro';
@@ -82,6 +82,7 @@ const statusLabel: Record<string, string> = {
         <div class="b-main">
           <div class="rb-contentsWrapper">
             <Hero />
+    <Introduction />
     <LatestTeaser />
     <Characters />
     <Widgets />
@@ -91,7 +92,7 @@ const statusLabel: Record<string, string> = {
     <div class="band b-side-head" id="b-market">
       <div class="b-wrap">
         <hgroup class="rb-content_title">
-          <p class="b-side-num">Side 01 / 03</p>
+          <p class="b-side-num">Side 01 / 02</p>
           <h2 class="b-side-title">The <span>Market</span></h2>
           <p class="b-side-desc">Trading, market thoughts, strategies, lessons. The journey entry, the lab notes, and the tools — all in one place.</p>
           <p class="rb-content_title--txt"><span>RetailBo</span></p>
@@ -201,7 +202,7 @@ const statusLabel: Record<string, string> = {
       <div class="b-wrap rb-content-container man-container">
         <div>
           <hgroup class="rb-content_title">
-            <p class="b-side-num">Side 02 / 03</p>
+            <p class="b-side-num">Side 02 / 02</p>
             <h2 class="b-side-title">The <span>Man</span></h2>
             <p class="b-side-desc">Personal thoughts, life, mindset, experiences — the side of the site outside the market.</p>
             <p class="rb-content_title--txt"><span>RetailBo</span></p>
@@ -231,26 +232,6 @@ const statusLabel: Record<string, string> = {
       </div>
     </section>
 
-    <!-- ═══ THE MEDIA ═══ -->
-    <section class="band rb-content rb-content--media b-side-head" data-section="media" id="b-media">
-      <div class="media_grad rb-grad" aria-hidden="true"></div>
-      <div class="rb-contPtnBg_wrapper" aria-hidden="true"><div class="rb-contPtnBg"></div></div>
-      <div class="media__decoWrapper rb-decoWrapper" aria-hidden="true">
-        <span class="b-deco b-deco-star b-deco-a">★</span>
-        <span class="b-deco b-deco-star b-deco-b">★</span>
-      </div>
-      <div class="b-wrap rb-content-container media-container">
-        <div>
-          <hgroup class="rb-content_title">
-            <p class="b-side-num">Side 03 / 03</p>
-            <h2 class="b-side-title">The <span>Media</span></h2>
-            <p class="b-side-desc">YouTube videos, tutorials, commentary, projects — an episode library, not an embed page. The videos land here when the vlog starts.</p>
-            <p class="rb-content_title--txt"><span>RetailBo</span></p>
-          </hgroup>
-          <MediaLibrary variant="home" />
-        </div>
-      </div>
-    </section>
     <Marquee />
 
     <ToolsShelf />
